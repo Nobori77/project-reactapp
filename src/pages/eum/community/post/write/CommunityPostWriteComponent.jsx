@@ -1,5 +1,5 @@
 import React from "react";
-import PostWrite from "../postComponents/PostWrite";
+import PostWrite from "./PostWrite";
 
 const CommunityPostWriteComponent = () => {
   return (

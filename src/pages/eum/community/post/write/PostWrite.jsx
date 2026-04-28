@@ -14,10 +14,12 @@ import {
   h10Bold,
   h10Regular,
   h11Bold,
+  h11Medium,
   h11Regular,
   h9Bold,
 } from "../../../../../styles/common";
 import { flexBetweenTopRow, flexStartColumn } from "../../communityStyle";
+import ToolBar from "./postWriteComponent/ToolBar";
 
 /* ── 에셋 URL ── */
 const logoSignImg =
@@ -343,67 +345,67 @@ const BodyCol = styled.div`
   gap: 8px;
 `;
 
-const ToolbarRow = styled.div`
-  ${flexCenterRow}
-  gap: 30px;
-`;
+// const ToolbarRow = styled.div`
+//   ${flexCenterRow}
+//   gap: 30px;
+// `;
 
-const Toolbar = styled.div`
-  background: ${theme.GRAYSCALE[10]};
-  border: 1px solid ${theme.GRAYSCALE[8]};
-  border-radius: 12px;
-  padding: 4px 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
+// const Toolbar = styled.div`
+//   background: ${theme.GRAYSCALE[10]};
+//   border: 1px solid ${theme.GRAYSCALE[8]};
+//   border-radius: 12px;
+//   padding: 4px 8px;
+//   display: flex;
+//   align-items: center;
+//   gap: 12px;
+// `;
 
-const ToolbarIcon = styled.button`
-  width: 16px;
-  height: 16px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+// const ToolbarIcon = styled.button`
+//   width: 16px;
+//   height: 16px;
+//   background: none;
+//   border: none;
+//   padding: 0;
+//   cursor: pointer;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   flex-shrink: 0;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+//   img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: contain;
+//   }
 
-  &:hover {
-    opacity: 0.7;
-  }
-`;
+//   &:hover {
+//     opacity: 0.7;
+//   }
+// `;
 
-const ToolbarDivider = styled.div`
-  width: 1px;
-  height: 20px;
-  background: ${theme.GRAYSCALE[8]};
-  flex-shrink: 0;
-`;
+// const ToolbarDivider = styled.div`
+//   width: 1px;
+//   height: 20px;
+//   background: ${theme.GRAYSCALE[8]};
+//   flex-shrink: 0;
+// `;
 
 // 음성 입력 버튼
-const VoiceBtn = styled.button`
-  ${h11Bold}
-  padding: 5px 30px;
-  border-radius: 10px;
-  border: none;
-  background: ${theme.PALETTE.secondary.main};
-  color: ${theme.PALETTE.white};
-  cursor: pointer;
-  white-space: nowrap;
-  transition: opacity 0.2s;
+// const VoiceBtn = styled.button`
+//   ${h11Bold}
+//   padding: 5px 30px;
+//   border-radius: 10px;
+//   border: none;
+//   background: ${theme.PALETTE.secondary.main};
+//   color: ${theme.PALETTE.white};
+//   cursor: pointer;
+//   white-space: nowrap;
+//   transition: opacity 0.2s;
 
-  &:hover {
-    opacity: 0.85;
-  }
-`;
+//   &:hover {
+//     opacity: 0.85;
+//   }
+// `;
 
 const TextArea = styled.textarea`
   width: 100%;
@@ -485,10 +487,7 @@ const FileButtons = styled.div`
 `;
 
 const FileBtn = styled.button`
-  font-weight: ${theme.FONT_WEIGHT.bold};
-  font-size: ${theme.FONT_SIZE.h11};
-  line-height: 20px;
-  letter-spacing: -0.24px;
+  ${h11Bold}
   padding: 8px 30px;
   border-radius: 10px;
   border: 1px solid ${theme.GRAYSCALE[8]};
@@ -571,10 +570,7 @@ const SideCard = styled.div`
 
 const SideCardTitle = styled.p`
   margin: 0;
-  font-weight: ${theme.FONT_WEIGHT.bold};
-  font-size: ${theme.FONT_SIZE.h10};
-  line-height: normal;
-  letter-spacing: -0.28px;
+  ${h10Bold}
   color: ${theme.TEXT_COLOR.basic};
 `;
 
@@ -619,9 +615,7 @@ const NumberBadge = styled.div`
 
 const NoticeText = styled.p`
   margin: 0;
-  font-size: ${theme.FONT_SIZE.h11};
-  line-height: 20px;
-  letter-spacing: -0.24px;
+  ${h11Regular}
   color: ${theme.GRAYSCALE[9]};
 `;
 
@@ -733,6 +727,7 @@ const SocialBtn = styled.a`
   }
 `;
 
+// 각종 푸터들
 const FooterInfoLabel = styled.p`
   font-weight: ${theme.FONT_WEIGHT.bold};
   font-size: ${theme.FONT_SIZE.h9};
@@ -843,41 +838,7 @@ const PostWrite = () => {
                   <RequiredMark>*</RequiredMark>
                 </FieldLabel>
                 <BodyCol>
-                  <ToolbarRow>
-                    <Toolbar>
-                      <ToolbarIcon>
-                        <img src={iconBold} alt="굵게" />
-                      </ToolbarIcon>
-                      <ToolbarIcon>
-                        <img src={iconItalic} alt="기울임" />
-                      </ToolbarIcon>
-                      <ToolbarIcon>
-                        <img src={iconUnderline} alt="밑줄" />
-                      </ToolbarIcon>
-                      <ToolbarIcon>
-                        <img src={iconStrikethrough} alt="취소선" />
-                      </ToolbarIcon>
-                      <ToolbarDivider />
-                      <ToolbarIcon
-                        style={{ transform: "scaleY(-1) rotate(180deg)" }}
-                      >
-                        <img src={iconAlignLeft} alt="왼쪽 정렬" />
-                      </ToolbarIcon>
-                      <ToolbarIcon>
-                        <img src={iconAlignCenter} alt="가운데 정렬" />
-                      </ToolbarIcon>
-                      <ToolbarIcon>
-                        <img src={iconAlignRight} alt="오른쪽 정렬" />
-                      </ToolbarIcon>
-                      <ToolbarIcon>
-                        <img src={iconAlignJustify} alt="양쪽 정렬" />
-                      </ToolbarIcon>
-                      <ToolbarIcon>
-                        <img src={iconImage} alt="이미지 삽입" />
-                      </ToolbarIcon>
-                    </Toolbar>
-                    <VoiceBtn>음성 입력</VoiceBtn>
-                  </ToolbarRow>
+                  <ToolBar />
                   <TextArea placeholder="내용을 입력해 주세요" />
                 </BodyCol>
               </FieldRow>
