@@ -61,7 +61,7 @@ const Layout = () => {
 
             {/* 고객지원 페이지 이동 */}
             <button>
-              <Link to="" style={{
+              <Link to="/customservice" style={{
                 fontSize: theme.FONT_SIZE.h9, 
                 fontWeight: theme.FONT_WEIGHT.bold, 
                 color: theme.PALETTE.primary.dark,

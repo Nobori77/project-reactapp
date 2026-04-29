@@ -45,6 +45,11 @@ import MyPageCertificateGuideContainer from "../pages/mypage/certificate/guide/M
 import MyPageCertificateCompleteContainer from "../pages/mypage/certificate/complete/MyPageCertificateCompleteContainer";
 import ConfirmAddressSearchContainer from "../pages/mypage/certificate/confirm/address-search/ConfirmAddressSearchContainer";
 import StudySearchContainer from "../pages/study/search/StudySearchContainer";
+import CustomServiceContainer from "../pages/customservice/CustomServiceContainer";
+import CustomServiceInquireContainer from "../pages/customservice/inquire/CustomServiceInquireContainer";
+import CustomServiceNoticeContainer from "../pages/customservice/notice/CustomServiceNoticeContainer";
+import CustomServicePrivacyContainer from "../pages/customservice/privacy/CustomServicePrivacyContainer";
+import CustomServiceResultContainer from "../pages/customservice/result/CustomServiceResultContainer";
 
 
 const router = createBrowserRouter([
@@ -245,6 +250,28 @@ const router = createBrowserRouter([
               }
             ]
           }
+        ]
+      },
+      {
+        path: "customservice",
+        element: <CustomServiceContainer />,
+        children: [
+          {
+            path: "inquire",
+            element: <CustomServiceInquireContainer />
+          },
+          {
+            path: "notice",
+            element: <CustomServiceNoticeContainer />
+          },
+          {
+            path: "privacy",
+            element: <CustomServicePrivacyContainer />
+          },
+          {
+            path: "result",
+            element: <CustomServiceResultContainer />
+          },
         ]
       },
       {
