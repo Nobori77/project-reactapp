@@ -1,13 +1,14 @@
 import StudyAttendancePopup from './StudyAttendancePopup';
+import { AttendTitle } from './style';
 
 // 출석체크 화면
 const StudyAttendanceComponent = () => {
 
     return(
         <>
-        <div>
+        <AttendTitle>
         출석체크 매일 출석하고 보상을 받아요  ✅오늘 출석 완료! +30 XP 획득했어요!
-        </div>
+        </AttendTitle>
         <div>
         🔥 7일 현재 연속 출석 📅 14일 이번달 출석 ⚡1,240 총 획득 EXP 🏅3개 획득 뱃지
         </div>

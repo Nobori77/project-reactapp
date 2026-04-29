@@ -8,11 +8,14 @@ const StudyComponent = () => {
     return (
         <StudyWrap>
             <Banner>
+                <span>🤝💬✨🫶🤙</span>
                 <p className='title'>지금 바로 배워보세요!</p>
+                <span>🤟💙🌸✨👐</span>
                 <p className='desc'>회원가입 없이 다양한 언어표현을
                     재미있게 체험할 수 있어요</p>
                 <Link to={"/study/experience"}>지금 시작하기!ㅠㅠㅠㅠ </Link>   
             </Banner>
+                <span>🤟💙🌸✨👐</span>
 
             <Category>
                 <div className='onest'> 
