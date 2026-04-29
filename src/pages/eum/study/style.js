@@ -11,6 +11,7 @@ export const StudyWrap = styled.section`
 // 배너
 export const Banner = styled.section`
   .title{
+    padding: 28px 22px;
 
 
   }
@@ -24,6 +25,7 @@ export const Banner = styled.section`
 // 카테고리
 export const Category = styled.section`
   .onest{
+    padding: 28px 22px;
 
     .attendCheck{
 
@@ -37,13 +39,18 @@ export const Category = styled.section`
   }
 
   .twoed{
+    padding: 28px 22px;
+
+
     .signLearn{
 
     }
+
     .emergency{
 
 
     }
+
     .mors{
 
     }
@@ -52,11 +59,30 @@ export const Category = styled.section`
 
 // 검색
 export const Search = styled.section`
+  .title{
+    padding: 28px 22px;
+
+  }
+  .input{
+
+  }
 
 `;
 
 // 영상
 export const Video = styled.section`
+  .title{
+    padding: 28px 22px;
+
+  }
+
+  .desc{
+
+  }
+
+  .image{
+
+  }
 
 `;
 

@@ -61,8 +61,8 @@ const StudyComponent = () => {
             </Category>
 
             <Search>
-                <p>찾고 싶은 단어를 검색하세요</p>
-                <input type='text' placeholder='단어를 입력하세요'/>
+                <p className='title'>찾고 싶은 단어를 검색하세요</p>
+                <input className='input' type='text' placeholder='단어를 입력하세요'/>
                 <Link to={"/study/search"}>검색</Link>
                 <p>전체 일상 가족 음식 날씨 감정 숫자 색깔 동물 </p>
                 <p>임티 임티 임티 임티 임티 임티</p>
@@ -71,12 +71,12 @@ const StudyComponent = () => {
             </Search>
 
             <Video>
-                <p>바로 배우는 오늘의 단어 영상</p>
-                <p>매일 업데이트되는 짧은 학습 영상을 만나보세요.</p>
+                <p className='title'>바로 배우는 오늘의 단어 영상</p>
+                <p className='desc'>매일 업데이트되는 짧은 학습 영상을 만나보세요.</p>
                 <span>수어</span>
                 <span>수신호</span>
                 <span>모스부호</span>
-                <p>영상이미지</p>
+                <p className='image'>영상이미지</p>
                 <button>더 많은 영상 보기 →</button>
             </Video>
 
