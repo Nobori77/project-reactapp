@@ -1,7 +1,3 @@
-// import React from "react";
-// import styled from "styled-components";
-// import theme from "../styles/theme";
-
 import styled from "styled-components";
 import theme from "../../../../styles/theme";
 import {
@@ -10,12 +6,8 @@ import {
   flexStartColumn,
   hoverStyle,
 } from "../../communityStyle";
-import {
-  flexBetweenRow,
-  flexCenterColumn,
-  h10Regular,
-  h7Medium,
-} from "../../../../styles/common";
+import { flexBetweenRow, flexCenterColumn } from "../../../../styles/common";
+import { H7Medium, H10Regular } from "../../communityTextStyle";
 
 const Card = styled.div`
   ${flexCenterColumn}
@@ -74,17 +66,9 @@ const InfoArea = styled.div`
   width: 100%;
 `;
 
-const RoomTitle = styled.p`
-  ${h7Medium}
-  color: ${theme.TEXT_COLOR.basic};
+const RoomTitle = styled(H7Medium)`
   margin: 0;
   line-height: 1;
-`;
-
-const RoomDescription = styled.p`
-  ${h10Regular}
-  color: ${theme.GRAYSCALE[9]};
-  /* margin: 8px 0 0 0; */
 `;
 
 const Divider = styled.hr`
@@ -153,7 +137,7 @@ const LiveChatCard = ({
           <RoomTitle style={{ marginTop: isLive ? "8px" : "0" }}>
             {title}
           </RoomTitle>
-          <RoomDescription>{description}</RoomDescription>
+          <H10Regular $color={theme.GRAYSCALE[9]}>{description}</H10Regular>
         </InfoArea>
         <Divider />
         <BottomRow>

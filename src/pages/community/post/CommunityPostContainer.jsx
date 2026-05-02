@@ -12,6 +12,7 @@ import {
 import { H6Bold, H7Bold } from "../communityTextStyle";
 import LiveChatCard from "../chat/chatComponents/LiveChatCard";
 import PostListCard from "./postComponents/PostListCard";
+import PostContent from "./detail/detailComponent/PostContent";
 
 const CommunityPostContainer = () => {
   return (
@@ -61,6 +62,9 @@ const CommunityPostContainer = () => {
       </ColumnBlock>
       {/* <PostDetailPage /> */}
       <Outlet />
+
+      {/* 여기에 임시로 개발 목적으로 포스트 디테일 */}
+      <PostContent />
     </div>
   );
 };

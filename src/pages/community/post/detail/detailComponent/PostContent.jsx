@@ -1,14 +1,3 @@
-// import React, { useState } from "react";
-// import styled from "styled-components";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faHeart } from "@fortawesome/free-solid-svg-icons";
-// import theme from "../../styles/theme";
-// import {
-//   FONT_FAMILY,
-//   SURFACE, TAG_ON_PRIMARY, ACCESSIBILITY,
-//   PALETTE_EXT, RADIUS,
-// } from "../../constants";
-
 import styled from "styled-components";
 import theme from "../../../../../styles/theme";
 import {
@@ -22,7 +11,8 @@ import {
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { h11Bold, h11Regular } from "../../../../../styles/common";
+import { h7Bold, h11Bold } from "../../../../../styles/common";
+import { H8Bold, H9Bold, H10Regular, H11Regular } from "../../../communityTextStyle";
 import CommentSection from "./CommentSection";
 
 const { PALETTE, GRAYSCALE, TEXT_COLOR, FONT_SIZE, FONT_WEIGHT } = theme;
@@ -38,7 +28,6 @@ const linkIconImg =
 const PostHeader = styled.div`
   display: flex;
   align-items: center;
-  /* width: 984px; */
   gap: 20px;
   background: ${PALETTE.primary.main};
   padding: 15px 52px;
@@ -56,10 +45,7 @@ const CategoryTag = styled.span`
   white-space: nowrap;
 `;
 
-const BreadcrumbPath = styled.p`
-  font-family: ${FONT_FAMILY};
-  color: ${TAG_ON_PRIMARY.text};
-  ${h11Regular}
+const BreadcrumbPath = styled(H11Regular)`
   margin: 0;
   white-space: nowrap;
 `;
@@ -77,9 +63,7 @@ const BodyWrapper = styled.div`
 
 /* ── Title ── */
 const PostTitle = styled.h1`
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.bold};
-  font-size: ${FONT_SIZE.h7};
+  ${h7Bold}
   color: ${TEXT_COLOR.basic};
   margin: 0;
   word-break: keep-all;
@@ -107,11 +91,7 @@ const AuthorMeta = styled.div`
   gap: 4px;
 `;
 
-const AuthorName = styled.p`
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.bold};
-  font-size: ${FONT_SIZE.h9};
-  color: ${TEXT_COLOR.basic};
+const AuthorName = styled(H9Bold)`
   margin: 0;
   white-space: nowrap;
 `;
@@ -156,12 +136,7 @@ const BodyText = styled.div`
   width: 100%;
 `;
 
-const Paragraph = styled.p`
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.regular};
-  font-size: ${FONT_SIZE.h10};
-  color: ${TEXT_COLOR.basic};
-  letter-spacing: -0.28px;
+const Paragraph = styled(H10Regular)`
   line-height: 22px;
   margin: 0;
 `;
@@ -213,12 +188,7 @@ const EmojiItem = styled.span`
   flex-shrink: 0;
 `;
 
-const ImageCaption = styled.p`
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.regular};
-  font-size: ${FONT_SIZE.h11};
-  color: ${GRAYSCALE[9]};
-  letter-spacing: -0.24px;
+const ImageCaption = styled(H11Regular)`
   line-height: 20px;
   text-align: center;
   margin: 0;
@@ -261,16 +231,11 @@ const AccessibilityBox = styled.div`
   align-items: center;
 `;
 
-const AccessibilityLabel = styled.p`
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.bold};
-  font-size: ${FONT_SIZE.h8};
-  color: ${PALETTE.primary.main};
-  letter-spacing: -0.4px;
-  margin: 0;
+const AccessibilityLabel = styled(H8Bold)`
   position: absolute;
   left: 35px;
   white-space: nowrap;
+  margin: 0;
 `;
 
 const AccessBtn = styled.button`
@@ -392,7 +357,7 @@ const PostContent = ({
     <div>
       <PostHeader>
         <CategoryTag>{category}</CategoryTag>
-        <BreadcrumbPath>{breadcrumb}</BreadcrumbPath>
+        <BreadcrumbPath $color={TAG_ON_PRIMARY.text}>{breadcrumb}</BreadcrumbPath>
       </PostHeader>
 
       <BodyWrapper>
@@ -461,7 +426,7 @@ const PostContent = ({
               <EmojiItem>🤙</EmojiItem>
               <EmojiItem>👍</EmojiItem>
             </ImageBox>
-            <ImageCaption>
+            <ImageCaption $color={GRAYSCALE[9]}>
               수어 알파벳 연습 영상 스틸컷 (촬영: 2025.03.08)
             </ImageCaption>
           </ImageArea>
@@ -474,7 +439,9 @@ const PostContent = ({
         </TagRow>
 
         <AccessibilityBox>
-          <AccessibilityLabel>접근성 도구</AccessibilityLabel>
+          <AccessibilityLabel $color={PALETTE.primary.main}>
+            접근성 도구
+          </AccessibilityLabel>
           <AccessBtn variant="blue" pos="180px">
             수어로 보기
           </AccessBtn>
