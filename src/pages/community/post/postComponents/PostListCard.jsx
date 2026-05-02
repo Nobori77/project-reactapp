@@ -146,43 +146,43 @@ const StatItem = styled.div`
 `;
 
 const PostListCard = ({
-  tag = "학습 인증",
-  time = "방금 전",
-  title = "수어에서 감정 표현할 때 표정이 얼마나 중요한가요?",
-  content = "수어에서 표정과 몸짓이 단어만큼 중요하다고 들었는데 실제로 어느 정도 비중을 두어야 할지 궁금합니다.",
-  thumbnail = null,
-  authorName = "수어러버김지민",
-  authorAvatar = null,
-  likes = 42,
-  comments = 18,
-  views = 887,
+  postTag = "학습 인증",
+  postCreateAt = "방금 전",
+  postTitle = "수어에서 감정 표현할 때 표정이 얼마나 중요한가요?",
+  postContent = "수어에서 표정과 몸짓이 단어만큼 중요하다고 들었는데 실제로 어느 정도 비중을 두어야 할지 궁금합니다.",
+  postThumbnail = null, // DTO 정의 시 확정
+  userNickname = "수어러버김지민",
+  authorAvatar = null, // DTO 정의 시 확정
+  postLikeCount = 42,
+  comments = 18, // DTO 정의 시 확정
+  postReadCount = 887,
 }) => {
   return (
     <Card>
       <TopRow>
-        <Tag>{tag}</Tag>
-        <TimeText>{time}</TimeText>
+        <Tag>{postTag}</Tag>
+        <TimeText>{postCreateAt}</TimeText>
       </TopRow>
 
       <MidRow>
         <ContentArea>
-          <Title>{title}</Title>
-          <Description>{content}</Description>
+          <Title>{postTitle}</Title>
+          <Description>{postContent}</Description>
         </ContentArea>
         <Thumbnail>
-          {thumbnail && <img src={thumbnail} alt="게시글 썸네일" />}
+          {postThumbnail && <img src={postThumbnail} alt="게시글 썸네일" />}
         </Thumbnail>
       </MidRow>
 
       <BottomRow>
         <AuthorArea>
-          {authorAvatar && <Avatar src={authorAvatar} alt={authorName} />}
-          <AuthorName>{authorName}</AuthorName>
+          {authorAvatar && <Avatar src={authorAvatar} alt={userNickname} />}
+          <AuthorName>{userNickname}</AuthorName>
         </AuthorArea>
         <StatsArea>
           <StatItem>
             <FontAwesomeIcon icon={faHeart} />
-            <span>{likes}</span>
+            <span>{postLikeCount}</span>
           </StatItem>
           <StatItem>
             <FontAwesomeIcon icon={faComment} />
@@ -190,7 +190,7 @@ const PostListCard = ({
           </StatItem>
           <StatItem>
             <FontAwesomeIcon icon={faEye} />
-            <span>{views}</span>
+            <span>{postReadCount}</span>
           </StatItem>
         </StatsArea>
       </BottomRow>

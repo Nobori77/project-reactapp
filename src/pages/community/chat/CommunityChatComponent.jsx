@@ -14,8 +14,6 @@ import PostListCard from "../post/postComponents/PostListCard";
 const CommunityChatComponent = () => {
   return (
     <div>
-      커뮤니티 채팅 팝업
-      <LiveChatCard />
       <ColumnBlock>
         {/* 상단 헤더 */}
         <RowBlock flexWrap="wrap" justifyContent="space-between" gap="0px">
