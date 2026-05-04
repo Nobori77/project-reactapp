@@ -13,7 +13,7 @@ export const styles = {
     height: '80px',
     borderBottom: `1px solid ${theme.GRAYSCALE[8]}`,
     backgroundColor: theme.GRAYSCALE[10],
-    zIndex:1
+    zIndex: 1
   },
 
   logoNav : {  
