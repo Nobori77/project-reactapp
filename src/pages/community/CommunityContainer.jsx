@@ -29,7 +29,7 @@ const CommunityContainer = () => {
           </ContentArea>
 
           {/* 포스트 디테일 임시 */}
-          <PostDetailPage />
+          {/* <PostDetailPage /> */}
         </Page>
       </div>
       <div>
