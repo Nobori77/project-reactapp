@@ -189,6 +189,7 @@ const PostDetailPage = () => {
   const navigate = useNavigate();
 
   return (
+    // 페이지
     <Page>
       <BreadcrumbBar>
         <Crumb>홈</Crumb>
@@ -202,15 +203,19 @@ const PostDetailPage = () => {
         </Crumb>
       </BreadcrumbBar>
 
+      {/* 좌측 9개, 우측 3개 로 나누는 레이아웃 */}
       <ContentArea>
+        {/* 좌측 9개 메인 영역 */}
         <MainSection>
           <PostContent />
           {/* <CommentSection /> */}
         </MainSection>
 
+        {/* 우측 3개 사이드 바 영역 */}
         <PostSidebar />
       </ContentArea>
 
+      {/* 하단 푸터 */}
       <Footer>
         <FooterTop>
           <FooterLinks>
