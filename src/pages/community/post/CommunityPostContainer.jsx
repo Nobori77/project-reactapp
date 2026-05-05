@@ -120,7 +120,7 @@ const CommunityPostContainer = () => {
       <Outlet />
 
       {/* 여기에 임시로 개발 목적으로 포스트 디테일 */}
-      <PostContent />
+      {/* <PostDetailPage /> */}
     </div>
   );
 };

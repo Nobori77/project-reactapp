@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import { ContentArea, Page } from "./communityStyle";
 import MainRightSide from "./common/MainRightSide";
+import PostDetailPage from "./post/detail/PostDetailPage";
 
 const users = [
   { userId: 1, userName: "홍길동" },
@@ -26,6 +27,9 @@ const CommunityContainer = () => {
             {/* 활동중 멤버, 공지사항, 사이드 채팅바 */}
             <MainRightSide />
           </ContentArea>
+
+          {/* 포스트 디테일 임시 */}
+          <PostDetailPage />
         </Page>
       </div>
       <div>

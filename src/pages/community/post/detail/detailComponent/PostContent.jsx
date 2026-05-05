@@ -1,21 +1,38 @@
-import styled from "styled-components";
 import theme from "../../../../../styles/theme";
-import {
-  ACCESSIBILITY,
-  FONT_FAMILY,
-  PALETTE_EXT,
-  RADIUS,
-  SURFACE,
-  TAG_ON_PRIMARY,
-} from "../../../constants";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { h7Bold, h11Bold } from "../../../../../styles/common";
-import { H8Bold, H9Bold, H10Regular, H11Regular } from "../../../communityTextStyle";
-import CommentSection from "./CommentSection";
+import {
+  AccessBtn,
+  AccessibilityBox,
+  AccessibilityLabel,
+  ActionButtons,
+  ActionRow,
+  AuthorAvatar,
+  AuthorMeta,
+  AuthorName,
+  AuthorRow,
+  AuthorSubRow,
+  BlockQuote,
+  BodyText,
+  Divider,
+  EmojiItem,
+  HighlightWord,
+  IconButton,
+  ImageArea,
+  ImageBox,
+  ImageCaption,
+  LevelBadge,
+  LikeButton,
+  MetaText,
+  Paragraph,
+  PostContentWrapper,
+  PostTitle,
+  Tag,
+  TagRow,
+} from "../postDetailStyle";
 
-const { PALETTE, GRAYSCALE, TEXT_COLOR, FONT_SIZE, FONT_WEIGHT } = theme;
+const { PALETTE, GRAYSCALE } = theme;
 
 const authorProfileImg =
   "https://www.figma.com/api/mcp/asset/c2cb9995-4cdf-4fcb-97c9-8a6c124289ab";
@@ -23,315 +40,6 @@ const reportIconImg =
   "https://www.figma.com/api/mcp/asset/3823b07b-8dff-47fb-9bc5-b1dacb0103e8";
 const linkIconImg =
   "https://www.figma.com/api/mcp/asset/307137f6-4a5b-4f60-8e17-56fb9a225552";
-
-/* ── Header ── */
-const PostHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background: ${PALETTE.primary.main};
-  padding: 15px 52px;
-  border-radius: ${RADIUS.card} ${RADIUS.card} 0 0;
-`;
-
-const CategoryTag = styled.span`
-  background: ${TAG_ON_PRIMARY.bg};
-  border: 1px solid ${TAG_ON_PRIMARY.border};
-  color: ${PALETTE.white};
-  font-family: ${FONT_FAMILY};
-  ${h11Bold}
-  padding: 4px 16px;
-  border-radius: ${RADIUS.pill};
-  white-space: nowrap;
-`;
-
-const BreadcrumbPath = styled(H11Regular)`
-  margin: 0;
-  white-space: nowrap;
-`;
-
-/* ── Body wrapper ── */
-const BodyWrapper = styled.div`
-  background: ${SURFACE.card};
-  border-radius: 0 0 ${RADIUS.card} ${RADIUS.card};
-  padding: 44px 52px;
-  width: 984px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-/* ── Title ── */
-const PostTitle = styled.h1`
-  ${h7Bold}
-  color: ${TEXT_COLOR.basic};
-  margin: 0;
-  word-break: keep-all;
-`;
-
-/* ── Author row ── */
-const AuthorRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  height: 44px;
-`;
-
-const AuthorAvatar = styled.img`
-  width: 44px;
-  height: 44px;
-  border-radius: ${RADIUS.sm};
-  object-fit: cover;
-  flex-shrink: 0;
-`;
-
-const AuthorMeta = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-
-const AuthorName = styled(H9Bold)`
-  margin: 0;
-  white-space: nowrap;
-`;
-
-const AuthorSubRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-
-const LevelBadge = styled.span`
-  background: ${PALETTE.primary.extraLight};
-  color: ${PALETTE.primary.main};
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.bold};
-  font-size: ${FONT_SIZE.h12};
-  padding: 2px 6px;
-  border-radius: ${RADIUS.pill};
-  white-space: nowrap;
-`;
-
-const MetaText = styled.span`
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.regular};
-  font-size: ${FONT_SIZE.h11};
-  color: ${GRAYSCALE[9]};
-  letter-spacing: -0.24px;
-  white-space: nowrap;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background: ${GRAYSCALE[8]};
-`;
-
-/* ── Post body text ── */
-const BodyText = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-`;
-
-const Paragraph = styled(H10Regular)`
-  line-height: 22px;
-  margin: 0;
-`;
-
-const HighlightWord = styled.span`
-  background: ${PALETTE.primary.extraLight};
-  color: ${PALETTE.primary.main};
-  border-radius: 4px;
-  padding: 0 2px;
-`;
-
-const BlockQuote = styled.div`
-  border-left: 6px solid ${PALETTE_EXT.primaryMid};
-  background: ${PALETTE.primary.extraLight};
-  border-radius: 4px 8px 8px 4px;
-  padding: 9px 13px;
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.regular};
-  font-size: ${FONT_SIZE.h10};
-  color: ${TEXT_COLOR.basic};
-  letter-spacing: -0.28px;
-  line-height: 22px;
-`;
-
-const ImageArea = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-`;
-
-const ImageBox = styled.div`
-  width: 100%;
-  max-width: 547px;
-  background: ${PALETTE.primary.extraLight};
-  border: 2px dashed ${PALETTE_EXT.primaryMid};
-  border-radius: 16px;
-  padding: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 38px;
-  box-sizing: border-box;
-`;
-
-const EmojiItem = styled.span`
-  font-size: 52px;
-  flex-shrink: 0;
-`;
-
-const ImageCaption = styled(H11Regular)`
-  line-height: 20px;
-  text-align: center;
-  margin: 0;
-`;
-
-/* ── Tags ── */
-const TagRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding-top: 12px;
-`;
-
-const Tag = styled.span`
-  background: ${SURFACE.card};
-  border: 1px solid ${GRAYSCALE[8]};
-  color: ${TEXT_COLOR.basic};
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.bold};
-  font-size: ${FONT_SIZE.h9};
-  letter-spacing: -0.32px;
-  line-height: 24px;
-  padding: 16px 30px;
-  border-radius: ${RADIUS.pill};
-  white-space: nowrap;
-  cursor: pointer;
-`;
-
-/* ── Accessibility Tools ── */
-const AccessibilityBox = styled.div`
-  width: 100%;
-  border: 1px solid ${PALETTE.secondary.main};
-  border-radius: 16px;
-  background: ${ACCESSIBILITY.gradient};
-  height: 119px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-`;
-
-const AccessibilityLabel = styled(H8Bold)`
-  position: absolute;
-  left: 35px;
-  white-space: nowrap;
-  margin: 0;
-`;
-
-const AccessBtn = styled.button`
-  position: absolute;
-  top: 36px;
-  left: ${({ pos }) => pos};
-  padding: 14px 80px;
-  border-radius: ${RADIUS.input};
-  font-family: ${FONT_FAMILY};
-  font-weight: ${FONT_WEIGHT.bold};
-  font-size: ${FONT_SIZE.h9};
-  letter-spacing: -0.32px;
-  line-height: 24px;
-  cursor: pointer;
-  white-space: nowrap;
-  background: ${({ variant }) =>
-    variant === "blue" ? PALETTE.primary.main : ACCESSIBILITY.readBg};
-  color: ${({ variant }) =>
-    variant === "blue" ? PALETTE.white : PALETTE.secondary.main};
-  border: ${({ variant }) =>
-    variant === "blue" ? "none" : `1px solid ${ACCESSIBILITY.readColor}`};
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 0.85;
-  }
-`;
-
-/* ── Like / Share / Report ── */
-const ActionRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 275px;
-`;
-
-const LikeButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-
-  svg {
-    font-size: ${FONT_SIZE.h9};
-    color: ${({ liked }) => (liked ? PALETTE.red : TEXT_COLOR.basic)};
-    transition: color 0.2s;
-  }
-
-  span {
-    font-family: ${FONT_FAMILY};
-    font-weight: ${FONT_WEIGHT.bold};
-    font-size: ${FONT_SIZE.h8};
-    color: ${TEXT_COLOR.basic};
-    letter-spacing: -0.4px;
-  }
-`;
-
-const ActionButtons = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const IconButton = styled.button`
-  width: 40px;
-  height: 40px;
-  border-radius: ${RADIUS.button};
-  background: ${SURFACE.card};
-  border: 2px solid ${({ danger }) => (danger ? PALETTE.red : GRAYSCALE[8])};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  overflow: hidden;
-  padding: 0;
-  transition: border-color 0.2s;
-
-  &:hover {
-    border-color: ${({ danger }) =>
-      danger ? PALETTE_EXT.redHover : GRAYSCALE[9]};
-  }
-
-  img {
-    width: 24px;
-    height: 24px;
-    object-fit: cover;
-  }
-
-  svg {
-    font-size: ${FONT_SIZE.h9};
-    color: ${({ danger }) => (danger ? PALETTE.red : TEXT_COLOR.basic)};
-  }
-`;
 
 const PostContent = ({
   category = "학습 인증",
@@ -355,14 +63,10 @@ const PostContent = ({
 
   return (
     <div>
-      <PostHeader>
-        <CategoryTag>{category}</CategoryTag>
-        <BreadcrumbPath $color={TAG_ON_PRIMARY.text}>{breadcrumb}</BreadcrumbPath>
-      </PostHeader>
-
-      <BodyWrapper>
+      <PostContentWrapper>
         <PostTitle>{title}</PostTitle>
 
+        {/* 게시글 작성자 정보 */}
         <AuthorRow>
           <AuthorAvatar src={authorAvatar} alt={authorName} />
           <AuthorMeta>
@@ -376,8 +80,10 @@ const PostContent = ({
           </AuthorMeta>
         </AuthorRow>
 
+        {/* 구분선 */}
         <Divider />
 
+        {/* 게시글 몸체 */}
         <BodyText>
           <Paragraph>안녕하세요! 이음 커뮤니티 여러분 😊</Paragraph>
 
@@ -432,12 +138,14 @@ const PostContent = ({
           </ImageArea>
         </BodyText>
 
+        {/* 해당 게시글의 태그 */}
         <TagRow>
           {tags.map((tag) => (
             <Tag key={tag}>{tag}</Tag>
           ))}
         </TagRow>
 
+        {/* 접근성 도구 */}
         <AccessibilityBox>
           <AccessibilityLabel $color={PALETTE.primary.main}>
             접근성 도구
@@ -450,6 +158,7 @@ const PostContent = ({
           </AccessBtn>
         </AccessibilityBox>
 
+        {/* 게시글 관련 액션 버튼 */}
         <ActionRow>
           <LikeButton liked={liked} onClick={handleLike}>
             <FontAwesomeIcon icon={faHeart} />
@@ -464,9 +173,10 @@ const PostContent = ({
             </IconButton>
           </ActionButtons>
         </ActionRow>
+      </PostContentWrapper>
 
-        <CommentSection />
-      </BodyWrapper>
+      {/* 댓글 섹션 */}
+      {/* <CommentSection /> */}
     </div>
   );
 };
