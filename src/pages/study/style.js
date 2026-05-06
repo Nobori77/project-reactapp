@@ -28,6 +28,7 @@ export const StudyWrap = styled.section`
 export const Banner = styled.div`
   padding-bottom: 50px;
 `;
+
 // 배너 아이콘
 export const BannerIcon = styled.div`
 
@@ -521,7 +522,7 @@ export const Search = styled.div`
     width: 939px;
     height: 66px;
     border: 1.5px solid #D9D9D9;
-    border-radius: 32px;
+    border-radius: 15px;
     padding: 0 28px;
     box-sizing: border-box;
     outline: none;
@@ -534,7 +535,7 @@ export const Search = styled.div`
     width: 63px;
     height: 47px;
     margin-left: -93px;
-    border-radius: 32px;
+    border-radius: 15px;
     background: #4359fc;
     text-decoration: none;
     align-items: center;

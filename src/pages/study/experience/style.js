@@ -2,8 +2,7 @@ import styled from "styled-components";
 import theme from "../../../styles/theme";
 import createGlobalStyle from "styled-components";
 
-
-// 검색 화면_style
+// 비회원 체험학습 화면_style
 
 // 크기
 const fontSize = (key) => ({theme}) => theme.FONT_SIZE[key];
@@ -17,10 +16,12 @@ const textColor = (key) => ({theme}) => theme.PALETTE[key];
 
 
 // 전체
-export const SearchWrap = styled.section`
+export const NonUser = styled.section`
   --inner: 1320px;
 
   width: 100%;
   overflow: hidden;
   position: relative;
 `;
+
+

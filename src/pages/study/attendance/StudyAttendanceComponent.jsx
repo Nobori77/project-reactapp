@@ -130,9 +130,35 @@ const StudyAttendanceComponent = () => {
                     {/* 출석보상 */}
                     <AttendReward>
                         <div>
-                            출석보상
-                            <p></p>
+                            <p>출석 보상</p>
 
+                            <div>
+                                <p>3일</p>
+                                <p>3일 연속</p>
+                                <p>+50 EXP 🏅 뱃지</p>
+                                <p>완료</p>
+                            </div>
+
+                            <div>
+                                <p>7일</p>
+                                <p>7일 연속</p>
+                                <p>+100 EXP 🏅 뱃지</p>
+                                <p>수령</p>
+                            </div>
+
+                            <div>
+                                <p>14일</p>
+                                <p>14일 연속</p>
+                                <p>+250 EXP 🏅 뱃지</p>
+                                <p>🔒</p>
+                            </div>
+
+                            <div>
+                                <p>30일</p>
+                                <p>30일 연속</p>
+                                <p>+500 EXP 🏅 뱃지</p>
+                                <p>🔒</p>
+                            </div>
                         </div>
                     </AttendReward>
                 </SideWrap>

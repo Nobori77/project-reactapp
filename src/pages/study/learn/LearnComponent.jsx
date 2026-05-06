@@ -1,10 +1,13 @@
 import React from 'react';
+import { LearnWrap } from './style';
 
+// 학습 화면
 const LearnComponent = () => {
+
     return (
-        <div>
+        <LearnWrap>
             학습카드
-        </div>
+        </LearnWrap>
     );
 };
 

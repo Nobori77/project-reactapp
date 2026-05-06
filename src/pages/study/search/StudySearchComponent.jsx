@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { SearchWrap } from './style';
 
 // 검색페이지
 const StudySearchComponent = () => {
     return (
-        <div>
+        <SearchWrap>
             <div id=''>
             <input type='text' placeholder='안녕하세요'/>
             <Link to={"/study/search"}>검색</Link>
@@ -33,7 +34,7 @@ const StudySearchComponent = () => {
                 <span>카드 보기</span>
                 <p>친한 친구나 아랫사람에게 사용하는 편안한 인사</p>
             </div> 
-        </div>
+        </SearchWrap>
     );
 };
 

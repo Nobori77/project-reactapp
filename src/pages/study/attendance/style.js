@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import Calendar from "react-calendar";
 
 
-// 학습 출석화면_style
+// 출석체크 화면_style
 
 // 크기
 const fontSize = (key) => ({theme}) => theme.FONT_SIZE[key];
@@ -16,7 +16,7 @@ const lineHeight = (key) => ({theme}) => theme.FONT_LINE[key];
 const textColor = (key) => ({theme}) => theme.PALETTE[key];
 
 
-// 출석체크 화면 style
+// 출석체크_화면
  
 // 전체
 export const AttendWrap = styled.section`
@@ -308,8 +308,8 @@ export const StyledCalendar = styled(Calendar)``;
 /* 오늘 버튼 스타일 */
 export const StyledDate = styled.div`
   position: absolute;
-  top: 75px; /* 상단에서 10px 떨어진 위치 */
-  right: 68px; /* 오른쪽에서 10px 떨어진 위치 */
+  top: 75px; 
+  right: 68px; 
   background-color: #7C97FE;
   color: white;
   width: 90px;
@@ -367,12 +367,11 @@ export const AttendReward = styled.div`
 `;
 
 
+// ================================================================
 
 
 
-
-
-// 출석체크PopUp 화면 style
+// 출석체크 PopUp 화면
 
 export const AttendPopUpWrap = styled.div`
   padding: 28px 22px;
