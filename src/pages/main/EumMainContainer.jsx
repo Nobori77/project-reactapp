@@ -854,7 +854,7 @@ const EumMainContainer = () => {
                 display : 'flex',
                 justifyContent : 'center',
                 textAlign : 'center'
-              }}>
+                }}>
                 <button style={{
                   color : theme.PALETTE.primary.main,
                   fontSize : theme.FONT_SIZE.h8,
@@ -866,7 +866,13 @@ const EumMainContainer = () => {
               </p>              
             </div>
           </div>
+          <div style={{
+            width : '100%',
+            height : '668px',
+            backgroundColor: styles.backGroundGray
+          }}>
 
+          </div>
         </div>
       </div>
     </>
