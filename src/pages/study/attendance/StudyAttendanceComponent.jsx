@@ -99,7 +99,7 @@ const StudyAttendanceComponent = () => {
                             if (view === "month") { // view가 'month'일 때
                                 // 해당 날짜가 특정 날짜인지 확인
                                 if (attendDay.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
-                                // 점 추가    
+                                // 점 추가 -> 여기해결하기    
                                 html.push(<StyledDot key={moment(date).format("YYYY-MM-DD")} />);
                                 console.log(moment(date).format("YYYY-MM-DD"));
                                 }
