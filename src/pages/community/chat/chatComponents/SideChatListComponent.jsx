@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { COMMENT, colors, radius } from "../../constants";
+import { colors, radius } from "../../constants";
 import { h10Bold, h11Bold, h11Regular } from "../../../../styles/common";
 import chatDefaultProfile from "../../assets/chat/chat_default_profile.svg";
-import { thumbnailStyle } from "./chatComponentStyle";
+import { ThumbnailBox } from "./chatComponentStyle";
 
 // ─── List Body ───────────────────────────────────────────────────────────────
 
@@ -50,11 +50,6 @@ const RoomLeft = styled.div`
   gap: 12px;
 `;
 
-const ThumbnailBox = styled.img`
-  ${thumbnailStyle}
-  flex-shrink: 0;
-  object-fit: cover;
-`;
 
 const RoomInfo = styled.div`
   display: flex;

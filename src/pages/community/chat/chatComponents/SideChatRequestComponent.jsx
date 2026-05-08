@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { colors, fonts, radius } from "../../constants";
+import chatDefaultProfile from "../../assets/chat/chat_default_profile.svg";
+import { ThumbnailBox } from "./chatComponentStyle";
 
 // ─── Body ────────────────────────────────────────────────────────────────────
 
@@ -44,21 +46,6 @@ const UserLeft = styled.div`
   gap: 10px;
 `;
 
-const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: ${radius.input};
-  background: ${colors.primaryLight};
-  flex-shrink: 0;
-  overflow: hidden;
-`;
-
-const AvatarImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
 const Username = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.bold};
@@ -89,7 +76,8 @@ const TabGroup = styled.div`
 `;
 
 const TabBtn = styled.button`
-  background: ${({ $isActive }) => ($isActive ? colors.primary : colors.bgCard)};
+  background: ${({ $isActive }) =>
+    $isActive ? colors.primary : colors.bgCard};
   border: 1px solid ${colors.primary};
   border-radius: ${radius.sm};
   padding: 6px 16px;
@@ -100,7 +88,9 @@ const TabBtn = styled.button`
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 `;
 
 // ─── Default Data ─────────────────────────────────────────────────────────────
@@ -130,9 +120,10 @@ const SideChatRequestComponent = ({
         {requests.map((req) => (
           <RequestItem key={req.id} onClick={() => onRequestClick?.(req)}>
             <UserLeft>
-              <Avatar>
-                {req.avatar && <AvatarImg src={req.avatar} alt={req.username} />}
-              </Avatar>
+              <ThumbnailBox
+                src={req.avatar || chatDefaultProfile}
+                alt={req.username}
+              />
               <Username>{req.username}</Username>
             </UserLeft>
             <TimeAgo>{req.timeAgo}</TimeAgo>
