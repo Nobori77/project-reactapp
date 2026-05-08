@@ -7,7 +7,6 @@ import {
   RightPanelScroll,
   PanelSection,
   SectionLabel,
-  RoomProfileImg,
   RoomTitleCenter,
   RoomTitleText,
   StatusRow,
@@ -21,22 +20,24 @@ import {
   AccessRow,
   AccessLabel,
 } from "../ChatStyle";
+import { PopupChatRoomInfoThumbnail } from "../chatComponents/chatComponentStyle";
+import defaultProfileImg from "../../assets/chat/chat_default_profile.svg";
 
-const roomProfileUrl =
-  "https://www.figma.com/api/mcp/asset/4597fd24-1f77-4b23-a97f-9d0612d37539";
 const liveVectorUrl =
   "https://www.figma.com/api/mcp/asset/79378b34-81dd-4aef-bc8a-2e9814e941b7";
 
-const PopupRoomInfoPanel = ({ tags, onLeave }) => {
+const PopupRoomInfoPanel = ({ profileUrl, tags, onLeave }) => {
   const [signToggle, setSignToggle] = useState(false);
   const [readToggle, setReadToggle] = useState(false);
 
   return (
     <RightPanelScroll>
       <PanelSection $center $gap="12px">
-        <RoomProfileImg>
-          <img src={roomProfileUrl} alt="채팅방" />
-        </RoomProfileImg>
+        <PopupChatRoomInfoThumbnail
+          src={profileUrl || defaultProfileImg}
+          alt="채팅방"
+          onError={(e) => { e.target.src = defaultProfileImg; }}
+        />
         <RoomTitleCenter>
           <RoomTitleText>수어 일상 대화방</RoomTitleText>
           <StatusRow>

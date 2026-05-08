@@ -8,6 +8,13 @@ export const thumbnailStyle = css`
   background: ${colors.primaryLight};
 `;
 
+export const imgBoxStyle = css`
+  border-radius: ${radius.input};
+  background: ${colors.primaryLight};
+  flex-shrink: 0;
+  object-fit: cover;
+`;
+
 export const ThumbnailBox = styled.img`
   ${thumbnailStyle}
   flex-shrink: 0;
@@ -21,4 +28,11 @@ export const PopupThumbnailBox = styled.img`
   background: ${colors.primaryLight};
   flex-shrink: 0;
   object-fit: cover;
+`;
+
+export const PopupChatRoomInfoThumbnail = styled.img`
+  ${imgBoxStyle}
+  border-radius: 16px;
+  width: 56px;
+  height: 56px;
 `;

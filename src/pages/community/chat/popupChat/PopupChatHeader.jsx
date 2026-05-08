@@ -36,7 +36,9 @@ const PopupChatHeader = ({ profileUrl, onLeave, onMinimize, onClose }) => (
         <ThumbnailBox
           src={profileUrl || defaultProfileImg}
           alt="채팅방 프로필"
-          onError={(e) => { e.target.src = defaultProfileImg; }}
+          onError={(e) => {
+            e.target.src = defaultProfileImg;
+          }}
         />
         <RoomInfo>
           <RoomTitle>학습 일상 대화방</RoomTitle>
