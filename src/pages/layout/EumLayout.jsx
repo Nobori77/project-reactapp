@@ -12,7 +12,7 @@ const Layout = () => {
             {/* 로고 */}
             <button>
               <Link to="/">
-                <img src= '/assets/image/logo.svg' alt='logo' style={{height:'28px'}}>
+                <img src= '/assets/image/layout/logo.svg' alt='logo' style={{height:'28px'}}>
                 </img>  
               </Link>
             </button>
@@ -77,7 +77,37 @@ const Layout = () => {
       <main style={{ marginTop: '80px' }}>
         <Outlet />
       </main>
-      <footer>푸터</footer>
+      <footer style={{marginTop : '70px'}}>
+        <div style={{
+          height : '290px',
+          backgroundColor : theme.PALETTE.primary.main,
+          display: 'flex',
+          justifyContent :'center',
+          }}>
+          <p style={{
+            width: '105vh',
+            display : 'flex',
+            justifyContent:'space-between',
+            display : 'flex',
+            marginTop : '71px'
+          }}>
+            <span style={{
+              display : 'flex',
+              fontSize : theme.FONT_SIZE.h9,
+              fontWeight : theme.FONT_WEIGHT.medium,
+              fontLine : theme.FONT_LINE.h9,
+              color : theme.PALETTE.white,
+            }}>
+              개인정보처리방침 | 서비스 이용약관
+            </span>
+            <p>
+              <img src='/assets/image/layout/youtube.svg' />
+              <img src='/assets/image/layout/naver.svg' />
+              <img src='/assets/image/layout/instagram.svg' />
+            </p>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };

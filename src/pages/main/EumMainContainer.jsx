@@ -35,13 +35,16 @@ const EumMainContainer = () => {
       <span style={{ 
         fontSize: theme.FONT_SIZE.h7, 
         fontWeight: theme.FONT_WEIGHT.bold,
+        fontLine: theme.FONT_LINE.h7,
         color: hovered ? theme.PALETTE.white : theme.PALETTE.black
         }}>
           {card.title}
       </span>
       <span style={{
         fontSize: theme.FONT_SIZE.h10, 
-        color: hovered ? theme.PALETTE.white : styles.textGray 
+        fontLine: theme.FONT_LINE.h10,
+        fontWeight : theme.FONT_WEIGHT.regular,
+        color: hovered ? theme.PALETTE.white : styles.textGray ,
         }}>
           {card.sub}
       </span>
@@ -49,11 +52,13 @@ const EumMainContainer = () => {
       {!hovered && card.tag && (
         <span style={{
           display: 'inline-flex',
-          backgroundColor: styles.backGroundGray,
+          backgroundColor: styles.dailyBorderGray,
           borderRadius: '20px',
           padding: '2px 10px',
           fontSize: theme.FONT_SIZE.h11,
-          fontWeight: theme.FONT_WEIGHT.regular,
+          fontWeight: theme.FONT_WEIGHT.medium,
+          fontLine: theme.FONT_LINE.h11,
+          color :theme.PALETTE.primary.main,
           width: 'fit-content',
         }}>{card.tag}</span>
       )}
@@ -1191,6 +1196,7 @@ const EumMainContainer = () => {
             <span style={{
               fontSize : theme.FONT_SIZE.h5,
               fontWeight : theme.FONT_WEIGHT.bold,
+              fontLine: theme.FONT_LINE.h5,
               alignSelf: 'flex-start', 
               paddingLeft: '370px',
               }}>
@@ -1200,6 +1206,7 @@ const EumMainContainer = () => {
             <span style = {{
               display : 'flex',
               fontSize : theme.FONT_SIZE.h5,
+              fontLine: theme.FONT_LINE.h5,
               fontWeight : theme.FONT_WEIGHT.bold,
               color : theme.PALETTE.primary.main
               }}>
@@ -1209,6 +1216,7 @@ const EumMainContainer = () => {
             <span style = {{
               fontSize : theme.FONT_SIZE.h5,
               fontWeight : theme.FONT_WEIGHT.bold,
+              fontLine: theme.FONT_LINE.h5,
               }}>
               하나씩
             </span>
