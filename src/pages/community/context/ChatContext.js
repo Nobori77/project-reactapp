@@ -20,7 +20,7 @@ export const ChatProvider = ({ children }) => {
   const [view, setView] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [sideInitialType, setSideInitialType] = useState(TYPE.LIST);
-  const [popupSelectInitialFilter, setPopupSelectInitialFilter] =
+  const [popupSelectCurrentFilter, setPopupSelectCurrentFilter] =
     useState("라이브 채팅방");
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export const ChatProvider = ({ children }) => {
     if (sideType === TYPE.ROOM) {
       setView(VIEW.POPUP);
     } else {
-      setPopupSelectInitialFilter(
+      setPopupSelectCurrentFilter(
         sideType === TYPE.REQUEST ? "요청" : "라이브 채팅방",
       );
       setView(VIEW.POPUP_SELECT);
@@ -79,11 +79,18 @@ export const ChatProvider = ({ children }) => {
     setView(VIEW.POPUP);
   }, []);
 
-  // 채팅방 선택 화면 최소화 → 사이드 채팅 표시 (현재 팝업 탭에 따라 타입 결정)
-  const handleSelectMinimize = useCallback((filter) => {
-    setSideInitialType(filter === "요청" ? TYPE.REQUEST : TYPE.LIST);
-    setView(VIEW.SIDE);
+  // 채팅방 선택 화면 필터 탭 변경 (SelectRoomListPanel에서 호출)
+  const updateSelectFilter = useCallback((filter) => {
+    setPopupSelectCurrentFilter(filter);
   }, []);
+
+  // 채팅방 선택 화면 최소화 → 사이드 채팅 표시 (현재 팝업 탭에 따라 타입 결정)
+  const handleSelectMinimize = useCallback(() => {
+    setSideInitialType(
+      popupSelectCurrentFilter === "요청" ? TYPE.REQUEST : TYPE.LIST,
+    );
+    setView(VIEW.SIDE);
+  }, [popupSelectCurrentFilter]);
 
   // 채팅방 선택 화면 닫기(X) → 채팅 종료
   const handleSelectClose = useCallback(() => {
@@ -98,7 +105,8 @@ export const ChatProvider = ({ children }) => {
         view,
         isLoading,
         sideInitialType,
-        popupSelectInitialFilter,
+        popupSelectCurrentFilter,
+        updateSelectFilter,
         openChatRoom,
         minimizeChat,
         closeChat,

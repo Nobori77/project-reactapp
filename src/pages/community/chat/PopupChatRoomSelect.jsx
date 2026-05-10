@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   SelectPageBg,
   SelectPopup,
@@ -18,62 +18,8 @@ const minimizeVUrl =
 const closeVUrl =
   "https://www.figma.com/api/mcp/asset/4b5d23e6-44b7-4a45-8a8f-9ed805ef3301";
 
-const LIVE_ROOMS = [
-  { id: 1, name: "수어 학습 질문방", count: 84 },
-  { id: 2, name: "수어 학습 질문방", count: 0 },
-  { id: 3, name: "수어 학습 질문방", count: 0 },
-  { id: 4, name: "수어 학습 질문방", count: 0 },
-  { id: 5, name: "수어 학습 질문방", count: 0 },
-];
-
-const ONGOING_ROOMS = [
-  {
-    id: 1,
-    name: "수어 학습 질문방",
-    count: "00",
-    time: "00:00",
-    lastMsg: "마지막 메세ㅇㅇㅇㅇㅇㅇ지..",
-  },
-  {
-    id: 2,
-    name: "수어 학습 질문방",
-    count: "00",
-    time: "00:00",
-    lastMsg: "마지막 메세ㅇㅇㅇㅇㅇㅇ지..",
-  },
-  {
-    id: 3,
-    name: "수어 학습 질문방",
-    count: "00",
-    time: "00:00",
-    lastMsg: "마지막 메세ㅇㅇㅇㅇㅇㅇ지..",
-  },
-];
-
-const FOLLOW_USERS = [
-  { id: 1, name: "ㅇㅇㅇ님" },
-  { id: 2, name: "ㅇㅇㅇ님" },
-  { id: 3, name: "ㅇㅇㅇ님" },
-  { id: 4, name: "ㅇㅇㅇ님" },
-];
-
-const REQUEST_USERS = [
-  { id: 1, name: "ㅇㅇㅇ님" },
-  { id: 2, name: "ㅇㅇㅇ님" },
-  { id: 3, name: "ㅇㅇㅇ님" },
-];
-
 const PopupChatRoomSelect = () => {
-  const {
-    popupSelectInitialFilter,
-    handleSelectMinimize,
-    handleSelectClose,
-    handleSelectRoom,
-  } = useChatContext();
-
-  const [currentFilter, setCurrentFilter] = useState(
-    popupSelectInitialFilter ?? "라이브 채팅방",
-  );
+  const { handleSelectMinimize, handleSelectClose } = useChatContext();
 
   return (
     <SelectPageBg>
@@ -81,7 +27,7 @@ const PopupChatRoomSelect = () => {
         <SelectHeader>
           <HeaderTitle>채팅방 선택</HeaderTitle>
           <HeaderBtns>
-            <MinimizeBtn onClick={() => handleSelectMinimize(currentFilter)}>
+            <MinimizeBtn onClick={handleSelectMinimize}>
               <img src={minimizeVUrl} alt="최소화" />
             </MinimizeBtn>
             <SelectCloseBtn onClick={handleSelectClose}>
@@ -91,15 +37,8 @@ const PopupChatRoomSelect = () => {
         </SelectHeader>
 
         <SelectBody>
-          <SelectRoomListPanel
-            liveRooms={LIVE_ROOMS}
-            followUsers={FOLLOW_USERS}
-            requestUsers={REQUEST_USERS}
-            initialFilter={popupSelectInitialFilter}
-            onFilterChange={setCurrentFilter}
-            onRoomSelect={handleSelectRoom}
-          />
-          <SelectOngoingPanel rooms={ONGOING_ROOMS} />
+          <SelectRoomListPanel />
+          <SelectOngoingPanel />
         </SelectBody>
       </SelectPopup>
     </SelectPageBg>

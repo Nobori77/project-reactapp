@@ -17,15 +17,39 @@ import {
   OngoingLastMsg,
 } from "../ChatStyle";
 
-const SelectOngoingPanel = ({ rooms }) => (
+const ONGOING_ROOMS = [
+  {
+    id: 1,
+    name: "수어 학습 질문방",
+    count: "00",
+    time: "00:00",
+    lastMsg: "마지막 메세ㅇㅇㅇㅇㅇㅇ지..",
+  },
+  {
+    id: 2,
+    name: "수어 학습 질문방",
+    count: "00",
+    time: "00:00",
+    lastMsg: "마지막 메세ㅇㅇㅇㅇㅇㅇ지..",
+  },
+  {
+    id: 3,
+    name: "수어 학습 질문방",
+    count: "00",
+    time: "00:00",
+    lastMsg: "마지막 메세ㅇㅇㅇㅇㅇㅇ지..",
+  },
+];
+
+const SelectOngoingPanel = () => (
   <SelectRightPanel>
     <PanelHeader>
       <PanelLabel>진행중인 채팅방</PanelLabel>
-      <SelectCountBadge>{rooms.length}</SelectCountBadge>
+      <SelectCountBadge>{ONGOING_ROOMS.length}</SelectCountBadge>
     </PanelHeader>
     <Divider />
     <OngoingRoomList>
-      {rooms.map((room) => (
+      {ONGOING_ROOMS.map((room) => (
         <OngoingRoomItem key={room.id}>
           <OngoingProfileBox />
           <OngoingRoomInfo>

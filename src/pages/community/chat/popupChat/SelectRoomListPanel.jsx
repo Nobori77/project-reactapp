@@ -23,30 +23,47 @@ import {
   FilterTabsRow,
   FilterTab,
 } from "../ChatStyle";
+import { useChatContext } from "../../context/ChatContext";
 
 const chatIconUrl =
   "https://www.figma.com/api/mcp/asset/b4896850-6051-457c-b680-087b71fd7760";
 
 const FILTER_TABS = ["라이브 채팅방", "팔로우 한 유저", "요청"];
 
-const SelectRoomListPanel = ({
-  liveRooms,
-  followUsers,
-  requestUsers,
-  initialFilter = "라이브 채팅방",
-  onFilterChange,
-  onRoomSelect,
-}) => {
-  const [activeRoom, setActiveRoom] = useState(liveRooms[0]?.id ?? null);
-  const [activeFilter, setActiveFilter] = useState(initialFilter);
+const LIVE_ROOMS = [
+  { id: 1, name: "수어 학습 질문방", count: 84 },
+  { id: 2, name: "수어 학습 질문방", count: 0 },
+  { id: 3, name: "수어 학습 질문방", count: 0 },
+  { id: 4, name: "수어 학습 질문방", count: 0 },
+  { id: 5, name: "수어 학습 질문방", count: 0 },
+];
+
+const FOLLOW_USERS = [
+  { id: 1, name: "ㅇㅇㅇ님" },
+  { id: 2, name: "ㅇㅇㅇ님" },
+  { id: 3, name: "ㅇㅇㅇ님" },
+  { id: 4, name: "ㅇㅇㅇ님" },
+];
+
+const REQUEST_USERS = [
+  { id: 1, name: "ㅇㅇㅇ님" },
+  { id: 2, name: "ㅇㅇㅇ님" },
+  { id: 3, name: "ㅇㅇㅇ님" },
+];
+
+const SelectRoomListPanel = () => {
+  const { popupSelectCurrentFilter, updateSelectFilter, handleSelectRoom } =
+    useChatContext();
+  const [activeRoom, setActiveRoom] = useState(LIVE_ROOMS[0]?.id ?? null);
+  const [activeFilter, setActiveFilter] = useState(popupSelectCurrentFilter);
 
   const handleFilterChange = (tab) => {
     setActiveFilter(tab);
-    onFilterChange?.(tab);
+    updateSelectFilter(tab);
   };
 
   const currentUsers =
-    activeFilter === "팔로우 한 유저" ? followUsers : requestUsers;
+    activeFilter === "팔로우 한 유저" ? FOLLOW_USERS : REQUEST_USERS;
 
   return (
     <SelectLeftPanel>
@@ -58,13 +75,13 @@ const SelectRoomListPanel = ({
         <Divider />
         {activeFilter === "라이브 채팅방" ? (
           <RoomList>
-            {liveRooms.map((room) => (
+            {LIVE_ROOMS.map((room) => (
               <RoomItem
                 key={room.id}
                 $active={activeRoom === room.id}
                 onClick={() => {
                   setActiveRoom(room.id);
-                  onRoomSelect?.(room);
+                  handleSelectRoom(room);
                 }}
               >
                 <RoomItemLeft>
