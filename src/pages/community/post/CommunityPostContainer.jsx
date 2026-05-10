@@ -3,7 +3,7 @@ import { Link, Outlet } from "react-router-dom";
 import { ActionBtn, CategoryPill, ColumnBlock } from "../communityStyle";
 import { H6Bold, H7Bold } from "../communityTextStyle";
 import LiveChatCard from "../chat/chatComponents/LiveChatCard";
-import PostListCard from "./postComponents/PostListCard.jsx";
+import PostListSection from "./postComponents/PostListSection.jsx";
 import styled from "styled-components";
 import { flexCenterRow, flexStartRow, h11Bold } from "../../../styles/common";
 import theme from "../../../styles/theme";
@@ -130,11 +130,8 @@ const CommunityPostContainer = () => {
           {/* 글쓰기 */}
         </PostCategoryHeader>
 
-        {/* 포스트 카드 */}
-        <PostListCard />
-        <PostListCard />
-        <PostListCard />
-        <PostListCard />
+        {/* 포스트 카드 목록 + 페이지네이션 */}
+        <PostListSection />
       </ColumnBlock>
       {/* <PostDetailPage /> */}
       <Outlet />
