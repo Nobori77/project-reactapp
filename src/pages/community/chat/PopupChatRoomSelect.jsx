@@ -11,6 +11,7 @@ import {
 } from "./ChatStyle";
 import SelectRoomListPanel from "./popupChat/SelectRoomListPanel";
 import SelectOngoingPanel from "./popupChat/SelectOngoingPanel";
+import { useChatContext } from "../context/ChatContext";
 
 const minimizeVUrl =
   "https://www.figma.com/api/mcp/asset/44666575-71f6-416e-a884-3df8697b8a6e";
@@ -62,14 +63,16 @@ const REQUEST_USERS = [
   { id: 3, name: "ㅇㅇㅇ님" },
 ];
 
-const PopupChatRoomSelect = ({
-  initialFilter,
-  onMinimize,
-  onClose,
-  onRoomSelect,
-}) => {
+const PopupChatRoomSelect = () => {
+  const {
+    popupSelectInitialFilter,
+    handleSelectMinimize,
+    handleSelectClose,
+    handleSelectRoom,
+  } = useChatContext();
+
   const [currentFilter, setCurrentFilter] = useState(
-    initialFilter ?? "라이브 채팅방",
+    popupSelectInitialFilter ?? "라이브 채팅방",
   );
 
   return (
@@ -78,10 +81,10 @@ const PopupChatRoomSelect = ({
         <SelectHeader>
           <HeaderTitle>채팅방 선택</HeaderTitle>
           <HeaderBtns>
-            <MinimizeBtn onClick={() => onMinimize(currentFilter)}>
+            <MinimizeBtn onClick={() => handleSelectMinimize(currentFilter)}>
               <img src={minimizeVUrl} alt="최소화" />
             </MinimizeBtn>
-            <SelectCloseBtn onClick={onClose}>
+            <SelectCloseBtn onClick={handleSelectClose}>
               <img src={closeVUrl} alt="닫기" />
             </SelectCloseBtn>
           </HeaderBtns>
@@ -92,9 +95,9 @@ const PopupChatRoomSelect = ({
             liveRooms={LIVE_ROOMS}
             followUsers={FOLLOW_USERS}
             requestUsers={REQUEST_USERS}
-            initialFilter={initialFilter}
+            initialFilter={popupSelectInitialFilter}
             onFilterChange={setCurrentFilter}
-            onRoomSelect={onRoomSelect}
+            onRoomSelect={handleSelectRoom}
           />
           <SelectOngoingPanel rooms={ONGOING_ROOMS} />
         </SelectBody>

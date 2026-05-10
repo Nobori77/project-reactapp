@@ -5,6 +5,7 @@ import SideChatHeader from "../chatComponents/SideChatHeader";
 import SideChatListComponent from "../chatComponents/SideChatListComponent";
 import SideChatRequestComponent from "../chatComponents/SideChatRequestComponent";
 import SideChatComponent from "../chatComponents/SideChatComponent";
+import { useChatContext } from "../../context/ChatContext";
 
 // ─── Panel ───────────────────────────────────────────────────────────────────
 
@@ -19,8 +20,9 @@ const ChatPanel = styled.div`
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const SideChat = ({ initialType = TYPE.LIST, onClose, onExpand }) => {
-  const [type, setType] = useState(initialType);
+const SideChat = () => {
+  const { sideInitialType, closeSideChat, expandFromSide } = useChatContext();
+  const [type, setType] = useState(sideInitialType);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
   const handleTabChange = (tab) =>
@@ -38,9 +40,9 @@ const SideChat = ({ initialType = TYPE.LIST, onClose, onExpand }) => {
       <SideChatHeader
         type={type}
         chatPartnerName={selectedRoom?.name}
-        onMinimize={type === TYPE.ROOM ? handleBack : onClose}
-        onExpand={() => onExpand(type)}
-        onClose={onClose}
+        onMinimize={type === TYPE.ROOM ? handleBack : closeSideChat}
+        onExpand={() => expandFromSide(type)}
+        onClose={closeSideChat}
       />
       {type === TYPE.LIST && (
         <SideChatListComponent

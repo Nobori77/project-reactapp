@@ -17,22 +17,7 @@ const PopupOverlay = styled.div`
 `;
 
 const MainRightSide = () => {
-  const {
-    activeChatRoom,
-    view,
-    isLoading,
-    sideInitialType,
-    popupSelectInitialFilter,
-    reopenChat,
-    expandFromSide,
-    minimizeChat,
-    closeChat,
-    closeSideChat,
-    handleLeave,
-    handleSelectRoom,
-    handleSelectMinimize,
-    handleSelectClose,
-  } = useChatContext();
+  const { activeChatRoom, view, isLoading, reopenChat } = useChatContext();
 
   return (
     <div>
@@ -51,34 +36,19 @@ const MainRightSide = () => {
       </ColumnBlock>
 
       {/* 사이드 채팅 — 팝업 축소 시 표시 */}
-      {view === VIEW.SIDE && (
-        <SideChat
-          initialType={sideInitialType}
-          onClose={closeSideChat}
-          onExpand={expandFromSide}
-        />
-      )}
+      {view === VIEW.SIDE && <SideChat />}
 
       {/* 팝업 채팅 화면 — position: fixed 오버레이 */}
       {view === VIEW.POPUP && (
         <PopupOverlay>
-          <PopupChatScreen
-            onMinimize={minimizeChat}
-            onClose={closeChat}
-            onLeave={handleLeave}
-          />
+          <PopupChatScreen />
         </PopupOverlay>
       )}
 
       {/* 채팅방 선택 팝업 — 채팅방 나가기 시 표시 */}
       {view === VIEW.POPUP_SELECT && (
         <PopupOverlay>
-          <PopupChatRoomSelect
-            initialFilter={popupSelectInitialFilter}
-            onMinimize={(filter) => handleSelectMinimize(filter)}
-            onClose={handleSelectClose}
-            onRoomSelect={handleSelectRoom}
-          />
+          <PopupChatRoomSelect />
         </PopupOverlay>
       )}
     </div>
