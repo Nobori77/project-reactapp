@@ -21,6 +21,7 @@ const MainRightSide = () => {
     activeChatRoom,
     view,
     isLoading,
+    sideInitialType,
     reopenChat,
     minimizeChat,
     closeChat,
@@ -49,7 +50,11 @@ const MainRightSide = () => {
 
       {/* 사이드 채팅 — 팝업 축소 시 표시 */}
       {view === VIEW.SIDE && (
-        <SideChat onClose={closeSideChat} onExpand={reopenChat} />
+        <SideChat
+          initialType={sideInitialType}
+          onClose={closeSideChat}
+          onExpand={reopenChat}
+        />
       )}
 
       {/* 팝업 채팅 화면 — position: fixed 오버레이 */}

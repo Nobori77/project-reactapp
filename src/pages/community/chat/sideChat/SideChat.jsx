@@ -19,8 +19,8 @@ const ChatPanel = styled.div`
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const SideChat = ({ onClose, onExpand }) => {
-  const [type, setType] = useState(TYPE.LIST);
+const SideChat = ({ initialType = TYPE.LIST, onClose, onExpand }) => {
+  const [type, setType] = useState(initialType);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
   const handleTabChange = (tab) =>
@@ -54,9 +54,7 @@ const SideChat = ({ onClose, onExpand }) => {
           onTabChange={handleTabChange}
         />
       )}
-      {type === TYPE.ROOM && (
-        <SideChatComponent onViewAll={handleBack} />
-      )}
+      {type === TYPE.ROOM && <SideChatComponent onViewAll={handleBack} />}
     </ChatPanel>
   );
 };

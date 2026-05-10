@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { TYPE } from "../constants";
 
 export const VIEW = {
   POPUP: "popup",
@@ -18,6 +19,7 @@ export const ChatProvider = ({ children }) => {
   const [activeChatRoom, setActiveChatRoom] = useState(null);
   const [view, setView] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [sideInitialType, setSideInitialType] = useState(TYPE.LIST);
 
   useEffect(() => {
     // TODO: API 연결 시 아래 mock을 실제 쿼리로 교체
@@ -32,8 +34,9 @@ export const ChatProvider = ({ children }) => {
     setView(VIEW.POPUP);
   }, []);
 
-  // 팝업 최소화 → 사이드 채팅 표시 (activeChatRoom 유지)
+  // 팝업 최소화 → 사이드 채팅 표시 (채팅 화면 → TYPE.ROOM, activeChatRoom 유지)
   const minimizeChat = useCallback(() => {
+    setSideInitialType(TYPE.ROOM);
     setView(VIEW.SIDE);
   }, []);
 
@@ -63,9 +66,10 @@ export const ChatProvider = ({ children }) => {
     setView(VIEW.POPUP);
   }, []);
 
-  // 채팅방 선택 화면 최소화
+  // 채팅방 선택 화면 최소화 → 사이드 채팅 표시 (방 선택 화면 → TYPE.LIST)
   const handleSelectMinimize = useCallback(() => {
-    setView(null);
+    setSideInitialType(TYPE.LIST);
+    setView(VIEW.SIDE);
   }, []);
 
   // 채팅방 선택 화면 닫기(X) → 채팅 종료
@@ -80,6 +84,7 @@ export const ChatProvider = ({ children }) => {
         activeChatRoom,
         view,
         isLoading,
+        sideInitialType,
         openChatRoom,
         minimizeChat,
         closeChat,
