@@ -19,6 +19,7 @@ import {
 } from "../ChatStyle";
 import { ThumbnailBox } from "../chatComponents/chatComponentStyle";
 import defaultProfileImg from "../../assets/chat/chat_default_profile.svg";
+import { useChatContext } from "../../context/ChatContext";
 
 const liveVectorUrl =
   "https://www.figma.com/api/mcp/asset/79378b34-81dd-4aef-bc8a-2e9814e941b7";
@@ -29,43 +30,47 @@ const minimizeVUrl =
 const closeVUrl =
   "https://www.figma.com/api/mcp/asset/633d41af-e1e1-462a-acec-b1534e4d49ad";
 
-const PopupChatHeader = ({ profileUrl, onLeave, onMinimize, onClose }) => (
-  <Header>
-    <HeaderLeft>
-      <ProfileArea>
-        <ThumbnailBox
-          src={profileUrl || defaultProfileImg}
-          alt="채팅방 프로필"
-          onError={(e) => {
-            e.target.src = defaultProfileImg;
-          }}
-        />
-        <RoomInfo>
-          <RoomTitle>학습 일상 대화방</RoomTitle>
-          <RoomSubText>00명 참여 중</RoomSubText>
-        </RoomInfo>
-      </ProfileArea>
-      <MessageStatus>
-        <LiveBadge>
-          <LiveIcon src={liveVectorUrl} alt="" />
-          <LiveText>LIVE</LiveText>
-        </LiveBadge>
-        <TodayMsgRow>
-          <img src={downloadIconUrl} alt="" />
-          <TodayMsgText>오늘 00개 메시지</TodayMsgText>
-        </TodayMsgRow>
-      </MessageStatus>
-    </HeaderLeft>
-    <HeaderRight>
-      <LeaveBtn onClick={onLeave}>채팅방 나가기</LeaveBtn>
-      <MinimizeBtn onClick={onMinimize}>
-        <img src={minimizeVUrl} alt="최소화" />
-      </MinimizeBtn>
-      <CloseBtn onClick={onClose}>
-        <img src={closeVUrl} alt="닫기" />
-      </CloseBtn>
-    </HeaderRight>
-  </Header>
-);
+const PopupChatHeader = ({ profileUrl }) => {
+  const { handleLeave, minimizeChat, closeChat } = useChatContext();
+
+  return (
+    <Header>
+      <HeaderLeft>
+        <ProfileArea>
+          <ThumbnailBox
+            src={profileUrl || defaultProfileImg}
+            alt="채팅방 프로필"
+            onError={(e) => {
+              e.target.src = defaultProfileImg;
+            }}
+          />
+          <RoomInfo>
+            <RoomTitle>학습 일상 대화방</RoomTitle>
+            <RoomSubText>00명 참여 중</RoomSubText>
+          </RoomInfo>
+        </ProfileArea>
+        <MessageStatus>
+          <LiveBadge>
+            <LiveIcon src={liveVectorUrl} alt="" />
+            <LiveText>LIVE</LiveText>
+          </LiveBadge>
+          <TodayMsgRow>
+            <img src={downloadIconUrl} alt="" />
+            <TodayMsgText>오늘 00개 메시지</TodayMsgText>
+          </TodayMsgRow>
+        </MessageStatus>
+      </HeaderLeft>
+      <HeaderRight>
+        <LeaveBtn onClick={handleLeave}>채팅방 나가기</LeaveBtn>
+        <MinimizeBtn onClick={minimizeChat}>
+          <img src={minimizeVUrl} alt="최소화" />
+        </MinimizeBtn>
+        <CloseBtn onClick={closeChat}>
+          <img src={closeVUrl} alt="닫기" />
+        </CloseBtn>
+      </HeaderRight>
+    </Header>
+  );
+};
 
 export default PopupChatHeader;

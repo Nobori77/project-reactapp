@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { colors } from "../../constants";
+import { useChatContext } from "../../context/ChatContext";
 import OutlineButton from "../../common/OutlineButton";
 import ToggleSwitch from "../../common/ToggleSwitch";
 import { H11Regular } from "../../communityTextStyle";
@@ -26,7 +27,8 @@ import defaultProfileImg from "../../assets/chat/chat_default_profile.svg";
 const liveVectorUrl =
   "https://www.figma.com/api/mcp/asset/79378b34-81dd-4aef-bc8a-2e9814e941b7";
 
-const PopupRoomInfoPanel = ({ profileUrl, tags, onLeave }) => {
+const PopupRoomInfoPanel = ({ profileUrl, tags }) => {
+  const { handleLeave } = useChatContext();
   const [signToggle, setSignToggle] = useState(false);
   const [readToggle, setReadToggle] = useState(false);
 
@@ -105,7 +107,7 @@ const PopupRoomInfoPanel = ({ profileUrl, tags, onLeave }) => {
         <OutlineButton
           borderColor={colors.live}
           textColor={colors.live}
-          onClick={onLeave}
+          onClick={handleLeave}
         >
           채팅방 나가기
         </OutlineButton>

@@ -6,7 +6,6 @@ import PopupParticipantList from "./popupChat/PopupParticipantList";
 import PopupChatCenter from "./popupChat/PopupChatCenter";
 import PopupRoomInfoPanel from "./popupChat/PopupRoomInfoPanel";
 import PopupUserInfoPanel from "./popupChat/PopupUserInfoPanel";
-import { useChatContext } from "../context/ChatContext";
 
 // Figma asset URLs (expires in 7 days)
 const USERS = [
@@ -135,7 +134,6 @@ const TAGS = [
 ];
 
 const PopupChatScreen = () => {
-  const { minimizeChat, closeChat, handleLeave } = useChatContext();
   const [selectedUser, setSelectedUser] = useState(null);
 
   const handleUserClick = (user) => {
@@ -145,11 +143,7 @@ const PopupChatScreen = () => {
   return (
     <PageBg>
       <Popup>
-        <PopupChatHeader
-          onLeave={handleLeave}
-          onMinimize={minimizeChat}
-          onClose={closeChat}
-        />
+        <PopupChatHeader />
         <Body>
           <PopupParticipantList
             users={USERS}
@@ -164,7 +158,7 @@ const PopupChatScreen = () => {
                 onClose={() => setSelectedUser(null)}
               />
             ) : (
-              <PopupRoomInfoPanel tags={TAGS} onLeave={handleLeave} />
+              <PopupRoomInfoPanel tags={TAGS} />
             )}
           </RightPanel>
         </Body>
