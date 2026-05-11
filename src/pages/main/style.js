@@ -7,6 +7,7 @@ const textGray = "#888888"
 const dailyGray = "#9090B0"
 const clickDailyGray = "#90909B"
 const dailyBorderGray = "#EEEFFE"
+const noticeGray = "#aaa"
 
 export const styles = {
   
@@ -16,6 +17,7 @@ export const styles = {
   dailyGray,
   clickDailyGray,
   dailyBorderGray,
+  noticeGray,
 
 // 최상위 wrapper
   wrapper: {
@@ -181,8 +183,9 @@ export const styles = {
   startBtn : {
     backgroundColor : theme.PALETTE.primary.main,
     color: theme.PALETTE.white,
-    fontSize: theme.FONT_SIZE.h7,
+    fontSize: theme.FONT_SIZE.h8,
     fontWeight: theme.FONT_WEIGHT.bold,
+    fontLine: theme.FONT_LINE.h8,
     textAlign:'center',
     padding: '20px 50px',
     borderRadius : '50px',

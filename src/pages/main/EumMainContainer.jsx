@@ -20,7 +20,9 @@ const EumMainContainer = () => {
         <CurriculumSection />
         <ReviewSection />
         <WordCardSection />
+        <div style={{marginBottom:'70px'}}>
         <NoticeSection />
+        </div>
       </div>
     </>
   );

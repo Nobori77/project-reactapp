@@ -29,7 +29,6 @@ const ChatbotButton = () => {
           transition: 'width 0.3s ease, background-color 0.3s ease, border 0.3s ease',
           overflow: 'hidden',
           whiteSpace: 'nowrap',
-          boxShadow: '0 4px 16px rgba(64,64,240,0.3)',
         }}
       >
         <div style={{

@@ -77,7 +77,7 @@ const Layout = () => {
       <main style={{ marginTop: '80px' }}>
         <Outlet />
       </main>
-      <footer style={{marginTop: '70px'}}>
+      <footer>
         <div style={{
           height: '290px',
           backgroundColor: theme.PALETTE.primary.main,

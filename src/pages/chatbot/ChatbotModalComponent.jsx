@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import theme from '../../styles/theme';
+import { styles } from '../main/style';
 
 const CATEGORIES = [
   { id: 'account', label: '계정 / 로그인', desc: '로그인 문제, 비밀번호 변경 등' },
@@ -19,7 +20,7 @@ const timeNow = () => {
 };
 
 const headerBtn = {
-  width: '22px', height: '22px', borderRadius: '50%',
+  width: '22px', height: '22px', borderRadius: '5px',
   border: 'none', cursor: 'pointer', fontSize: '11px',
   backgroundColor: 'rgba(255,255,255,0.25)',
   color: theme.PALETTE.white, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -28,22 +29,28 @@ const headerBtn = {
 const BotMessage = ({ text, time, children }) => (
   <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
     <div style={{
-      width: '32px', height: '32px', borderRadius: '50%',
-      backgroundColor: theme.PALETTE.primary.main, flexShrink: 0,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontSize: '16px',
+      width: '32px',
+      height: '32px', 
+      borderRadius: '50%',
+      backgroundColor: theme.PALETTE.primary.main,
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      fontSize: theme.FONT_SIZE.h9, 
+      fontLine: theme.FONT_LINE.h9,
+
     }}>🤚</div>
     <div style={{ flex: 1 }}>
-      <p style={{ fontSize: '11px', color: '#888', margin: '0 0 4px' }}>이음 도우미</p>
+      <p style={{ fontSize: theme.FONT_SIZE.h11,fontWeight: theme.FONT_WEIGHT.bold, color: styles.textGray, margin: '0 0 4px' }}>이음 도우미</p>
       <div style={{
         backgroundColor: '#F1F1F5', borderRadius: '4px 12px 12px 12px',
-        padding: '10px 14px', fontSize: '13px', color: '#222',
+        padding: '10px 14px', fontSize: '13px', color: theme.PALETTE.black,
         lineHeight: 1.6, maxWidth: '85%', whiteSpace: 'pre-line',
       }}>
         {text}
       </div>
       {children}
-      {time && <p style={{ fontSize: '11px', color: '#aaa', margin: '4px 0 0' }}>{time}</p>}
+      {time && <p style={{ fontSize: theme.FONT_SIZE.h11,fontLine:theme.FONT_LINE.h11 , color: styles.noticeGray, margin: '4px 0 0' }}>{time}</p>}
     </div>
   </div>
 );
@@ -164,13 +171,13 @@ const ChatbotModal = ({ onClose }) => {
                 <div style={{
                   width: '36px', height: '36px', borderRadius: '8px',
                   backgroundColor: '#EEEDFE', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center', fontSize: theme.FONT_SIZE.h9, flexShrink: 0,
+                  alignItems: 'center', justifyContent: 'center', fontSize: theme.FONT_SIZE.h9,
                 }}>
                   {cat.id === 'account' ? '👤' : cat.id === 'report' ? '🚨' : '💬'}
                 </div>
                 <div>
-                  <div style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: '#222' }}>{cat.label}</div>
-                  <div style={{ margin: 0, fontSize: '11px', color: '#888' }}>{cat.desc}</div>
+                  <div style={{ fontSize: theme.FONT_SIZE.h10, fontWeight: theme.FONT_WEIGHT.regular, color: theme.PALETTE.black }}>{cat.label}</div>
+                  <div style={{ fontSize: theme.FONT_SIZE.h11, color: styles.textGray }}>{cat.desc}</div>
                 </div>
               </button>
             ))}
@@ -189,8 +196,8 @@ const ChatbotModal = ({ onClose }) => {
                     {msg.quickReplies.map((q, j) => (
                       <button key={j} onClick={() => sendMessage(q)} style={{
                         padding: '6px 12px', borderRadius: '20px',
-                        border: '1px solid #4040F0', backgroundColor: '#fff',
-                        color: '#4040F0', fontSize: '12px', cursor: 'pointer',
+                        border: `1px solid ${theme.PALETTE.primary.main}`, backgroundColor: theme.PALETTE.white,
+                        color: theme.PALETTE.primary.main, fontSize: theme.FONT_SIZE.h11, cursor: 'pointer',
                       }}>{q}</button>
                     ))}
                   </div>
@@ -200,11 +207,11 @@ const ChatbotModal = ({ onClose }) => {
             ) : (
               <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                 <div style={{
-                  backgroundColor: '#4040F0', color: '#fff',
+                  backgroundColor: theme.PALETTE.primary.main, color: theme.PALETTE.white,
                   padding: '10px 14px', borderRadius: '12px 4px 12px 12px',
                   fontSize: '13px', maxWidth: '75%', lineHeight: 1.6,
                 }}>{msg.text}</div>
-                <div style={{ fontSize: '11px', color: '#aaa', margin: '4px 0 0' }}>{msg.time}</div>
+                <div style={{ fontSize: theme.FONT_SIZE.h12,fontWeight:theme.FONT_WEIGHT.regular, color: styles.noticeGray, margin: '4px 0 0' }}>{msg.time}</div>
               </div>
             )
           ))}
@@ -234,19 +241,12 @@ const ChatbotModal = ({ onClose }) => {
         />
         <button onClick={() => sendMessage()} style={{
           width: '38px', height: '38px', borderRadius: '50%',
-          backgroundColor: '#4040F0', border: 'none', cursor: 'pointer',
+          backgroundColor: theme.PALETTE.primary.main, border: 'none', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
         }}>
           <span style={{ color: '#fff', fontSize: '16px' }}>▶</span>
         </button>
-        <button 
-          onClick={() => {
-            console.log('X 클릭됨', onClose);
-            onClose();
-          }} 
-          style={{ ...headerBtn, backgroundColor: '#FF4444' }}
-        >✕</button>
       </div>
     </div>
   );

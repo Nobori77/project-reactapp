@@ -56,7 +56,11 @@ const NoticeCard = ({id, tag, title, date }) => {
             cursor: 'pointer',
             backgroundColor:theme.PALETTE.white
           }}>
-          <span style={{ fontSize: '14px', color: '#aaa',}}>↗</span>
+          <span style={{ 
+            fontSize: theme.FONT_SIZE.h9,
+            fontWeight:theme.FONT_WEIGHT.regular , 
+            fontLine: theme.FONT_LINE.h9,
+            color: styles.noticeGray,}}>↗</span>
         </div>
       </div>
 
@@ -73,7 +77,7 @@ const NoticeCard = ({id, tag, title, date }) => {
         fontSize: theme.FONT_SIZE.h11,
         fontWeight: theme.FONT_WEIGHT.regular,
         fontLine: theme.FONT_LINE.h11,
-        color: '#aaa',
+        color: styles.noticeGray,
       }}>{date}</span>
     </div>
   );
