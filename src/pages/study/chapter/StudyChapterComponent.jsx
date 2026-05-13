@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { StudyQuizContext } from '../../../context/StudyQuizContext';
 
+
+// 퀴즈 목록
 const StudyChapterComponent = () => {
     const {id, quiz} = useParams()
     const {state, actions} = useContext(StudyQuizContext)

@@ -677,5 +677,9 @@ export const Video = styled.div`
     font-size: ${fontSize("h8")};
     font-weight: ${fontWeight("bold")};
   }
+
+  .StudyAttendancePopup{
+    
+  }
 `;
 

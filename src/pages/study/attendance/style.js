@@ -124,28 +124,28 @@ export const AttendNotice = styled.div`
 // 달력 전체
 export const StyledCalendarWrapper = styled.div`
   
-  // width: 820px;
+  /* // width: 820px;
   // height: 549px;
   /* display: flex; */
   // justify-content: center;
   // position: relative;
   /* margin: auto; */
-  // margin-top: 50px;
+  // margin-top: 50px; */
 
-  width: min(1200px, calc(100% - 48px));
+  width: min(1250px, calc(100% - 48px));
   margin: 0 auto;
   display: grid;
   grid-template-columns: 820px 330px;
-  gap: 20px;
+  gap: 30px;
   align-items: start;
   
 
   .react-calendar {
     width: 820px;
-    height: 540px;
-    border: 1px solid #C4C4C4;
+    height: 600px;
+    border: 1px solid #e6e6e6;
     border-radius: 25px;
-    padding: 5% 4%;
+    padding: 7% 4%;
   }
 
   /* 전체 클릭 비활성화 */
@@ -163,6 +163,8 @@ export const StyledCalendarWrapper = styled.div`
 
   .react-calendar__navigation {
     border-bottom: 1px solid #DFDFDF;
+    padding-bottom: 2%;
+    height: 57px;
   }
 
   /* 2024.09 텍스트 색상 설정 */
@@ -220,6 +222,11 @@ export const StyledCalendarWrapper = styled.div`
     font-weight: 700;
   }
 
+  /* 기본요일 폰트 */
+  .react-calendar__month-view__weekdays__weekday abbr {
+    color: #424242;
+  }
+
   /* 일요일에 빨간 폰트 */
   .react-calendar__month-view__weekdays__weekday--weekend abbr[title="일요일"] {
     color: #FF0000;
@@ -230,8 +237,9 @@ export const StyledCalendarWrapper = styled.div`
     color: #2E7AF2;
   }
 
-  .react-calendar__month-view__weekdays__weekday abbr {
-    color: #424242;
+  /* 일요일 날짜 숫자 */
+  .react-calendar__month-view__days__day--weekend:nth-child(7n + 1) abbr {
+    color: #ff0000;
   }
 
   /* 토요일 날짜 숫자는 기본색 유지 또는 파란색 */
@@ -239,7 +247,7 @@ export const StyledCalendarWrapper = styled.div`
     color: #2E7AF2;
   }
 
-  .react-calendar__month-view__days__day:nth-child abbr {
+  .react-calendar__month-view__days__day abbr {
     color: #424242;
   }
 
@@ -297,7 +305,6 @@ export const StyledCalendarWrapper = styled.div`
 // CalendarWrapper
 export const CalendarWrap = styled.div`
   position: relative;
-  padding: 10px 10px;
   background: #fff;
   border-radius: 20px;
   box-sizing: border-box;
@@ -308,8 +315,8 @@ export const StyledCalendar = styled(Calendar)``;
 /* 오늘 버튼 스타일 */
 export const StyledDate = styled.div`
   position: absolute;
-  top: 75px; 
-  right: 68px; 
+  top: 60px; 
+  right: 58px; 
   background-color: #7C97FE;
   color: white;
   width: 90px;
@@ -322,9 +329,64 @@ export const StyledDate = styled.div`
   z-index: 1; /* 버튼이 다른 요소 위에 나타나도록 설정 */
 `;
 
+// 출석 미출석
+export const AttendIS = styled.div`
+  position: absolute;
+  left: 90px;
+  bottom: 58px;
+
+  display: flex;
+  align-items: center;
+  gap: 34px;
+
+  .in{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-left: 18px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #666;
+  }
+
+  .out{
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding-left: 18px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #c9c9c9;
+  }
+
+  
+  .in::before,
+  .out::before {
+    content: "";
+    position: absolute;
+    left: 0;
+
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .in::before {
+    background: #4359fc;
+  }
+
+
+`;
+
 /* 특정 날짜에 점 표시 스타일 */
 export const StyledDot = styled.div`
-  background-color: #FF4949;
+  background-color: #4359FC;
   border-radius: 50%;
   width: 0.3rem;
   height: 0.3rem;
@@ -342,38 +404,399 @@ export const SideWrap = styled.div`
 
 // 이번주
 export const HeadsUp = styled.div`
-  display: flex;
-  
-  gap: 20px;
+  width: 356px;
+  height: 225px;
+  padding: 30px 26px;
+  box-sizing: border-box;
+
   background: #fff;
   border: 1.5px solid #e6e6e6;
-  border-radius: 20px;
-  box-sizing: border-box;
-  padding: 20px;
-  height: 210px;
+  border-radius: 22px;
+
+  .weekTitle{
+    margin: 0 0 18px;
+    color: #1a1a1a;
+    font-size: 20px;
+    font-weight: 900;
+  }
+
+  .weekList{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 32px;
+
+    .weekItem{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .day{
+      margin: 0;
+      color: #aaa;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .todayText{
+      color: #4359fc;
+    }
+
+    .circle{
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #eeeeee;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .circle.check{
+      background: #4359fc;
+      font-size: 18px;
+    }
+
+    .circle.today{
+      background: #4359fc;
+      font-size: 11px;
+    }
+
+    .circle.empty{
+      background: #eeeeee;
+    }
+  }
+
+  .weekText{
+    margin: 0 0 14px;
+    color: #aaa;
+    font-size: 14px;
+
+    .weekText span{
+      color: #999;
+    }
+
+  }
+
+  .progressBar{
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: #f0f0f0;
+    overflow: hidden;
+
+    .progressFill{
+      width: 43%;
+      height: 100%;
+      border-radius: 999px;
+      background: #4359fc;
+
+    }
+  }
+
 `;
 
 // 출석보상
 export const AttendReward = styled.div`
-  display: grid;
-  gap: 20px;
+  width: 356px;
+  height: 355px;
+  padding: 28px 30px;
+  box-sizing: border-box;
+
   background: #fff;
   border: 1.5px solid #e6e6e6;
-  border-radius: 20px;
-  box-sizing: border-box;
-  padding: 30px;
-  height: 312px;
-  text-align: center;
+  border-radius: 22px;
+
+  .rewardTitle{
+    margin: 0 0 28px;
+    padding-bottom: 5%;
+
+    border-bottom: 1px solid #eeeeee;
+
+    color: #1a1a1a;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .rewardList {
+    display: flex;
+    flex-direction: column;
+    gap: 27px;
+
+    .rewardItem {
+      display: grid;
+      grid-template-columns: 44px 1fr 66px;
+      align-items: center;
+      column-gap: 10px;
+    }
+
+    .dayCircle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 10px;
+    }
+
+    .rewardText {
+      min-width: 0;
+    }
+
+    .rewardName {
+      margin: 0 0 6px;
+
+      color: #1a1a1a;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .rewardDesc {
+      margin: 0;
+
+      color: #aaa;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .rewardButton {
+      width: 52px;
+      height: 24px;
+
+      border: 0;
+      border-radius: 999px;
+
+      font-size: 10px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .lockIcon {
+      width: 55px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .done .dayCircle {
+      background: #eef0ff;
+      color: #4359fc;
+    }
+
+    .done .complete {
+      background: #eef0ff;
+      color: #4359fc;
+    }
+
+    .receive .dayCircle {
+      background: #fff1d8;
+      color: #ff7a00;
+    }
+
+    .receive .rewardName {
+      color: #ff7a00;
+    }
+
+    .receive .receiveButton {
+      background: #fff1d8;
+      color: #ff7a00;
+    }
+
+    .locked .dayCircle {
+      background: #f1f1f1;
+      color: #c8c8c8;
+    }
+
+    .locked .rewardName,
+    .locked .rewardDesc {
+      color: #c8c8c8;
+    }
+  }
 `;
 
 
 // ================================================================
 
 
-
 // 출석체크 PopUp 화면
 
 export const AttendPopUpWrap = styled.div`
-  padding: 28px 22px;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.35);
+
+  .attendancePopup::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 208px;
+
+    background: #ff8004;
+    z-index: 0;
+  }
+
+  .attendancePopup{
+    position: relative;
+
+    width: 440px;
+    padding: 42px 34px 34px;
+    box-sizing: border-box;
+
+    background: #fff;
+    border-radius: 28px;
+    text-align: center;
+
+    overflow: hidden;
+
+    .closeBtn{
+      position: absolute;
+      top: 22px;
+      right: 28px;
+      z-index: 3;
+
+      border: 0;
+      background: transparent;
+      color: #fff;
+
+      font-size: 30px;
+      font-weight: 300;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .popupHeader{
+      position: relative;
+      z-index: 1;
+
+      height: 160px;
+      color: #fff;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .fireIcon {
+        margin: 8px 0 20px;
+        font-size: 46px;
+        line-height: 1;
+      }
+
+      .popupHeader h1 {
+        margin: 0 0 8px;
+
+        font-size: 26px;
+        font-weight: 900;
+      }
+
+      .date {
+        margin: 0;
+
+        font-size: 15px;
+        font-weight: 500;
+      }
+    }
+
+    .rewardBoxWrap{
+      position: relative;
+      z-index: 1;
+
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+
+      margin: 28px 0 68px;
+
+      .rewardBox {
+        height: 106px;
+        padding: 18px 10px;
+        box-sizing: border-box;
+
+        background: transparent;
+        border: 1.5px solid #7157ff;
+        border-radius: 14px;
+
+        .rewardIcon {
+          margin: 0 0 8px;
+          font-size: 24px;
+          line-height: 1;
+        }
+
+        .rewardLabel {
+          margin: 0 0 4px;
+
+          color: #b8aaaa;
+          font-size: 13px;
+          font-weight: 600;
+        }
+
+        .rewardPoint {
+          margin: 0;
+
+          color: #4359fc;
+          font-size: 22px;
+          font-weight: 900;
+        }
+      }
+    }
+
+    .attendNotice{
+      margin: 0 0 12px;
+
+      color: #8b7d7d;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .attendNotice span{
+      color: #ff7a00;
+      font-weight: 900;
+    }
+
+    .attendNoticeBar{
+      width: 376px;
+      height: 7px;
+      margin: 0 auto 42px;
+
+      background: #f7e7e6;
+      border-radius: 999px;
+      overflow: hidden;
+
+      .barFill {
+        width: 50%;
+        height: 100%;
+
+        background: #ff8004;
+        border-radius: 999px;
+      }
+    }
+
+    .detailBtn {
+      border: 0;
+      background: transparent;
+      color: #1f1717;
+
+      font-size: 22px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+  }
 `;
+ 

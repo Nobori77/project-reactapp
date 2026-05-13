@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import StudyAttendancePopup from './StudyAttendancePopup';
-import { AttendNotice, AttendReward, AttendTitle, AttendWrap, CalendarWrap, HeadsUp, SideWrap, StyledCalendar, StyledCalendarWrapper, StyledDate, StyledDot } from './style';
+import { AttendIS, AttendNotice, AttendReward, AttendTitle, AttendWrap, CalendarWrap, HeadsUp, SideWrap, StyledCalendar, StyledCalendarWrapper, StyledDate, StyledDot } from './style';
 import moment from 'moment';
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { data } from 'react-router-dom';
 
 // 출석체크 화면
 const StudyAttendanceComponent = () => {
@@ -24,6 +21,18 @@ const StudyAttendanceComponent = () => {
         setActiveStartDate(today);
         setDate(today);
     };
+
+    // 이번주 출석
+    const weekList = [
+
+        {id: 1, day:"월", status: "check"},
+        {id: 2, day:"화", status: "check"},
+        {id: 3, day:"수", status: "today"},
+        {id: 4, day:"목", status: "empty"},
+        {id: 5, day:"금", status: "empty"},
+        {id: 6, day:"토", status: "empty"},
+        {id: 7, day:"일", status: "empty"},
+    ];
 
 
     return(
@@ -78,9 +87,13 @@ const StudyAttendanceComponent = () => {
                         formatYear={(locale, date) => moment(date).format("YYYY")} //연도
                         formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")} //상단 월
                         formatShortWeekday={(locale, date) => moment(date).format("ddd")} // 요일
+                        // formatShortWeekday={( locale, date ) => {
+                        //     const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
+                        //     return weekDays[date.getDay()];
+                        // }} // 요일
                         calendarType="gregory" // 그레고리력 달력
 
-                        showNeighboringMonth={false} // 이전/다음달 날짜 보기 -> true / 안봄 -> false
+                        showNeighboringMonth={true} // 이전/다음달 날짜 보기 -> true / 안봄 -> false
                         // 2칸 이동 버튼 숨기기 -> >> <<
                         next2Label={null}
                         prev2Label={null}
@@ -99,7 +112,7 @@ const StudyAttendanceComponent = () => {
                             if (view === "month") { // view가 'month'일 때
                                 // 해당 날짜가 특정 날짜인지 확인
                                 if (attendDay.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
-                                // 점 추가    
+                                // 점 추가 -> 여기해결하기    
                                 html.push(<StyledDot key={moment(date).format("YYYY-MM-DD")} />);
                                 console.log(moment(date).format("YYYY-MM-DD"));
                                 }
@@ -110,56 +123,91 @@ const StudyAttendanceComponent = () => {
                     
                     {/*  Today 버튼 */}
                     <StyledDate onClick={handleTodayClick}>Today</StyledDate>
+                    <AttendIS>
+                        <span className='in'>출석</span>
+                        <span className='out'>미출석</span>
+                    </AttendIS>
                 </CalendarWrap>
 
                 <SideWrap>
                     {/* weeks */}
                     <HeadsUp>
-                        <div>
-                            <p>이번주</p>
-                            <span>월</span>
-                            <span>화</span>
-                            <span>수</span>
-                            <span>목</span>
-                            <span>금</span>
-                            <span>토</span>
-                            <span>일</span>
+                        <p className='weekTitle'>이번 주</p>
+                        <div className='weekList'>
+                            {weekList.map((item) => (
+                                <div className='weekItem' key={item.id}>
+                                    <p className={item.status === "today" ? "day todayText" : "day"}>
+                                        {item.day}
+                                    </p>
+
+                                    <div className={`circle ${item.status}`}>
+                                        {/* 출석완료한날 */}
+                                        {item.status === "check" && "✓"}
+                                        {/* 오늘 */}
+                                        {item.status === "today" && "오늘"}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <p className='weekText'>
+                            <span>3일 출석</span> · 4일 남음
+                        </p>
+
+                        <div className='progressBar'>
+                            <p className='progressFill' />
                         </div>
                     </HeadsUp>
 
                     {/* 출석보상 */}
                     <AttendReward>
-                        <div>
-                            <p>출석 보상</p>
+                        <p className='rewardTitle'>출석 보상</p>
 
-                            <div>
-                                <p>3일</p>
-                                <p>3일 연속</p>
-                                <p>+50 EXP 🏅 뱃지</p>
-                                <p>완료</p>
+                        <div className="rewardList">
+                            <div className="rewardItem done">
+                                <div className="dayCircle">3일</div>
+
+                                <div className="rewardText">
+                                    <p className="rewardName">3일 연속</p>
+                                    <p className="rewardDesc">+50 XP</p>
+                                </div>
+
+                                <button className="rewardButton complete">완료</button>
                             </div>
 
-                            <div>
-                                <p>7일</p>
-                                <p>7일 연속</p>
-                                <p>+100 EXP 🏅 뱃지</p>
-                                <p>수령</p>
+                            <div className="rewardItem receive">
+                                <div className="dayCircle">7일</div>
+
+                                <div className="rewardText">
+                                    <p className="rewardName">7일 연속</p>
+                                    <p className="rewardDesc">+100 XP · 🏅 뱃지</p>
+                                </div>
+
+                                <button className="rewardButton receiveButton">수령</button>
                             </div>
 
-                            <div>
-                                <p>14일</p>
-                                <p>14일 연속</p>
-                                <p>+250 EXP 🏅 뱃지</p>
-                                <p>🔒</p>
+                            <div className="rewardItem locked">
+                                <div className="dayCircle">14일</div>
+
+                                <div className="rewardText">
+                                    <p className="rewardName">14일 연속</p>
+                                    <p className="rewardDesc">+200 XP · 🏅 뱃지</p>
+                                </div>
+
+                                <div className="lockIcon">🔒</div>
                             </div>
 
-                            <div>
-                                <p>30일</p>
-                                <p>30일 연속</p>
-                                <p>+500 EXP 🏅 뱃지</p>
-                                <p>🔒</p>
+                            <div className="rewardItem locked">
+                                <div className="dayCircle">30일</div>
+
+                                <div className="rewardText">
+                                    <p className="rewardName">30일 연속</p>
+                                    <p className="rewardDesc">+500 XP · 🏅 뱃지</p>
+                                </div>
+
+                                <div className="lockIcon">🔒</div>
                             </div>
-                        </div>
+                        </div>                    
                     </AttendReward>
                 </SideWrap>
             </StyledCalendarWrapper>

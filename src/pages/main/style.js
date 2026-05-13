@@ -6,13 +6,18 @@ const backGroundGray = "#F7F7FB"
 const textGray = "#888888"
 const dailyGray = "#9090B0"
 const clickDailyGray = "#90909B"
-const dailyBorderGray = "#EFEFFA"
+const dailyBorderGray = "#EEEFFE"
+const noticeGray = "#aaa"
 
 export const styles = {
   
   backGroundGray,
   textGray,
   curriculumGray,
+  dailyGray,
+  clickDailyGray,
+  dailyBorderGray,
+  noticeGray,
 
 // 최상위 wrapper
   wrapper: {
@@ -28,10 +33,10 @@ export const styles = {
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'flex-end',
-    marginTop: '20.65vh',
+    marginTop: '15vh',
   },
 
-  // 배너 헤드라인 텍스트 — theme 의존값은 컴포넌트에서 주입
+  // 배너 헤드라인 텍스트 
   headlineText: {
     fontSize: theme.FONT_SIZE.h1,
     fontWeight: theme.FONT_WEIGHT.bold,
@@ -49,7 +54,7 @@ export const styles = {
     
   },
 
-  // 배너 서브타이틀 텍스트 — theme 의존값은 컴포넌트에서 주입
+  // 배너 서브타이틀 텍스트
   subtitleText: {
     fontSize: theme.FONT_SIZE.h7,
     fontWeight: theme.FONT_WEIGHT.regular,
@@ -178,8 +183,9 @@ export const styles = {
   startBtn : {
     backgroundColor : theme.PALETTE.primary.main,
     color: theme.PALETTE.white,
-    fontSize: theme.FONT_SIZE.h7,
+    fontSize: theme.FONT_SIZE.h8,
     fontWeight: theme.FONT_WEIGHT.bold,
+    fontLine: theme.FONT_LINE.h8,
     textAlign:'center',
     padding: '20px 50px',
     borderRadius : '50px',
@@ -200,10 +206,11 @@ export const styles = {
     alignItems: 'center',
     maxHeight: '1000px',
     minHeight: '1100px',
-    backgroundColor: theme.GRAYSCALE[10]
+    backgroundColor: theme.GRAYSCALE[10],
+    marginTop:'80px'
   },
 
-  // 콘텐츠 소개 타이틀 — theme 의존값은 컴포넌트에서 주입
+  // 콘텐츠 소개 타이틀 
   contentTitle: {
     textAlign: 'center',
     justifyContent: 'center',

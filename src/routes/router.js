@@ -9,6 +9,7 @@ import LicenseIntroContainer from "../pages/exam/info/intro/LicenseIntroContaine
 import ReceiptContainer from "../pages/exam/receipt/ReceiptContainer";
 import ReceiptConfirmContainer from "../pages/exam/receipt/confirm/ReceiptConfirmContainer";
 import ReceiptInfoContainer from "../pages/exam/receipt/info/ReceiptInfoContainer";
+import ReceiptGuideContainer from "../pages/exam/receipt/guide/ReceiptGuideContainer";
 import ReceiptSubmitContainer from "../pages/exam/receipt/receipt/ReceiptSubmitContainer";
 import ResultsContainer from "../pages/exam/results/ResultsContainer";
 import CheckContainer from "../pages/exam/results/check/CheckContainer"
@@ -30,6 +31,10 @@ import CommunityChatContainer from "../pages/community/chat/CommunityChatContain
 import CommunityPostContainer from "../pages/community/post/CommunityPostContainer";
 import CommunityPostWriteContainer from "../pages/community/post/write/CommunityPostWriteContainer";
 import CommunityUserProfileComponent from "../pages/community/profile/CommunityUserProfileComponent";
+import PostDetailPage from "../pages/community/post/detail/PostDetailPage";
+import UserWritePostList from "../pages/community/profile/filter/UserWritePostList";
+import UserWriteComment from "../pages/community/profile/filter/UserWriteComment";
+import UserClickedLike from "../pages/community/profile/filter/UserClickedLike";
 import CertificateContainer from "../pages/exam/certificate/CertificateContainer";
 import CertificateCheckContainer from "../pages/exam/certificate/check/CertificateCheckContainer";
 import CertificatePrintContainer from "../pages/exam/certificate/print/CertificatePrintContainer";
@@ -52,7 +57,7 @@ import CustomServicePrivacyContainer from "../pages/customservice/privacy/Custom
 import CustomServiceResultContainer from "../pages/customservice/result/CustomServiceResultContainer";
 import MyPageEditContainer from "../pages/mypage/edit/MyPageEditContainer";
 import MyPageWithdrawContainer from "../pages/mypage/withdraw/MyPageWithdrawContainer";
-
+import CustomServiceNoticeListContainer from '../pages/customservice/notice/CustomServiceNoticeListContainer';
 
 const router = createBrowserRouter([
   {
@@ -88,6 +93,10 @@ const router = createBrowserRouter([
                 path: "info",
                 element: <ReceiptInfoContainer />,
                 children: [
+                  {
+                    path: "guide",
+                    element: <ReceiptGuideContainer />
+                  },
                   {
                     path: "submit",
                     element: <ReceiptSubmitContainer />
@@ -249,32 +258,40 @@ const router = createBrowserRouter([
         element: <CommunityContainer />,
         children: [
           {
-            path: "chat",
-            element: <CommunityChatContainer />
+            index: true,
+            element: <CommunityPostContainer />
           },
           {
-            path: "post",
-            element: <CommunityPostContainer />,
-            children: [
-              {
-                path: "write",
-                element: <CommunityPostWriteContainer />
-              }
-            ]
+            path: "chat",
+            element: <CommunityChatContainer />
           }
         ]
+      },
+      {
+        path: "community/post/write",
+        element: <CommunityPostWriteContainer />
+      },
+      {
+        path: "community/post/:id",
+        element: <PostDetailPage />
       },
       {
         path: "customservice",
         element: <CustomServiceContainer />,
         children: [
           {
-            path: "inquire",
-            element: <CustomServiceInquireContainer />
+            path: "notice",
+            element: <CustomServiceNoticeListContainer />,
+            children: [
+                  {
+                    path: ":id",
+                    element: <CustomServiceNoticeContainer />
+                  }
+                ]
           },
           {
-            path: "notice",
-            element: <CustomServiceNoticeContainer />
+            path: "inquire",
+            element: <CustomServiceInquireContainer />
           },
           {
             path: "privacy",
@@ -287,8 +304,22 @@ const router = createBrowserRouter([
         ]
       },
       {
-         path: "community/profile/:userId",
-         element: <CommunityUserProfileComponent />
+        path: "community/profile/:userId",
+        element: <CommunityUserProfileComponent />,
+        children: [
+          {
+            path: "writed-post",
+            element: <UserWritePostList />
+          },
+          {
+            path: "writed-comment",
+            element: <UserWriteComment />
+          },
+          {
+            path: "liked-post",
+            element: <UserClickedLike />
+          }
+        ]
       },
       {
         path: "login",
