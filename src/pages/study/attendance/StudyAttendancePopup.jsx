@@ -2,7 +2,7 @@ import React from 'react';
 import { AttendPopUpWrap } from './style';
 
 // 출석체크 Popup
-const StudyAttendancePopup = ({onClose, onDetail}) => {
+const StudyAttendancePopup = ({ onClose, onDetail }) => {
 
 
     return (
@@ -38,12 +38,8 @@ const StudyAttendancePopup = ({onClose, onDetail}) => {
                     <div className='barFill'/>
                 </div>
                 
-                <div className='buttonWrap'>
-                    {/* 팝업닫기 */}
-                    <button className='cancelBtn' onClick={onClose}>닫기</button>
-                    {/* 출석페이지로 이동 */}
-                    <button className='detailBtn' onClick={onDetail}>자세히 보기 →</button>
-                </div>
+                {/* 출석페이지로 이동 */}
+                <button className='detailBtn' onClick={onDetail}>자세히 보기 →</button>
             </div>
         </AttendPopUpWrap>
     );

@@ -160,6 +160,8 @@ const StudyComponent = () => {
 
                 <button className='videoButton'>더 많은 영상 보기 →</button>
             </Video>
+
+            {/* popup */}
             {isStudyAttendancePopupOpen && (
                 <StudyAttendancePopup
                     onClose={closeStudyAttendancePopup}

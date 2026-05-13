@@ -27,7 +27,7 @@ const StudyAttendanceComponent = () => {
 
         {id: 1, day:"월", status: "check"},
         {id: 2, day:"화", status: "check"},
-        {id: 3, day:"수", status: "check"},
+        {id: 3, day:"수", status: "today"},
         {id: 4, day:"목", status: "empty"},
         {id: 5, day:"금", status: "empty"},
         {id: 6, day:"토", status: "empty"},
@@ -87,9 +87,13 @@ const StudyAttendanceComponent = () => {
                         formatYear={(locale, date) => moment(date).format("YYYY")} //연도
                         formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")} //상단 월
                         formatShortWeekday={(locale, date) => moment(date).format("ddd")} // 요일
+                        // formatShortWeekday={( locale, date ) => {
+                        //     const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
+                        //     return weekDays[date.getDay()];
+                        // }} // 요일
                         calendarType="gregory" // 그레고리력 달력
 
-                        showNeighboringMonth={false} // 이전/다음달 날짜 보기 -> true / 안봄 -> false
+                        showNeighboringMonth={true} // 이전/다음달 날짜 보기 -> true / 안봄 -> false
                         // 2칸 이동 버튼 숨기기 -> >> <<
                         next2Label={null}
                         prev2Label={null}

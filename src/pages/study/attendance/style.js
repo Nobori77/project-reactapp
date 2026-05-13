@@ -124,13 +124,13 @@ export const AttendNotice = styled.div`
 // 달력 전체
 export const StyledCalendarWrapper = styled.div`
   
-  // width: 820px;
+  /* // width: 820px;
   // height: 549px;
   /* display: flex; */
   // justify-content: center;
   // position: relative;
   /* margin: auto; */
-  // margin-top: 50px;
+  // margin-top: 50px; */
 
   width: min(1250px, calc(100% - 48px));
   margin: 0 auto;
@@ -164,6 +164,7 @@ export const StyledCalendarWrapper = styled.div`
   .react-calendar__navigation {
     border-bottom: 1px solid #DFDFDF;
     padding-bottom: 2%;
+    height: 57px;
   }
 
   /* 2024.09 텍스트 색상 설정 */
@@ -221,6 +222,11 @@ export const StyledCalendarWrapper = styled.div`
     font-weight: 700;
   }
 
+  /* 기본요일 폰트 */
+  .react-calendar__month-view__weekdays__weekday abbr {
+    color: #424242;
+  }
+
   /* 일요일에 빨간 폰트 */
   .react-calendar__month-view__weekdays__weekday--weekend abbr[title="일요일"] {
     color: #FF0000;
@@ -231,8 +237,9 @@ export const StyledCalendarWrapper = styled.div`
     color: #2E7AF2;
   }
 
-  .react-calendar__month-view__weekdays__weekday abbr {
-    color: #424242;
+  /* 일요일 날짜 숫자 */
+  .react-calendar__month-view__days__day--weekend:nth-child(7n + 1) abbr {
+    color: #ff0000;
   }
 
   /* 토요일 날짜 숫자는 기본색 유지 또는 파란색 */
@@ -240,7 +247,7 @@ export const StyledCalendarWrapper = styled.div`
     color: #2E7AF2;
   }
 
-  .react-calendar__month-view__days__day:nth-child abbr {
+  .react-calendar__month-view__days__day abbr {
     color: #424242;
   }
 
@@ -298,7 +305,6 @@ export const StyledCalendarWrapper = styled.div`
 // CalendarWrapper
 export const CalendarWrap = styled.div`
   position: relative;
-  padding: 0 auto;
   background: #fff;
   border-radius: 20px;
   box-sizing: border-box;
@@ -335,10 +341,8 @@ export const AttendIS = styled.div`
 
   .in{
     position: relative;
-
     display: inline-flex;
     align-items: center;
-
     padding-left: 18px;
 
     font-size: 14px;
@@ -453,22 +457,21 @@ export const HeadsUp = styled.div`
       color: #fff;
       font-size: 12px;
       font-weight: 900;
-
-      .circle.check{
-        background: #4359fc;
-        font-size: 18px;
-      }
-
-      .circle.today{
-        background: #4359fc;
-        font-size: 11px;
-      }
-
-      .circle.empty{
-        background: #eeeeee;
-      }
     }
 
+    .circle.check{
+      background: #4359fc;
+      font-size: 18px;
+    }
+
+    .circle.today{
+      background: #4359fc;
+      font-size: 11px;
+    }
+
+    .circle.empty{
+      background: #eeeeee;
+    }
   }
 
   .weekText{
@@ -637,6 +640,19 @@ export const AttendPopUpWrap = styled.div`
 
   background: rgba(0, 0, 0, 0.35);
 
+  .attendancePopup::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 208px;
+
+    background: #ff8004;
+    z-index: 0;
+  }
+
   .attendancePopup{
     position: relative;
 
@@ -650,49 +666,40 @@ export const AttendPopUpWrap = styled.div`
 
     overflow: hidden;
 
-  .attendanceModal::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-
-    width: 100%;
-    height: 150px;
-
-    background: #ff8004;
-    z-index: 0;
-  }
-
     .closeBtn{
       position: absolute;
-      top: 18px;
-      right: 20px;
-      z-index: 2;
+      top: 22px;
+      right: 28px;
+      z-index: 3;
 
       border: 0;
-      background: none;
+      background: transparent;
       color: #fff;
 
-      font-size: 22px;
-      font-weight: 500;
+      font-size: 30px;
+      font-weight: 300;
+      line-height: 1;
       cursor: pointer;
     }
 
     .popupHeader{
-      background-color: #ff8004;
       position: relative;
       z-index: 1;
 
-      margin-bottom: 36px;
+      height: 160px;
       color: #fff;
 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
       .fireIcon {
-        margin-bottom: 10px;
-        font-size: 42px;
+        margin: 8px 0 20px;
+        font-size: 46px;
         line-height: 1;
       }
 
-      .modalHeader h1 {
+      .popupHeader h1 {
         margin: 0 0 8px;
 
         font-size: 26px;
@@ -702,9 +709,8 @@ export const AttendPopUpWrap = styled.div`
       .date {
         margin: 0;
 
-        font-size: 13px;
-        font-weight: 700;
-        opacity: 0.9;
+        font-size: 15px;
+        font-weight: 500;
       }
     }
 
@@ -714,39 +720,38 @@ export const AttendPopUpWrap = styled.div`
 
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: 22px;
 
-      margin-bottom: 28px;
+      margin: 28px 0 68px;
 
       .rewardBox {
-        height: 110px;
-        padding: 20px 10px;
+        height: 106px;
+        padding: 18px 10px;
         box-sizing: border-box;
 
-        background: #fff4f0;
-        border: 1.5px solid #815cff;
+        background: transparent;
+        border: 1.5px solid #7157ff;
         border-radius: 14px;
 
         .rewardIcon {
           margin: 0 0 8px;
-
           font-size: 24px;
           line-height: 1;
         }
 
         .rewardLabel {
-          margin: 0 0 6px;
+          margin: 0 0 4px;
 
-          color: #aaa;
-          font-size: 12px;
-          font-weight: 700;
+          color: #b8aaaa;
+          font-size: 13px;
+          font-weight: 600;
         }
 
         .rewardPoint {
           margin: 0;
 
           color: #4359fc;
-          font-size: 18px;
+          font-size: 22px;
           font-weight: 900;
         }
       }
@@ -755,21 +760,22 @@ export const AttendPopUpWrap = styled.div`
     .attendNotice{
       margin: 0 0 12px;
 
-      color: #888;
-      font-size: 14px;
-      font-weight: 700;
+      color: #8b7d7d;
+      font-size: 15px;
+      font-weight: 500;
+    }
 
-      .attendNotice span{
-        color: #ff8004;
-      }
+    .attendNotice span{
+      color: #ff7a00;
+      font-weight: 900;
     }
 
     .attendNoticeBar{
-      width: 100%;
-      height: 6px;
-      margin-bottom: 22px;
+      width: 376px;
+      height: 7px;
+      margin: 0 auto 42px;
 
-      background: #f7f7fb;
+      background: #f7e7e6;
       border-radius: 999px;
       overflow: hidden;
 
@@ -782,33 +788,14 @@ export const AttendPopUpWrap = styled.div`
       }
     }
 
-    .buttonWrap{
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+    .detailBtn {
+      border: 0;
+      background: transparent;
+      color: #1f1717;
 
-
-      .cancelBtn,
-      .detailBtn {
-        height: 48px;
-
-        border: 0;
-        border-radius: 14px;
-
-        font-size: 14px;
-        font-weight: 800;
-        cursor: pointer;
-      }
-
-      .cancelBtn {
-        background: #f7f7fb;
-        color: #666;
-      }
-
-      .detailBtn {
-        background: #4359fc;
-        color: #fff;
-      }
+      font-size: 22px;
+      font-weight: 500;
+      cursor: pointer;
     }
   }
 `;

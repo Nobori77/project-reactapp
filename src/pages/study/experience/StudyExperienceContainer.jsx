@@ -96,7 +96,7 @@ const StudyExperienceContainer = () => {
                     ))}
                 </div>
             </div>    
-            <button className='quizStartButton'>퀴즈 풀기</button>
+            {/* <button className='quizStartButton'>퀴즈 풀기</button> */}
         </NonUser>
     );
 };
