@@ -1,22 +1,5 @@
 import React from "react";
-import {
-  Header,
-  HeaderLeft,
-  ProfileArea,
-  RoomInfo,
-  RoomTitle,
-  RoomSubText,
-  MessageStatus,
-  LiveBadge,
-  LiveIcon,
-  LiveText,
-  TodayMsgRow,
-  TodayMsgText,
-  HeaderRight,
-  LeaveBtn,
-  MinimizeBtn,
-  CloseBtn,
-} from "../ChatStyle";
+import S from "../ChatStyle";
 import { ThumbnailBox } from "../chatComponents/chatComponentStyle";
 import defaultProfileImg from "../../assets/chat/chat_default_profile.svg";
 import { useChatContext } from "../../context/ChatContext";
@@ -34,9 +17,9 @@ const PopupChatHeader = ({ profileUrl }) => {
   const { handleLeave, minimizeChat, closeChat } = useChatContext();
 
   return (
-    <Header>
-      <HeaderLeft>
-        <ProfileArea>
+    <S.Header>
+      <S.HeaderLeft>
+        <S.ProfileArea>
           <ThumbnailBox
             src={profileUrl || defaultProfileImg}
             alt="채팅방 프로필"
@@ -44,32 +27,32 @@ const PopupChatHeader = ({ profileUrl }) => {
               e.target.src = defaultProfileImg;
             }}
           />
-          <RoomInfo>
-            <RoomTitle>학습 일상 대화방</RoomTitle>
-            <RoomSubText>00명 참여 중</RoomSubText>
-          </RoomInfo>
-        </ProfileArea>
-        <MessageStatus>
-          <LiveBadge>
-            <LiveIcon src={liveVectorUrl} alt="" />
-            <LiveText>LIVE</LiveText>
-          </LiveBadge>
-          <TodayMsgRow>
+          <S.RoomInfo>
+            <S.RoomTitle>학습 일상 대화방</S.RoomTitle>
+            <S.RoomSubText>00명 참여 중</S.RoomSubText>
+          </S.RoomInfo>
+        </S.ProfileArea>
+        <S.MessageStatus>
+          <S.LiveBadge>
+            <S.LiveIcon src={liveVectorUrl} alt="" />
+            <S.LiveText>LIVE</S.LiveText>
+          </S.LiveBadge>
+          <S.TodayMsgRow>
             <img src={downloadIconUrl} alt="" />
-            <TodayMsgText>오늘 00개 메시지</TodayMsgText>
-          </TodayMsgRow>
-        </MessageStatus>
-      </HeaderLeft>
-      <HeaderRight>
-        <LeaveBtn onClick={handleLeave}>채팅방 나가기</LeaveBtn>
-        <MinimizeBtn onClick={minimizeChat}>
+            <S.TodayMsgText>오늘 00개 메시지</S.TodayMsgText>
+          </S.TodayMsgRow>
+        </S.MessageStatus>
+      </S.HeaderLeft>
+      <S.HeaderRight>
+        <S.LeaveBtn onClick={handleLeave}>채팅방 나가기</S.LeaveBtn>
+        <S.MinimizeBtn onClick={minimizeChat}>
           <img src={minimizeVUrl} alt="최소화" />
-        </MinimizeBtn>
-        <CloseBtn onClick={closeChat}>
+        </S.MinimizeBtn>
+        <S.CloseBtn onClick={closeChat}>
           <img src={closeVUrl} alt="닫기" />
-        </CloseBtn>
-      </HeaderRight>
-    </Header>
+        </S.CloseBtn>
+      </S.HeaderRight>
+    </S.Header>
   );
 };
 

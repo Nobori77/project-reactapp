@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  SelectPageBg,
-  SelectPopup,
-  SelectHeader,
-  HeaderTitle,
-  HeaderBtns,
-  MinimizeBtn,
-  SelectCloseBtn,
-  SelectBody,
-} from "./ChatStyle";
+import S from "./ChatStyle";
 import SelectRoomListPanel from "./popupChat/SelectRoomListPanel";
 import SelectOngoingPanel from "./popupChat/SelectOngoingPanel";
 import { useChatContext } from "../context/ChatContext";
@@ -22,26 +13,26 @@ const PopupChatRoomSelect = () => {
   const { handleSelectMinimize, handleSelectClose } = useChatContext();
 
   return (
-    <SelectPageBg>
-      <SelectPopup>
-        <SelectHeader>
-          <HeaderTitle>채팅방 선택</HeaderTitle>
-          <HeaderBtns>
-            <MinimizeBtn onClick={handleSelectMinimize}>
+    <S.SelectPageBg>
+      <S.SelectPopup>
+        <S.SelectHeader>
+          <S.HeaderTitle>채팅방 선택</S.HeaderTitle>
+          <S.HeaderBtns>
+            <S.MinimizeBtn onClick={handleSelectMinimize}>
               <img src={minimizeVUrl} alt="최소화" />
-            </MinimizeBtn>
-            <SelectCloseBtn onClick={handleSelectClose}>
+            </S.MinimizeBtn>
+            <S.SelectCloseBtn onClick={handleSelectClose}>
               <img src={closeVUrl} alt="닫기" />
-            </SelectCloseBtn>
-          </HeaderBtns>
-        </SelectHeader>
+            </S.SelectCloseBtn>
+          </S.HeaderBtns>
+        </S.SelectHeader>
 
-        <SelectBody>
+        <S.SelectBody>
           <SelectRoomListPanel />
           <SelectOngoingPanel />
-        </SelectBody>
-      </SelectPopup>
-    </SelectPageBg>
+        </S.SelectBody>
+      </S.SelectPopup>
+    </S.SelectPageBg>
   );
 };
 

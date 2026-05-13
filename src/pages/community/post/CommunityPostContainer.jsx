@@ -1,7 +1,7 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
-import { ActionBtn, CategoryPill, ColumnBlock } from "../communityStyle";
-import { H6Bold, H7Bold } from "../communityTextStyle";
+import { Link } from "react-router-dom";
+import S from "../communityStyle";
+import T from "../communityTextStyle";
 import LiveChatCard from "../chat/chatComponents/LiveChatCard";
 import PostListSection from "./postComponents/PostListSection.jsx";
 import styled from "styled-components";
@@ -83,14 +83,14 @@ const CommunityPostContainer = () => {
   return (
     <div>
       {/* <CommunityPostComponent /> */}
-      <ColumnBlock>
+      <S.ColumnBlock>
         {/* 상단 헤더 */}
         <HeaderBlock>
           {/* 제목 */}
-          <H6Bold>실시간 채팅방</H6Bold>
+          <T.H6Bold>실시간 채팅방</T.H6Bold>
 
           {/* 글쓰기 버튼 */}
-          <ActionBtn $type="submit">+채팅방 만들기</ActionBtn>
+          <S.ActionBtn $type="submit">+채팅방 만들기</S.ActionBtn>
         </HeaderBlock>
         {/* 채팅방 */}
         <LiveChatRow>
@@ -112,32 +112,27 @@ const CommunityPostContainer = () => {
 
         {/* 포스트 영역 헤더 */}
         <PostHeader>
-          <H7Bold>게시글</H7Bold>
+          <T.H7Bold>게시글</T.H7Bold>
         </PostHeader>
 
         {/* 카테고리 및 글쓰기 버튼 */}
         <PostCategoryHeader>
           {/* 카테고리 */}
           <PostCategoryRow>
-            <CategoryPill>카테고리</CategoryPill>
-            <CategoryPill>카테고리</CategoryPill>
-            <CategoryPill>카테고리</CategoryPill>
-            <CategoryPill>카테고리</CategoryPill>
-            <CategoryPill>카테고리</CategoryPill>
+            <S.CategoryPill>카테고리</S.CategoryPill>
+            <S.CategoryPill>카테고리</S.CategoryPill>
+            <S.CategoryPill>카테고리</S.CategoryPill>
+            <S.CategoryPill>카테고리</S.CategoryPill>
+            <S.CategoryPill>카테고리</S.CategoryPill>
           </PostCategoryRow>
-          <ActionBtn $type="submit">글쓰기</ActionBtn>
+          <S.ActionBtn $type="submit">글쓰기</S.ActionBtn>
 
           {/* 글쓰기 */}
         </PostCategoryHeader>
 
         {/* 포스트 카드 목록 + 페이지네이션 */}
         <PostListSection />
-      </ColumnBlock>
-      {/* <PostDetailPage /> */}
-      <Outlet />
-
-      {/* 여기에 임시로 개발 목적으로 포스트 디테일 */}
-      {/* <PostDetailPage /> */}
+      </S.ColumnBlock>
     </div>
   );
 };

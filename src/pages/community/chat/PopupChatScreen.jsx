@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { colors } from "../constants";
-import { PageBg, Popup, Body, RightPanel } from "./ChatStyle";
+import S from "./ChatStyle";
 import PopupChatHeader from "./popupChat/PopupChatHeader";
 import PopupParticipantList from "./popupChat/PopupParticipantList";
 import PopupChatCenter from "./popupChat/PopupChatCenter";
@@ -141,17 +141,17 @@ const PopupChatScreen = () => {
   };
 
   return (
-    <PageBg>
-      <Popup>
+    <S.PageBg>
+      <S.Popup>
         <PopupChatHeader />
-        <Body>
+        <S.Body>
           <PopupParticipantList
             users={USERS}
             selectedUserId={selectedUser?.id}
             onUserClick={handleUserClick}
           />
           <PopupChatCenter messages={MESSAGES} />
-          <RightPanel>
+          <S.RightPanel>
             {selectedUser ? (
               <PopupUserInfoPanel
                 user={selectedUser}
@@ -160,10 +160,10 @@ const PopupChatScreen = () => {
             ) : (
               <PopupRoomInfoPanel tags={TAGS} />
             )}
-          </RightPanel>
-        </Body>
-      </Popup>
-    </PageBg>
+          </S.RightPanel>
+        </S.Body>
+      </S.Popup>
+    </S.PageBg>
   );
 };
 

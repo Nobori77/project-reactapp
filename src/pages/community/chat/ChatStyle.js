@@ -2,13 +2,7 @@
 
 import styled from "styled-components";
 import { colors, fonts, radius } from "../constants";
-import {
-  H9Bold,
-  H11Bold,
-  H11Regular,
-  H12Bold,
-  H12Regular,
-} from "../communityTextStyle";
+import T from "../communityTextStyle";
 import {
   flexBetweenRow,
   flexCenterColumn,
@@ -24,7 +18,7 @@ export const ORANGE_DARK = "#92400e";
 
 // ─── Page wrapper ──────────────────────────────────────────────────────────────
 
-export const PageBg = styled.div`
+const PageBg = styled.div`
   background: ${colors.bgPopupOverlay};
   min-height: 100vh;
   display: flex;
@@ -33,7 +27,7 @@ export const PageBg = styled.div`
   padding: 73px 0 40px;
 `;
 
-export const Popup = styled.div`
+const Popup = styled.div`
   width: 872px;
   /* display: flex;
   flex-direction: column; */
@@ -42,7 +36,7 @@ export const Popup = styled.div`
 
 // ─── Header ────────────────────────────────────────────────────────────────────
 
-export const Header = styled.div`
+const Header = styled.div`
   background: linear-gradient(
     175.28deg,
     ${colors.primaryDark} 0%,
@@ -54,17 +48,17 @@ export const Header = styled.div`
   padding: 12px;
 `;
 
-export const HeaderLeft = styled.div`
+const HeaderLeft = styled.div`
   ${flexCenterRow}
   gap: 36px;
 `;
 
-export const ProfileArea = styled.div`
+const ProfileArea = styled.div`
   ${flexCenterRow}
   gap: 12px;
 `;
 
-export const RoomProfileBox = styled.div`
+const RoomProfileBox = styled.div`
   background: ${colors.tagOnPrimary};
   border: 1px solid ${colors.tagOnPrimaryBorder};
   border-radius: ${radius.button};
@@ -78,27 +72,27 @@ export const RoomProfileBox = styled.div`
   }
 `;
 
-export const RoomInfo = styled.div`
+const RoomInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   width: 105px;
 `;
 
-export const RoomTitle = styled(H9Bold).attrs({ $color: colors.textWhite })``;
+const RoomTitle = styled(T.H9Bold).attrs({ $color: colors.textWhite })``;
 
-export const RoomSubText = styled(H11Regular).attrs({
+const RoomSubText = styled(T.H11Regular).attrs({
   $color: colors.border,
 })``;
 
-export const MessageStatus = styled.div`
+const MessageStatus = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   width: 122px;
 `;
 
-export const LiveBadge = styled.div`
+const LiveBadge = styled.div`
   background: ${colors.tagOnPrimary};
   border: 1px solid ${colors.tagOnPrimaryBorder};
   border-radius: ${radius.pill};
@@ -109,14 +103,14 @@ export const LiveBadge = styled.div`
   align-self: flex-start;
 `;
 
-export const LiveIcon = styled.img`
+const LiveIcon = styled.img`
   width: 8px;
   height: 8px;
 `;
 
-export const LiveText = styled(H12Bold).attrs({ $color: colors.textWhite })``;
+const LiveText = styled(T.H12Bold).attrs({ $color: colors.textWhite })``;
 
-export const TodayMsgRow = styled.div`
+const TodayMsgRow = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
@@ -126,16 +120,16 @@ export const TodayMsgRow = styled.div`
   }
 `;
 
-export const TodayMsgText = styled(H11Regular).attrs({
+const TodayMsgText = styled(T.H11Regular).attrs({
   $color: colors.border,
 })``;
 
-export const HeaderRight = styled.div`
+const HeaderRight = styled.div`
   ${flexCenterRow}
   gap: 6px;
 `;
 
-export const LeaveBtn = styled.button`
+const LeaveBtn = styled.button`
   background: ${colors.dangerOverlay};
   border: none;
   border-radius: 6px;
@@ -148,7 +142,7 @@ export const LeaveBtn = styled.button`
   line-height: 1;
 `;
 
-export const MinimizeBtn = styled.button`
+const MinimizeBtn = styled.button`
   background: ${colors.overlayWhite15};
   border: none;
   border-radius: 6px;
@@ -166,7 +160,7 @@ export const MinimizeBtn = styled.button`
   }
 `;
 
-export const CloseBtn = styled.button`
+const CloseBtn = styled.button`
   background: ${colors.dangerOverlay};
   border: none;
   border-radius: 6px;
@@ -184,7 +178,7 @@ export const CloseBtn = styled.button`
 
 // ─── Body ──────────────────────────────────────────────────────────────────────
 
-export const Body = styled.div`
+const Body = styled.div`
   display: flex;
   align-items: stretch;
   height: 540px;
@@ -192,7 +186,7 @@ export const Body = styled.div`
 
 // ─── Left panel ────────────────────────────────────────────────────────────────
 
-export const LeftPanel = styled.div`
+const LeftPanel = styled.div`
   width: 200px;
   background: ${colors.bgSection};
   border-left: 1px solid ${colors.border};
@@ -205,37 +199,37 @@ export const LeftPanel = styled.div`
   padding: 6px 16px;
 `;
 
-export const ParticipantHeader = styled.div`
+const ParticipantHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-export const ParticipantLabel = styled(H11Bold).attrs({
+const ParticipantLabel = styled(T.H11Bold).attrs({
   $color: colors.textSub,
 })``;
 
-export const CountBadge = styled.div`
+const CountBadge = styled.div`
   background: ${colors.primary};
   border-radius: ${radius.pill};
   padding: 4px 8px;
   ${h12Bold}
 `;
 
-export const Divider = styled.div`
+const Divider = styled.div`
   height: 1px;
   background: ${colors.border};
   width: 100%;
 `;
 
-export const UserList = styled.div`
+const UserList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
   height: 100%;
 `;
 
-export const UserItem = styled.div`
+const UserItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -250,20 +244,20 @@ export const UserItem = styled.div`
   }
 `;
 
-export const UserProfileRow = styled.div`
+const UserProfileRow = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
 `;
 
-export const AvatarWrap = styled.div`
+const AvatarWrap = styled.div`
   position: relative;
   width: 30px;
   height: 30px;
   flex-shrink: 0;
 `;
 
-export const AvatarImg = styled.img`
+const AvatarImg = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 8px;
@@ -272,7 +266,7 @@ export const AvatarImg = styled.img`
   padding: ${({ $isIcon }) => ($isIcon ? "6px" : "0")};
 `;
 
-export const OnlineDot = styled.img`
+const OnlineDot = styled.img`
   position: absolute;
   bottom: 0;
   right: 0;
@@ -280,23 +274,23 @@ export const OnlineDot = styled.img`
   height: 6px;
 `;
 
-export const UserMeta = styled.div`
+const UserMeta = styled.div`
   display: flex;
   flex-direction: column;
   width: 40px;
 `;
 
-export const UserNameText = styled(H11Bold).attrs({ $color: colors.textMain })`
+const UserNameText = styled(T.H11Bold).attrs({ $color: colors.textMain })`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-export const UserRoleText = styled(H12Regular).attrs({
+const UserRoleText = styled(T.H12Regular).attrs({
   $color: colors.textSub,
 })``;
 
-export const LevelBadge = styled.div`
+const LevelBadge = styled.div`
   background: ${colors.primaryLight};
   border-radius: ${radius.pill};
   padding: 2px 6px;
@@ -307,7 +301,7 @@ export const LevelBadge = styled.div`
 
 // ─── Center panel ──────────────────────────────────────────────────────────────
 
-export const CenterPanel = styled.div`
+const CenterPanel = styled.div`
   width: 472px;
   display: flex;
   flex-direction: column;
@@ -315,7 +309,7 @@ export const CenterPanel = styled.div`
   min-height: 0;
 `;
 
-export const MessagesArea = styled.div`
+const MessagesArea = styled.div`
   flex: 1;
   min-height: 0;
   background: ${colors.bgCard};
@@ -327,34 +321,34 @@ export const MessagesArea = styled.div`
   overflow-y: auto;
 `;
 
-export const OtherMsgWrap = styled.div`
+const OtherMsgWrap = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 8px;
 `;
 
-export const MsgAvatar = styled.img`
+const MsgAvatar = styled.img`
   width: 26px;
   height: 26px;
   flex-shrink: 0;
 `;
 
-export const MsgContentCol = styled.div`
+const MsgContentCol = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   width: 206px;
 `;
 
-export const SenderName = styled(H12Bold).attrs({ $color: colors.textSub })``;
+const SenderName = styled(T.H12Bold).attrs({ $color: colors.textSub })``;
 
-export const MsgTimeRow = styled.div`
+const MsgTimeRow = styled.div`
   display: flex;
   align-items: flex-end;
   gap: 8px;
 `;
 
-export const OtherBubble = styled.div`
+const OtherBubble = styled.div`
   background: ${colors.bgCard};
   border-radius: ${radius.button};
   padding: 8px 12px;
@@ -362,33 +356,33 @@ export const OtherBubble = styled.div`
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
 `;
 
-export const OtherBubbleText = styled(H11Regular).attrs({
+const OtherBubbleText = styled(T.H11Regular).attrs({
   $color: colors.textMain,
 })``;
 
-export const MsgTime = styled(H12Regular).attrs({ $color: colors.textSub })`
+const MsgTime = styled(T.H12Regular).attrs({ $color: colors.textSub })`
   white-space: nowrap;
 `;
 
-export const MyMsgRow = styled.div`
+const MyMsgRow = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
   gap: 8px;
 `;
 
-export const MyBubble = styled.div`
+const MyBubble = styled.div`
   background: ${colors.primary};
   border-radius: ${radius.button};
   padding: 8px 12px;
   max-width: 188px;
 `;
 
-export const MyBubbleText = styled(H11Regular).attrs({
+const MyBubbleText = styled(T.H11Regular).attrs({
   $color: colors.textWhite,
 })``;
 
-export const InputArea = styled.div`
+const InputArea = styled.div`
   background: ${colors.bgCard};
   padding: 12px 20px;
   display: flex;
@@ -396,37 +390,37 @@ export const InputArea = styled.div`
   gap: 8px;
 `;
 
-export const AttachRow = styled.div`
+const AttachRow = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
 `;
 
-export const AttachIcons = styled.div`
+const AttachIcons = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
 `;
 
-export const AttachIcon = styled.img`
+const AttachIcon = styled.img`
   width: 20px;
   height: 20px;
   cursor: pointer;
 `;
 
-export const AttachDivider = styled.div`
+const AttachDivider = styled.div`
   width: 1px;
   height: 16px;
   background: ${colors.border};
 `;
 
-export const InputRow = styled.div`
+const InputRow = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
 `;
 
-export const TextInputBox = styled.div`
+const TextInputBox = styled.div`
   flex: 1;
   background: ${colors.bgCard};
   border: 1px solid ${colors.border};
@@ -434,13 +428,13 @@ export const TextInputBox = styled.div`
   padding: 8px 10px;
 `;
 
-export const InputPlaceholder = styled(H11Regular).attrs({
+const InputPlaceholder = styled(T.H11Regular).attrs({
   $color: colors.textSub,
 })`
   white-space: nowrap;
 `;
 
-export const SendBtn = styled.button`
+const SendBtn = styled.button`
   background: ${colors.primary};
   border: none;
   border-radius: ${radius.input};
@@ -456,7 +450,7 @@ export const SendBtn = styled.button`
 
 // ─── Right panel ───────────────────────────────────────────────────────────────
 
-export const RightPanel = styled.div`
+const RightPanel = styled.div`
   width: 200px;
   border-right: 1px solid ${colors.border};
   border-bottom: 1px solid ${colors.border};
@@ -467,7 +461,7 @@ export const RightPanel = styled.div`
 `;
 
 /* 채팅방 기본 정보 패널 — 내용이 패널 높이를 초과하면 세로 스크롤 */
-export const RightPanelScroll = styled.div`
+const RightPanelScroll = styled.div`
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -486,7 +480,7 @@ export const RightPanelScroll = styled.div`
   }
 `;
 
-export const PanelSection = styled.div`
+const PanelSection = styled.div`
   background: ${colors.bgCard};
   border-left: 1px solid ${colors.border};
   border-bottom: ${({ $last }) =>
@@ -499,11 +493,11 @@ export const PanelSection = styled.div`
   flex: ${({ $flex }) => $flex || "none"};
 `;
 
-export const SectionLabel = styled(H12Bold).attrs({ $color: colors.textSub })`
+const SectionLabel = styled(T.H12Bold).attrs({ $color: colors.textSub })`
   width: 100%;
 `;
 
-export const RoomProfileImg = styled.div`
+const RoomProfileImg = styled.div`
   background: ${colors.bgSection};
   border: 1px solid ${colors.border};
   border-radius: 16px;
@@ -517,7 +511,7 @@ export const RoomProfileImg = styled.div`
   }
 `;
 
-export const RoomTitleCenter = styled.div`
+const RoomTitleCenter = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -525,42 +519,42 @@ export const RoomTitleCenter = styled.div`
   width: 100%;
 `;
 
-export const RoomTitleText = styled(H9Bold).attrs({ $color: colors.textMain })`
+const RoomTitleText = styled(T.H9Bold).attrs({ $color: colors.textMain })`
   text-align: center;
 `;
 
-export const StatusRow = styled.div`
+const StatusRow = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
 `;
 
-export const LiveStatusRow = styled.div`
+const LiveStatusRow = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
 `;
 
-export const LiveDot = styled.img`
+const LiveDot = styled.img`
   width: 8px;
   height: 8px;
 `;
 
-export const LiveLabel = styled(H12Bold).attrs({ $color: colors.live })``;
+const LiveLabel = styled(T.H12Bold).attrs({ $color: colors.live })``;
 
-export const ParticipantCount = styled(H12Regular).attrs({
+const ParticipantCount = styled(T.H12Regular).attrs({
   $color: colors.textSub,
 })``;
 
-export const IntroText = styled.div``;
+const IntroText = styled.div``;
 
-export const TagGrid = styled.div`
+const TagGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, fit-content(100%));
   gap: 8px;
 `;
 
-export const Tag = styled.div`
+const Tag = styled.div`
   background: ${({ $bg }) => $bg};
   border-radius: ${radius.pill};
   padding: 2px 8px;
@@ -572,20 +566,20 @@ export const Tag = styled.div`
 `;
 
 /* 접근성 도구 섹션 — 라벨 + 토글 가로 배치 */
-export const AccessRow = styled.div`
+const AccessRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 `;
 
-export const AccessLabel = styled(H11Regular).attrs({
+const AccessLabel = styled(T.H11Regular).attrs({
   $color: colors.textMain,
 })``;
 
 // ─── ChatRoomUserInfo ───────────────────────────────────────────────────────────
 
-export const UserInfoTopSection = styled.div`
+const UserInfoTopSection = styled.div`
   background: ${colors.bgCard};
   border-left: 1px solid ${colors.border};
   border-bottom: 1px solid ${colors.border};
@@ -596,18 +590,18 @@ export const UserInfoTopSection = styled.div`
   align-items: center;
 `;
 
-export const UserInfoSectionHeader = styled.div`
+const UserInfoSectionHeader = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
 `;
 
-export const UserInfoSectionTitle = styled(H9Bold).attrs({
+const UserInfoSectionTitle = styled(T.H9Bold).attrs({
   $color: colors.textMain,
 })``;
 
-export const UserBigAvatarBox = styled.div`
+const UserBigAvatarBox = styled.div`
   width: 64px;
   height: 64px;
   background: ${colors.primaryLight};
@@ -626,11 +620,11 @@ export const UserBigAvatarBox = styled.div`
   }
 `;
 
-export const UserInfoName = styled(H9Bold).attrs({ $color: colors.textMain })`
+const UserInfoName = styled(T.H9Bold).attrs({ $color: colors.textMain })`
   text-align: center;
 `;
 
-export const LevelRoleBadge = styled.div`
+const LevelRoleBadge = styled.div`
   background: ${colors.primaryLight};
   border-radius: ${radius.pill};
   padding: 4px 12px;
@@ -639,11 +633,11 @@ export const LevelRoleBadge = styled.div`
   white-space: nowrap;
 `;
 
-export const ActionDescText = styled(H11Regular).attrs({
+const ActionDescText = styled(T.H11Regular).attrs({
   $color: colors.textMain,
 })``;
 
-export const ReportCard = styled.div`
+const ReportCard = styled.div`
   background: ${ORANGE_LIGHT};
   border-radius: 16px;
   padding: 12px 24px;
@@ -654,9 +648,9 @@ export const ReportCard = styled.div`
   box-sizing: border-box;
 `;
 
-export const ReportCardTitle = styled(H11Bold).attrs({ $color: ORANGE })``;
+const ReportCardTitle = styled(T.H11Bold).attrs({ $color: ORANGE })``;
 
-export const ReportCardDesc = styled(H11Regular).attrs({
+const ReportCardDesc = styled(T.H11Regular).attrs({
   $color: ORANGE_DARK,
 })``;
 
@@ -665,7 +659,7 @@ export const ReportCardDesc = styled(H11Regular).attrs({
 const POPUP_OVERLAY = "rgba(0, 0, 0, 0.45)";
 const INACTIVE_BORDER = "#8d8d8d";
 
-export const SelectPageBg = styled.div`
+const SelectPageBg = styled.div`
   background: ${POPUP_OVERLAY};
   min-height: 100vh;
   display: flex;
@@ -674,13 +668,13 @@ export const SelectPageBg = styled.div`
   padding: 73px 0 40px;
 `;
 
-export const SelectPopup = styled.div`
+const SelectPopup = styled.div`
   width: 872px;
   display: flex;
   flex-direction: column;
 `;
 
-export const SelectHeader = styled.div`
+const SelectHeader = styled.div`
   background: linear-gradient(
     169.4deg,
     ${colors.primaryDark} 0%,
@@ -694,7 +688,7 @@ export const SelectHeader = styled.div`
   padding: 12px 16px;
 `;
 
-export const HeaderTitle = styled.p`
+const HeaderTitle = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.bold};
   font-size: ${fonts.size.base};
@@ -704,13 +698,13 @@ export const HeaderTitle = styled.p`
   margin: 0;
 `;
 
-export const HeaderBtns = styled.div`
+const HeaderBtns = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
 `;
 
-export const SelectCloseBtn = styled.button`
+const SelectCloseBtn = styled.button`
   background: ${colors.dangerOverlay};
   border: none;
   border-radius: 6px;
@@ -728,12 +722,12 @@ export const SelectCloseBtn = styled.button`
   }
 `;
 
-export const SelectBody = styled.div`
+const SelectBody = styled.div`
   display: flex;
   height: 460px;
 `;
 
-export const SelectLeftPanel = styled.div`
+const SelectLeftPanel = styled.div`
   width: 312px;
   flex-shrink: 0;
   background: ${colors.bgSection};
@@ -747,19 +741,19 @@ export const SelectLeftPanel = styled.div`
   padding: 6px 16px;
 `;
 
-export const PanelTop = styled.div`
+const PanelTop = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
 `;
 
-export const PanelHeader = styled.div`
+const PanelHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-export const PanelLabel = styled.p`
+const PanelLabel = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.bold};
   font-size: ${fonts.size.sm};
@@ -767,7 +761,7 @@ export const PanelLabel = styled.p`
   margin: 0;
 `;
 
-export const SelectCountBadge = styled.div`
+const SelectCountBadge = styled.div`
   background: ${colors.primary};
   border-radius: ${radius.pill};
   padding: 4px 8px;
@@ -778,14 +772,14 @@ export const SelectCountBadge = styled.div`
   letter-spacing: -0.2px;
 `;
 
-export const RoomList = styled.div`
+const RoomList = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow-y: auto;
 `;
 
-export const RoomItem = styled.div`
+const RoomItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -802,13 +796,13 @@ export const RoomItem = styled.div`
   }
 `;
 
-export const RoomItemLeft = styled.div`
+const RoomItemLeft = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
 `;
 
-export const RoomIconBox = styled.div`
+const RoomIconBox = styled.div`
   width: 40px;
   height: 40px;
   background: ${colors.primaryLight};
@@ -825,13 +819,13 @@ export const RoomIconBox = styled.div`
   }
 `;
 
-export const RoomMetaCol = styled.div`
+const RoomMetaCol = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
 `;
 
-export const RoomNameText = styled.p`
+const RoomNameText = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.bold};
   font-size: ${fonts.size.md};
@@ -840,13 +834,13 @@ export const RoomNameText = styled.p`
   margin: 0;
 `;
 
-export const LiveRow = styled.div`
+const LiveRow = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
 `;
 
-export const SelectLiveDot = styled.div`
+const SelectLiveDot = styled.div`
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -854,7 +848,7 @@ export const SelectLiveDot = styled.div`
   flex-shrink: 0;
 `;
 
-export const SelectLiveLabel = styled.p`
+const SelectLiveLabel = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.bold};
   font-size: ${fonts.size.sm};
@@ -863,7 +857,7 @@ export const SelectLiveLabel = styled.p`
   margin: 0;
 `;
 
-export const RoomCountText = styled.p`
+const RoomCountText = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.regular};
   font-size: ${fonts.size.sm};
@@ -872,14 +866,14 @@ export const RoomCountText = styled.p`
   margin: 0;
 `;
 
-export const SelectUserList = styled.div`
+const SelectUserList = styled.div`
   display: flex;
   flex-direction: column;
   height: 280px;
   overflow-y: auto;
 `;
 
-export const SelectUserItem = styled.div`
+const SelectUserItem = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
@@ -893,7 +887,7 @@ export const SelectUserItem = styled.div`
   }
 `;
 
-export const UserAvatarBox = styled.div`
+const UserAvatarBox = styled.div`
   width: 40px;
   height: 40px;
   background: ${colors.primaryLight};
@@ -901,7 +895,7 @@ export const UserAvatarBox = styled.div`
   flex-shrink: 0;
 `;
 
-export const SelectUserNameText = styled.p`
+const SelectUserNameText = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.bold};
   font-size: ${fonts.size.md};
@@ -910,7 +904,7 @@ export const SelectUserNameText = styled.p`
   margin: 0;
 `;
 
-export const FilterTabsRow = styled.div`
+const FilterTabsRow = styled.div`
   display: flex;
   gap: 16px;
   align-items: center;
@@ -919,7 +913,7 @@ export const FilterTabsRow = styled.div`
   padding-bottom: 13px;
 `;
 
-export const FilterTab = styled.button`
+const FilterTab = styled.button`
   background: ${({ $active }) =>
     $active ? colors.primaryLight : colors.bgCard};
   border: 1px solid
@@ -935,7 +929,7 @@ export const FilterTab = styled.button`
   transition: all 0.15s;
 `;
 
-export const SelectRightPanel = styled.div`
+const SelectRightPanel = styled.div`
   flex: 1;
   min-width: 0;
   background: ${colors.bgSection};
@@ -948,12 +942,12 @@ export const SelectRightPanel = styled.div`
   padding: 6px 16px;
 `;
 
-export const OngoingRoomList = styled.div`
+const OngoingRoomList = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-export const OngoingRoomItem = styled.div`
+const OngoingRoomItem = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
@@ -967,7 +961,7 @@ export const OngoingRoomItem = styled.div`
   }
 `;
 
-export const OngoingProfileBox = styled.div`
+const OngoingProfileBox = styled.div`
   width: 40px;
   height: 40px;
   background: ${colors.primaryLight};
@@ -975,7 +969,7 @@ export const OngoingProfileBox = styled.div`
   flex-shrink: 0;
 `;
 
-export const OngoingRoomInfo = styled.div`
+const OngoingRoomInfo = styled.div`
   flex: 1;
   min-width: 0;
   display: flex;
@@ -983,20 +977,20 @@ export const OngoingRoomInfo = styled.div`
   gap: 6px;
 `;
 
-export const OngoingRoomTopRow = styled.div`
+const OngoingRoomTopRow = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   white-space: nowrap;
 `;
 
-export const OngoingRoomNameRow = styled.div`
+const OngoingRoomNameRow = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
 `;
 
-export const OngoingRoomName = styled.p`
+const OngoingRoomName = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.bold};
   font-size: ${fonts.size.md};
@@ -1005,7 +999,7 @@ export const OngoingRoomName = styled.p`
   margin: 0;
 `;
 
-export const OngoingRoomCount = styled.p`
+const OngoingRoomCount = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.regular};
   font-size: ${fonts.size.sm};
@@ -1015,7 +1009,7 @@ export const OngoingRoomCount = styled.p`
   margin: 0;
 `;
 
-export const OngoingLastTime = styled.p`
+const OngoingLastTime = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.regular};
   font-size: ${fonts.size.xs};
@@ -1024,7 +1018,7 @@ export const OngoingLastTime = styled.p`
   margin: 0;
 `;
 
-export const OngoingLastMsg = styled.p`
+const OngoingLastMsg = styled.p`
   font-family: ${fonts.family};
   font-weight: ${fonts.weight.medium};
   font-size: ${fonts.size.sm};
@@ -1036,3 +1030,131 @@ export const OngoingLastMsg = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
+
+const S = {
+  PageBg,
+  Popup,
+  Header,
+  HeaderLeft,
+  ProfileArea,
+  RoomProfileBox,
+  RoomInfo,
+  RoomTitle,
+  RoomSubText,
+  MessageStatus,
+  LiveBadge,
+  LiveIcon,
+  LiveText,
+  TodayMsgRow,
+  TodayMsgText,
+  HeaderRight,
+  LeaveBtn,
+  MinimizeBtn,
+  CloseBtn,
+  Body,
+  LeftPanel,
+  ParticipantHeader,
+  ParticipantLabel,
+  CountBadge,
+  Divider,
+  UserList,
+  UserItem,
+  UserProfileRow,
+  AvatarWrap,
+  AvatarImg,
+  OnlineDot,
+  UserMeta,
+  UserNameText,
+  UserRoleText,
+  LevelBadge,
+  CenterPanel,
+  MessagesArea,
+  OtherMsgWrap,
+  MsgAvatar,
+  MsgContentCol,
+  SenderName,
+  MsgTimeRow,
+  OtherBubble,
+  OtherBubbleText,
+  MsgTime,
+  MyMsgRow,
+  MyBubble,
+  MyBubbleText,
+  InputArea,
+  AttachRow,
+  AttachIcons,
+  AttachIcon,
+  AttachDivider,
+  InputRow,
+  TextInputBox,
+  InputPlaceholder,
+  SendBtn,
+  RightPanel,
+  RightPanelScroll,
+  PanelSection,
+  SectionLabel,
+  RoomProfileImg,
+  RoomTitleCenter,
+  RoomTitleText,
+  StatusRow,
+  LiveStatusRow,
+  LiveDot,
+  LiveLabel,
+  ParticipantCount,
+  IntroText,
+  TagGrid,
+  Tag,
+  AccessRow,
+  AccessLabel,
+  UserInfoTopSection,
+  UserInfoSectionHeader,
+  UserInfoSectionTitle,
+  UserBigAvatarBox,
+  UserInfoName,
+  LevelRoleBadge,
+  ActionDescText,
+  ReportCard,
+  ReportCardTitle,
+  ReportCardDesc,
+  SelectPageBg,
+  SelectPopup,
+  SelectHeader,
+  HeaderTitle,
+  HeaderBtns,
+  SelectCloseBtn,
+  SelectBody,
+  SelectLeftPanel,
+  PanelTop,
+  PanelHeader,
+  PanelLabel,
+  SelectCountBadge,
+  RoomList,
+  RoomItem,
+  RoomItemLeft,
+  RoomIconBox,
+  RoomMetaCol,
+  RoomNameText,
+  LiveRow,
+  SelectLiveDot,
+  SelectLiveLabel,
+  RoomCountText,
+  SelectUserList,
+  SelectUserItem,
+  UserAvatarBox,
+  SelectUserNameText,
+  FilterTabsRow,
+  FilterTab,
+  SelectRightPanel,
+  OngoingRoomList,
+  OngoingRoomItem,
+  OngoingProfileBox,
+  OngoingRoomInfo,
+  OngoingRoomTopRow,
+  OngoingRoomNameRow,
+  OngoingRoomName,
+  OngoingRoomCount,
+  OngoingLastTime,
+  OngoingLastMsg,
+};
+
+export default S;

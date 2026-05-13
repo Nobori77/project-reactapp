@@ -1,28 +1,5 @@
 import React, { useState } from "react";
-import {
-  SelectLeftPanel,
-  PanelTop,
-  PanelHeader,
-  PanelLabel,
-  SelectCountBadge,
-  Divider,
-  RoomList,
-  RoomItem,
-  RoomItemLeft,
-  RoomIconBox,
-  RoomMetaCol,
-  RoomNameText,
-  LiveRow,
-  SelectLiveDot,
-  SelectLiveLabel,
-  RoomCountText,
-  SelectUserList,
-  SelectUserItem,
-  UserAvatarBox,
-  SelectUserNameText,
-  FilterTabsRow,
-  FilterTab,
-} from "../ChatStyle";
+import S from "../ChatStyle";
 import { useChatContext } from "../../context/ChatContext";
 
 const chatIconUrl =
@@ -66,17 +43,17 @@ const SelectRoomListPanel = () => {
     activeFilter === "팔로우 한 유저" ? FOLLOW_USERS : REQUEST_USERS;
 
   return (
-    <SelectLeftPanel>
-      <PanelTop>
-        <PanelHeader>
-          <PanelLabel>라이브 채팅방</PanelLabel>
-          <SelectCountBadge>247</SelectCountBadge>
-        </PanelHeader>
-        <Divider />
+    <S.SelectLeftPanel>
+      <S.PanelTop>
+        <S.PanelHeader>
+          <S.PanelLabel>라이브 채팅방</S.PanelLabel>
+          <S.SelectCountBadge>247</S.SelectCountBadge>
+        </S.PanelHeader>
+        <S.Divider />
         {activeFilter === "라이브 채팅방" ? (
-          <RoomList>
+          <S.RoomList>
             {LIVE_ROOMS.map((room) => (
-              <RoomItem
+              <S.RoomItem
                 key={room.id}
                 $active={activeRoom === room.id}
                 onClick={() => {
@@ -84,46 +61,46 @@ const SelectRoomListPanel = () => {
                   handleSelectRoom(room);
                 }}
               >
-                <RoomItemLeft>
-                  <RoomIconBox>
+                <S.RoomItemLeft>
+                  <S.RoomIconBox>
                     <img src={chatIconUrl} alt="" />
-                  </RoomIconBox>
-                  <RoomMetaCol>
-                    <RoomNameText>{room.name}</RoomNameText>
-                    <LiveRow>
-                      <SelectLiveDot />
-                      <SelectLiveLabel>라이브</SelectLiveLabel>
-                    </LiveRow>
-                  </RoomMetaCol>
-                </RoomItemLeft>
-                <RoomCountText>{room.count}명</RoomCountText>
-              </RoomItem>
+                  </S.RoomIconBox>
+                  <S.RoomMetaCol>
+                    <S.RoomNameText>{room.name}</S.RoomNameText>
+                    <S.LiveRow>
+                      <S.SelectLiveDot />
+                      <S.SelectLiveLabel>라이브</S.SelectLiveLabel>
+                    </S.LiveRow>
+                  </S.RoomMetaCol>
+                </S.RoomItemLeft>
+                <S.RoomCountText>{room.count}명</S.RoomCountText>
+              </S.RoomItem>
             ))}
-          </RoomList>
+          </S.RoomList>
         ) : (
-          <SelectUserList>
+          <S.SelectUserList>
             {currentUsers.map((user) => (
-              <SelectUserItem key={user.id}>
-                <UserAvatarBox />
-                <SelectUserNameText>{user.name}</SelectUserNameText>
-              </SelectUserItem>
+              <S.SelectUserItem key={user.id}>
+                <S.UserAvatarBox />
+                <S.SelectUserNameText>{user.name}</S.SelectUserNameText>
+              </S.SelectUserItem>
             ))}
-          </SelectUserList>
+          </S.SelectUserList>
         )}
-      </PanelTop>
+      </S.PanelTop>
 
-      <FilterTabsRow>
+      <S.FilterTabsRow>
         {FILTER_TABS.map((tab) => (
-          <FilterTab
+          <S.FilterTab
             key={tab}
             $active={activeFilter === tab}
             onClick={() => handleFilterChange(tab)}
           >
             {tab}
-          </FilterTab>
+          </S.FilterTab>
         ))}
-      </FilterTabsRow>
-    </SelectLeftPanel>
+      </S.FilterTabsRow>
+    </S.SelectLeftPanel>
   );
 };
 

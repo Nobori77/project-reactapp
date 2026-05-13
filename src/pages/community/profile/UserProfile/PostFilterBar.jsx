@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import theme from "../../../../styles/theme";
 
@@ -23,19 +24,27 @@ const SORT_LIST = [
   { key: "popular", label: "인기순" },
 ];
 
+const TYPE_PATH = {
+  post: "writed-post",
+  comment: "writed-comment",
+  like: "liked-post",
+};
+
 const PostFilterBar = ({
   counts = { post: 42, comment: 42, like: 42 },
-  onTypeChange,
   onSortChange,
   onSearch,
 }) => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
+
   const [activeType, setActiveType] = useState("post");
   const [activeSort, setActiveSort] = useState("latest");
   const [searchValue, setSearchValue] = useState("");
 
   const handleTypeClick = (key) => {
     setActiveType(key);
-    onTypeChange?.(key);
+    navigate(`/community/profile/${userId}/${TYPE_PATH[key]}`);
   };
 
   const handleSortClick = (key) => {

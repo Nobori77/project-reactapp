@@ -1,21 +1,5 @@
 import React from "react";
-import {
-  SelectRightPanel,
-  PanelHeader,
-  PanelLabel,
-  SelectCountBadge,
-  Divider,
-  OngoingRoomList,
-  OngoingRoomItem,
-  OngoingProfileBox,
-  OngoingRoomInfo,
-  OngoingRoomTopRow,
-  OngoingRoomNameRow,
-  OngoingRoomName,
-  OngoingRoomCount,
-  OngoingLastTime,
-  OngoingLastMsg,
-} from "../ChatStyle";
+import S from "../ChatStyle";
 
 const ONGOING_ROOMS = [
   {
@@ -42,30 +26,30 @@ const ONGOING_ROOMS = [
 ];
 
 const SelectOngoingPanel = () => (
-  <SelectRightPanel>
-    <PanelHeader>
-      <PanelLabel>진행중인 채팅방</PanelLabel>
-      <SelectCountBadge>{ONGOING_ROOMS.length}</SelectCountBadge>
-    </PanelHeader>
-    <Divider />
-    <OngoingRoomList>
+  <S.SelectRightPanel>
+    <S.PanelHeader>
+      <S.PanelLabel>진행중인 채팅방</S.PanelLabel>
+      <S.SelectCountBadge>{ONGOING_ROOMS.length}</S.SelectCountBadge>
+    </S.PanelHeader>
+    <S.Divider />
+    <S.OngoingRoomList>
       {ONGOING_ROOMS.map((room) => (
-        <OngoingRoomItem key={room.id}>
-          <OngoingProfileBox />
-          <OngoingRoomInfo>
-            <OngoingRoomTopRow>
-              <OngoingRoomNameRow>
-                <OngoingRoomName>{room.name}</OngoingRoomName>
-                <OngoingRoomCount>{room.count}명</OngoingRoomCount>
-              </OngoingRoomNameRow>
-              <OngoingLastTime>{room.time}</OngoingLastTime>
-            </OngoingRoomTopRow>
-            <OngoingLastMsg>{room.lastMsg}</OngoingLastMsg>
-          </OngoingRoomInfo>
-        </OngoingRoomItem>
+        <S.OngoingRoomItem key={room.id}>
+          <S.OngoingProfileBox />
+          <S.OngoingRoomInfo>
+            <S.OngoingRoomTopRow>
+              <S.OngoingRoomNameRow>
+                <S.OngoingRoomName>{room.name}</S.OngoingRoomName>
+                <S.OngoingRoomCount>{room.count}명</S.OngoingRoomCount>
+              </S.OngoingRoomNameRow>
+              <S.OngoingLastTime>{room.time}</S.OngoingLastTime>
+            </S.OngoingRoomTopRow>
+            <S.OngoingLastMsg>{room.lastMsg}</S.OngoingLastMsg>
+          </S.OngoingRoomInfo>
+        </S.OngoingRoomItem>
       ))}
-    </OngoingRoomList>
-  </SelectRightPanel>
+    </S.OngoingRoomList>
+  </S.SelectRightPanel>
 );
 
 export default SelectOngoingPanel;
