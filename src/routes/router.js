@@ -31,6 +31,10 @@ import CommunityChatContainer from "../pages/community/chat/CommunityChatContain
 import CommunityPostContainer from "../pages/community/post/CommunityPostContainer";
 import CommunityPostWriteContainer from "../pages/community/post/write/CommunityPostWriteContainer";
 import CommunityUserProfileComponent from "../pages/community/profile/CommunityUserProfileComponent";
+import PostDetailPage from "../pages/community/post/detail/PostDetailPage";
+import UserWritePostList from "../pages/community/profile/filter/UserWritePostList";
+import UserWriteComment from "../pages/community/profile/filter/UserWriteComment";
+import UserClickedLike from "../pages/community/profile/filter/UserClickedLike";
 import CertificateContainer from "../pages/exam/certificate/CertificateContainer";
 import CertificateCheckContainer from "../pages/exam/certificate/check/CertificateCheckContainer";
 import CertificatePrintContainer from "../pages/exam/certificate/print/CertificatePrintContainer";
@@ -254,20 +258,22 @@ const router = createBrowserRouter([
         element: <CommunityContainer />,
         children: [
           {
-            path: "chat",
-            element: <CommunityChatContainer />
+            index: true,
+            element: <CommunityPostContainer />
           },
           {
-            path: "post",
-            element: <CommunityPostContainer />,
-            children: [
-              {
-                path: "write",
-                element: <CommunityPostWriteContainer />
-              }
-            ]
+            path: "chat",
+            element: <CommunityChatContainer />
           }
         ]
+      },
+      {
+        path: "community/post/write",
+        element: <CommunityPostWriteContainer />
+      },
+      {
+        path: "community/post/:id",
+        element: <PostDetailPage />
       },
       {
         path: "customservice",
@@ -292,8 +298,22 @@ const router = createBrowserRouter([
         ]
       },
       {
-         path: "community/profile/:userId",
-         element: <CommunityUserProfileComponent />
+        path: "community/profile/:userId",
+        element: <CommunityUserProfileComponent />,
+        children: [
+          {
+            path: "writed-post",
+            element: <UserWritePostList />
+          },
+          {
+            path: "writed-comment",
+            element: <UserWriteComment />
+          },
+          {
+            path: "liked-post",
+            element: <UserClickedLike />
+          }
+        ]
       },
       {
         path: "login",
