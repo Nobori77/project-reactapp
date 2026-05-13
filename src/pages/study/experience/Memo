@@ -1,0 +1,38 @@
+        <!-- <NonUser>
+            <div>
+                미리보기 학습
+                <Link to="/study/experience/mors/1">모스부호1</Link>
+                <Link to="/study/experience/mors/2">모스부호2</Link>
+                <Link to="/study/experience/sos/2">수신호1</Link>
+                <Link to="/study/experience/sos/2">수신호2</Link>
+                <Link to="/study/experience/culture/1">문화1</Link>
+                <Link to="/study/experience/culture/2">문화2</Link>
+                <Outlet />
+            </div>
+            <button>퀴즈 풀기</button>
+        </NonUser> -->
+
+
+          /* 기본요일 폰트 */
+  .react-calendar__month-view__weekdays__weekday abbr {
+    color: #424242;
+  }
+
+  /* 일요일에 빨간 폰트 */
+  .react-calendar__month-view__weekdays__weekday--weekend abbr[title="일요일"] {
+    color: #FF0000;
+  }
+
+  /* 토요일에 파란 폰트 */
+  .react-calendar__month-view__weekdays__weekday--weekend abbr[title="토요일"] {
+    color: #2E7AF2;
+  }
+
+  /* 토요일 날짜 숫자는 기본색 유지 또는 파란색 */
+  .react-calendar__month-view__days__day--weekend:nth-child(7n) abbr {
+    color: #2E7AF2;
+  }
+
+  .react-calendar__month-view__days__day:nth-child abbr {
+    color: #424242;
+  }

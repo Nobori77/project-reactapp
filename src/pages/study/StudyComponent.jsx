@@ -1,11 +1,27 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Banner, BannerContent, BannerIcon, Category, Search, StudyWrap, Video } from './style';
+import StudyAttendancePopup from './attendance/StudyAttendancePopup';
 
 // 학습 메인화면
 const StudyComponent = () => {
 
+    // popup 이동
     const navigate = useNavigate();
+    const[isStudyAttendancePopupOpen, setIsStudyAttendancePopupOpen] = useState(false);
+
+    const openStudyAttendancePopup = () => {
+        setIsStudyAttendancePopupOpen(true);
+    };
+
+    const closeStudyAttendancePopup = () => {
+        setIsStudyAttendancePopupOpen(false);
+    };
+
+    const goStudyAttendancePopup = () => {
+        setIsStudyAttendancePopupOpen(false);
+        navigate("/study/attendance")
+    };
 
     // 검색 icon
     const words = [
@@ -55,10 +71,10 @@ const StudyComponent = () => {
                 <div className='one-row'> 
                     <div className='attendCheck'>
                         <p className='attendCheck1'>출석체크</p>
-                        <Link className='attendCheckLink' to={"/study/attendance"}>출석체크 </Link>
+                        <button className='attendCheckLink' onClick={openStudyAttendancePopup}>출석체크 </button>
                         <img className='attendCheckImg' src='/assets/image/attendCheck.png' alt='출석체크 이미지'/>
                         <p className='attendCheck2'>매일매일 출석해요! </p>
-                        <button className='oneButton' onClick={() => navigate("/study/attendance")}>바로가기 →</button>
+                        <button className='oneButton' onClick={openStudyAttendancePopup}>바로가기 →</button>
                     </div>
 
                     <div className='ohQuiz'>
@@ -144,6 +160,14 @@ const StudyComponent = () => {
 
                 <button className='videoButton'>더 많은 영상 보기 →</button>
             </Video>
+
+            {/* popup */}
+            {isStudyAttendancePopupOpen && (
+                <StudyAttendancePopup
+                    onClose={closeStudyAttendancePopup}
+                    onDetail={goStudyAttendancePopup}
+                />
+            )}
 
         </StudyWrap>
     );

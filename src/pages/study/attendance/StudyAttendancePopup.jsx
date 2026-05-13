@@ -2,43 +2,48 @@ import React from 'react';
 import { AttendPopUpWrap } from './style';
 
 // 출석체크 Popup
-const StudyAttendancePopup = () => {
-
+const StudyAttendancePopup = ({ onClose, onDetail }) => {
 
 
     return (
         <AttendPopUpWrap>
-            <div className="attendance-modal">
-                <button className='close-btn' onClick={onclose}>✕</button>
+            <div className="attendancePopup">
+                <button className='closeBtn' onClick={onClose}>✕</button>
 
-                <div>
-                <div className='fire'>🔥</div>
-                <h1>7일 연속 출석!</h1>
-                <div className='date'>2026년 01월 01일 목요일</div>
+                <div className='popupHeader'>
+                    <div className='fireIcon'>🔥</div>
+                    <h1>7일 연속 출석!</h1>
+                    <div className='date'>2026년 01월 01일 목요일</div>
                 </div>
 
-                <div>
-                <div className='fire'>⚡</div>
-                <div className='get-exp'>획득 EXP</div>
-                <div className='point-exp'>+30 EXP</div>
-                </div>
+                <div className='rewardBoxWrap'>
+                    <div className='rewardBox'>
+                        <p className='rewardIcon'>⚡</p>
+                        <p className='rewardLabel'>획득 EXP</p>
+                        <p className='rewardPoint'>+30 EXP</p>
+                    </div>
 
-                <div>
-                <div className='badge'>🏅</div>
-                <div className='get-badge'>획득뱃지</div>
-                <div className='point-badge'>4개</div>
+                    <div className='rewardBox'>
+                        <div className='rewardIcon'>🏅</div>
+                        <div className='rewardLabel'>획득뱃지</div>
+                        <div className='rewardPoint'>4개</div>
+                    </div>
                 </div>
-
-                <div>
                     
+                <p className='attendNotice'>
+                    14일 달성까지 <span>7일</span> 남았어요
+                </p>
+
+                <div className='attendNoticeBar'>
+                    <div className='barFill'/>
                 </div>
-                <div className='attendnotice'>14일 달성까지 7일 남았어요</div>
-                <div className='attendnoticebar'>--------------</div>
                 
-                <button className='detail-btn'>자세히 보기 →</button>
+                {/* 출석페이지로 이동 */}
+                <button className='detailBtn' onClick={onDetail}>자세히 보기 →</button>
             </div>
         </AttendPopUpWrap>
     );
 };
 
 export default StudyAttendancePopup;
+

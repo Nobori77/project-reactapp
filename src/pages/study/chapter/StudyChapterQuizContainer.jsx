@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import StudyQuizProvider from '../../../context/StudyQuizContext';
 
+
+// 퀴즈 상세
 const StudyChapterQuizContainer = () => {
     const {quiz} = useParams()
 
