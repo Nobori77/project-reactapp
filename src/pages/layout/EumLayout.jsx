@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Outlet, Link, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Outlet, Link } from 'react-router-dom';
 import theme from '../../styles/theme';
 import { styles } from './style';
 
@@ -12,6 +12,29 @@ const navLinks = [
 
 const EumLayout = () => {
   const [hoveredNav, setHoveredNav] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:10000/private/api/users/me', {
+      credentials: 'include',
+    })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.success) setUser(data.data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:10000/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch {}
+    setUser(null);
+    window.location.href = '/';
+  };
 
   return (
     <div>
@@ -49,14 +72,72 @@ const EumLayout = () => {
           </nav>
 
           <nav style={{ marginLeft: 'auto', display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-              <Link to="/login" style={styles.rightNav}>
-                <span style={styles.rigthBorderNav}>로그인</span>
-              </Link>
-              <Link to="/join" style={styles.rigthBackGroundNav}>
-                <span style={styles.join}>회원가입</span>
-              </Link>
-            </div>
+            {user ? (
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: theme.PALETTE.primary.extraLight,
+                  borderRadius: '20px',
+                  padding: '4px 14px 4px 4px',
+                  cursor: 'pointer',
+                }}>
+                  <img
+                    src={user.userProfile}
+                    alt="프로필"
+                    style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${theme.PALETTE.primary.main}` }}
+                  />
+                  <span style={{ fontSize: theme.FONT_SIZE.h10, fontWeight: theme.FONT_WEIGHT.bold, color: theme.PALETTE.primary.main, whiteSpace: 'nowrap' }}>
+                    {user.userNickname || user.userName}
+                  </span>
+                </div>
+                <Link
+                  to="/mypage"
+                  style={{
+                    fontSize: theme.FONT_SIZE.h10,
+                    fontWeight: theme.FONT_WEIGHT.bold,
+                    color: theme.PALETTE.primary.main,
+                    textDecoration: 'none',
+                    padding: '0 16px',
+                    border: `1.5px solid ${theme.PALETTE.primary.main}`,
+                    borderRadius: '8px',
+                    whiteSpace: 'nowrap',
+                    height: '34px',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  마이페이지
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    fontSize: theme.FONT_SIZE.h10,
+                    fontWeight: theme.FONT_WEIGHT.bold,
+                    color: theme.PALETTE.white,
+                    background: theme.PALETTE.primary.main,
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0 16px',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    height: '34px',
+                  }}
+                >
+                  로그아웃
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                <div style={styles.rightNav}>
+                  <Link to="/login" style={styles.rigthBorderNav}>로그인</Link>
+                </div>
+                <button style={styles.rigthBackGroundNav}>
+                  <Link to="/join" style={styles.join}>회원가입</Link>
+                </button>
+              </div>
+            )}
           </nav>
         </header>
       </div>
