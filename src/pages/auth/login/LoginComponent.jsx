@@ -4,8 +4,45 @@ import * as S from "./style";
 
 export default function LoginComponent() {
   const navigate = useNavigate();
+
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [loginMsg, setLoginMsg] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+
   const [showFindPw, setShowFindPw] = useState(false);
   const [findStep, setFindStep] = useState(1);
+
+  const handleSocialLogin = (provider) => {
+    window.location.href = `http://localhost:10000/oauth2/authorization/${provider}`;
+  };
+
+  const handleLogin = async () => {
+    if (!userEmail || !userPassword) {
+      setLoginMsg("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+    setLoginLoading(true);
+    setLoginMsg("");
+    try {
+      const res = await fetch("http://localhost:10000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ userEmail, userPassword }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        window.location.href = "/";
+      } else {
+        setLoginMsg(data.message || "로그인에 실패했습니다.");
+      }
+    } catch {
+      setLoginMsg("서버 오류가 발생했습니다.");
+    } finally {
+      setLoginLoading(false);
+    }
+  };
 
   return (
     <S.PageWrap>
@@ -21,30 +58,49 @@ export default function LoginComponent() {
           <S.CardTitle>로그인</S.CardTitle>
           <S.InputGroup>
             <div>
-              <S.Label>아이디</S.Label>
-              <S.Input placeholder="아이디를 입력하세요" />
+              <S.Label>아이디 (이메일)</S.Label>
+              <S.Input
+                placeholder="example@email.com"
+                value={userEmail}
+                onChange={e => setUserEmail(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleLogin()}
+              />
             </div>
             <div>
               <S.Label>비밀번호</S.Label>
-              <S.Input type="password" placeholder="비밀번호를 입력하세요" />
+              <S.Input
+                type="password"
+                placeholder="비밀번호를 입력하세요"
+                value={userPassword}
+                onChange={e => setUserPassword(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleLogin()}
+              />
             </div>
           </S.InputGroup>
 
-          <S.PrimaryBtn>로그인</S.PrimaryBtn>
+          {loginMsg && (
+            <div style={{ fontSize: 12, color: "#e74c3c", marginBottom: 8, textAlign: "center" }}>
+              {loginMsg}
+            </div>
+          )}
+
+          <S.PrimaryBtn onClick={handleLogin} disabled={loginLoading}>
+            {loginLoading ? "로그인 중..." : "로그인"}
+          </S.PrimaryBtn>
           <S.OutlineBtn onClick={() => navigate("/join")}>회원가입</S.OutlineBtn>
 
-          <S.Divider>Or SNS 로그인</S.Divider>
+          <S.Divider>SNS 로그인</S.Divider>
 
           <S.SocialBtnRow>
-            <S.SocialBtn $bg="#FEE500" $color="#3C1E1E">
+            <S.SocialBtn $bg="#FEE500" $color="#3C1E1E" onClick={() => handleSocialLogin("kakao")}>
               <span style={{ fontWeight: 800, fontSize: 15 }}>K</span>
               Kakao로 시작하기
             </S.SocialBtn>
-            <S.SocialBtn $bg="#03C75A" $color="#fff">
+            <S.SocialBtn $bg="#03C75A" $color="#fff" onClick={() => handleSocialLogin("naver")}>
               <span style={{ fontWeight: 800, fontSize: 15 }}>N</span>
               Naver로 시작하기
             </S.SocialBtn>
-            <S.SocialBtn $outline $bg="#fff" $color="#333">
+            <S.SocialBtn $outline $bg="#fff" $color="#333" onClick={() => handleSocialLogin("google")}>
               <img src="https://www.google.com/favicon.ico" alt="" style={{ width: 16, height: 16 }} />
               Google로 시작하기
             </S.SocialBtn>
@@ -67,11 +123,11 @@ export default function LoginComponent() {
                   <S.Input placeholder="이름을 입력하세요" />
                 </div>
                 <div>
-                  <S.Label>아이디</S.Label>
-                  <S.SmallInput placeholder="아이디를 입력하세요" />
+                  <S.Label>아이디 (이메일)</S.Label>
+                  <S.SmallInput placeholder="example@email.com" />
                 </div>
                 <S.InlineRow>
-                  <S.SmallInput placeholder="인증번호" />
+                  <S.SmallInput placeholder="휴대폰 번호" />
                   <S.SmallBtn onClick={() => setFindStep(2)}>인증 발송</S.SmallBtn>
                 </S.InlineRow>
                 {findStep >= 2 && (
