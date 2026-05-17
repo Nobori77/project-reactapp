@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import S from "../style";
 
@@ -10,10 +11,19 @@ const guideList = [
 ];
 
 const CertificateGuideCard = () => {
+  const navigate = useNavigate();
+
+  /* 신청 가이드 페이지 이동 */
+  const handleGuideClick = () => {
+    navigate("/mypage/certificate/guide");
+  };
+
   return (
     <S.CertificateGuideCardBox>
       {/* 안내 제목 */}
-      <S.CertificateGuideTitle>실물 신청 안내</S.CertificateGuideTitle>
+      <S.CertificateGuideTitle>
+        실물 신청 안내
+      </S.CertificateGuideTitle>
 
       {/* 안내 내용 */}
       <S.CertificateGuideList>
@@ -25,7 +35,10 @@ const CertificateGuideCard = () => {
       </S.CertificateGuideList>
 
       {/* 신청 안내 페이지 연결 */}
-      <S.CertificateGuideButton type="button">
+      <S.CertificateGuideButton
+        type="button"
+        onClick={handleGuideClick}
+      >
         신청 가이드
       </S.CertificateGuideButton>
     </S.CertificateGuideCardBox>

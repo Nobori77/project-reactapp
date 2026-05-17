@@ -65,8 +65,9 @@ S.CertificateDesc = styled.p`
 /* 카드 */
 S.CertificateCardBox = styled.div`
   width: 984px;
-  height: 257px;
-  padding: 24px 26px 0 28px;
+  height: ${({ $hasDetail }) => ($hasDetail ? "474px" : "257px")};
+
+  padding: 24px 26px 12px 28px;
   box-sizing: border-box;
 
   border-radius: 14px;
@@ -83,7 +84,6 @@ S.CertificateHeader = styled.div`
   padding-bottom: 6px;
   border-bottom: 1px solid #eceef5;
 `;
-
 
 /* 헤더 텍스트 */
 S.CertificateHeaderText = styled.span`
@@ -127,6 +127,7 @@ S.CertificateStatusButton = styled.button`
   width: 80px;
   height: 30px;
   padding: 0;
+
   justify-self: center;
 
   display: flex;
@@ -135,6 +136,7 @@ S.CertificateStatusButton = styled.button`
 
   border: none;
   border-radius: 8px;
+
   background: #e4e7ef;
 
   font-size: 12px;
@@ -147,6 +149,7 @@ S.CertificateApplyButton = styled.button`
   width: 80px;
   height: 30px;
   padding: 0;
+
   justify-self: center;
 
   display: flex;
@@ -155,16 +158,133 @@ S.CertificateApplyButton = styled.button`
 
   border: none;
   border-radius: 8px;
+
   background: #e4e7ef;
 
   font-size: 12px;
   font-weight: ${FONT_WEIGHT.regular};
   color: #000000;
+
+  cursor: pointer;
+`;
+
+/* 선택 자격증 상세 CSS */
+
+/* 상세 박스 */
+S.CertificateDetailBox = styled.div`
+  width: 724px;
+  height: 188px;
+
+  margin: 11px auto 0;
+
+  /* 내부 여백 */
+  padding: 13px 14px 16px 22px;
+  box-sizing: border-box;
+
+  position: relative;
+
+  border-radius: 14px;
+  background: #f8f9fc;
+`;
+
+/* 상세 제목 */
+S.CertificateDetailTitle = styled.h4`
+  margin: 13px 0 12px;
+
+  font-size: 14px;
+  font-weight: ${FONT_WEIGHT.bold};
+  line-height: 1;
+
+  color: #000000;
+`;
+
+/* 상세 정보 영역 */
+S.CertificateDetailInfoRow = styled.div`
+  display: grid;
+  grid-template-columns: 120px 120px 120px;
+
+  column-gap: 46px;
+`;
+
+/* 상세 정보 묶음 */
+S.CertificateDetailInfoItem = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+`;
+
+/* 상세 라벨 */
+S.CertificateDetailLabel = styled.span`
+  margin: 0;
+
+  font-size: 12px;
+  font-weight: ${FONT_WEIGHT.regular};
+  line-height: 1;
+
+  color: #000000;
+`;
+
+/* 상세 값 */
+S.CertificateDetailValue = styled.span`
+  margin: 0;
+
+  font-size: 12px;
+  font-weight: ${FONT_WEIGHT.regular};
+  line-height: 1;
+
+  color: #000000;
+`;
+
+
+/* 안내 제목 */
+S.CertificateDetailNoticeTitle = styled.p`
+  margin: 20px 0 10px;
+
+  font-size: 12px;
+  font-weight: ${FONT_WEIGHT.regular};
+  line-height: 1;
+
+  color: #000000;
+`;
+
+/* 안내 문구 */
+S.CertificateDetailNoticeText = styled.p`
+  margin: 0;
+
+  font-size: 12px;
+  font-weight: ${FONT_WEIGHT.regular};
+  line-height: 1.6;
+
+  color: #000000;
+`;
+
+/* 실물 신청 버튼 */
+S.CertificateDetailApplyButton = styled.button`
+  position: absolute;
+
+  right: 14px;
+  bottom: 15px;
+
+  width: 92px;
+  height: 36px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #4359fc;
+
+  font-size: 12px;
+  font-weight: ${FONT_WEIGHT.regular};
+
+  color: #ffffff;
+
+  cursor: pointer;
 `;
 
 /* 더보기 */
 S.CertificateMoreButton = styled.button`
-  margin: 46px auto 0;
+  margin: ${({ $hasDetail }) => ($hasDetail ? "18px auto 0" : "46px auto 0")};
 
   display: flex;
   align-items: center;
@@ -229,6 +349,7 @@ S.CourseItem = styled.div`
 
   border: 1px solid #eceef5;
   border-radius: 10px;
+
   background: ${PALETTE.white};
   overflow: hidden;
 `;
@@ -285,10 +406,12 @@ S.CourseDate = styled.p`
 S.CourseProgressBar = styled.div`
   width: calc(100% - 14px);
   height: 8px;
+
   margin: 9px auto 0;
 
   border-radius: 999px;
   background: #e4e7ef;
+
   overflow: hidden;
 `;
 
@@ -354,7 +477,6 @@ S.CertificateGuideItem = styled.p`
   color: #000000;
 `;
 
-
 /* 신청 가이드 버튼 */
 S.CertificateGuideButton = styled.button`
   width: 127px;
@@ -376,7 +498,7 @@ S.CertificateGuideButton = styled.button`
   color: #000000;
 `;
 
-/*  실물 신청 가능 카드 CSS */
+/* 실물 신청 가능 카드 CSS */
 
 /* 카드 */
 S.CertificateAvailableCardBox = styled.div`
@@ -462,9 +584,11 @@ S.CertificateAvailableIcon = styled.div`
   img {
     width: 110px;
     height: 100px;
+
     object-fit: contain;
-    transform: rotate(0deg);
+
     filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
   }
 `;
+
 export default S;
