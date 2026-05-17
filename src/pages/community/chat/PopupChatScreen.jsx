@@ -99,11 +99,15 @@ const makeWsMessageId = (msg) =>
 
 const toDisplayMessage = (msg, currentUserId) => ({
   id: msg.id ?? makeWsMessageId(msg),
-  type: msg.userId === currentUserId ? "mine" : "other",
-  sender: msg.userNickname ?? `사용자 ${msg.userId}`,
-  avatar: msg.userProfile ?? "",
-  content: msg.chatContent,
-  time: formatTime(msg.chatCreateAt),
+  chatContent: msg.chatContent,
+  chatCreateAt: formatTime(msg.chatCreateAt),
+  chatType: msg.chatType,
+  userNickname: msg.userNickname ?? `사용자`,
+  userProfile: msg.userProfile ?? "default.jpg",
+  chatRoomId: msg.chatRoomId,
+  // WS 메시지는 chatIsMe를 직접 제공, REST 초기 로딩은 userId 비교로 판별
+  chatIsMe:
+    msg.chatIsMe ?? (currentUserId != null && msg.userId === currentUserId),
 });
 
 const PopupChatScreen = () => {
@@ -142,7 +146,10 @@ const PopupChatScreen = () => {
       ws.onmessage = (event) => {
         try {
           const msg = JSON.parse(event.data);
-          setMessages((prev) => [...prev, toDisplayMessage(msg, currentUserId)]);
+          setMessages((prev) => [
+            ...prev,
+            toDisplayMessage(msg, currentUserId),
+          ]);
         } catch (e) {
           console.error("WS 메시지 파싱 실패:", e);
         }

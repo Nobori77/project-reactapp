@@ -47,24 +47,24 @@ const PopupChatCenter = ({ messages, onSendMessage }) => {
     <S.CenterPanel>
       <S.MessagesArea>
         {messages.map((msg) =>
-          msg.type === "other" ? (
+          !msg.chatIsMe ? (
             <S.OtherMsgWrap key={msg.id}>
-              <S.MsgAvatar src={msg.avatar} alt={msg.sender} />
+              <S.MsgAvatar src={msg.userProfile} alt={msg.userNickname} />
               <S.MsgContentCol>
-                <S.SenderName>{msg.sender}</S.SenderName>
+                <S.SenderName>{msg.userNickname}</S.SenderName>
                 <S.MsgTimeRow>
                   <S.OtherBubble>
-                    <S.OtherBubbleText>{msg.content}</S.OtherBubbleText>
+                    <S.OtherBubbleText>{msg.chatContent}</S.OtherBubbleText>
                   </S.OtherBubble>
-                  <S.MsgTime>{msg.time}</S.MsgTime>
+                  <S.MsgTime>{msg.chatCreateAt}</S.MsgTime>
                 </S.MsgTimeRow>
               </S.MsgContentCol>
             </S.OtherMsgWrap>
           ) : (
             <S.MyMsgRow key={msg.id}>
-              <S.MsgTime>{msg.time}</S.MsgTime>
+              <S.MsgTime>{msg.chatCreateAt}</S.MsgTime>
               <S.MyBubble>
-                <S.MyBubbleText>{msg.content}</S.MyBubbleText>
+                <S.MyBubbleText>{msg.chatContent}</S.MyBubbleText>
               </S.MyBubble>
             </S.MyMsgRow>
           ),
