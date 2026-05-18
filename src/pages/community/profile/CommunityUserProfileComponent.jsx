@@ -30,7 +30,7 @@ const CommunityUserProfileComponent = () => {
 
   return (
     <div>
-      {userId}번 유저 프로필
+      {/* {userId}번 유저 프로필 */}
       <S.Page>
         <S.ContentArea>
           {/* 메인 영역 */}

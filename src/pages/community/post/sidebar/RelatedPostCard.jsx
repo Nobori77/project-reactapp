@@ -4,6 +4,8 @@ import { FONT_FAMILY, RADIUS, SURFACE } from "../../constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { h11Bold } from "../../../../styles/common";
+import { Thumbnail } from "../postComponents/postListCardStyle";
+import postDefaultProfile from "../../assets/post_default_profile.png";
 
 const { GRAYSCALE, TEXT_COLOR, FONT_SIZE, FONT_WEIGHT } = theme;
 
@@ -111,9 +113,12 @@ const RelatedPostCard = ({
 }) => {
   return (
     <Wrapper onClick={onClick}>
-      <IconBox>
+      {/* <IconBox>
         <img src={icon} alt="" />
-      </IconBox>
+      </IconBox> */}
+      <Thumbnail $size="42px" $radius="8px">
+        <img src={postDefaultProfile} alt="" />
+      </Thumbnail>
       <TextArea>
         <PostTitle>{title}</PostTitle>
         <PostDesc>{description}</PostDesc>

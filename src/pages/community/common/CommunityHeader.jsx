@@ -76,7 +76,8 @@ const StatisticsSection = styled.div`
 const StatItem = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  /* align-items: flex-start; */
+  align-items: center;
   gap: 0;
 `;
 

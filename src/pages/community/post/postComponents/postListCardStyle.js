@@ -87,13 +87,12 @@ export const Description = styled.p`
 `;
 
 export const Thumbnail = styled.div`
-  width: 96px;
-  height: 96px;
-  border-radius: ${RADIUS.card};
+  width: ${({ $size }) => $size || "96px"};
+  height: ${({ $size }) => $size || "96px"};
+  border-radius: ${({ $radius }) => $radius || RADIUS.card};
   background: ${theme.GRAYSCALE[0]};
   flex-shrink: 0;
   overflow: hidden;
-
   img {
     width: 100%;
     height: 100%;
