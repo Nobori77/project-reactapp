@@ -1,12 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
+import * as S from "./style";
 
-const STATUS_STYLE = {
-  '답변완료': { color: '#fff', background: '#4f6ef7' },
-  '처리중':   { color: '#fff', background: '#f5a623' },
-};
-
-const AccordionItem = ({ result }) => {
+const AccordionItem = ({ result, isAdmin, onAnswer }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [answerText, setAnswerText] = useState("");
+  const [showAnswerInput, setShowAnswerInput] = useState(false);
   const contentRef = useRef(null);
   const [height, setHeight] = useState(0);
 
@@ -16,94 +14,102 @@ const AccordionItem = ({ result }) => {
     } else {
       setHeight(0);
     }
-  }, [isOpen]);
+  }, [isOpen, showAnswerInput, answerText]);
 
-  const statusStyle = STATUS_STYLE[result.status] || {};
+  const handleAnswerSubmit = async () => {
+    if (!answerText.trim()) return alert("답변 내용을 입력해주세요.");
+    await onAnswer(result.id, answerText);
+    setAnswerText("");
+    setShowAnswerInput(false);
+  };
 
   return (
-    <div style={{ border: '1px solid #eee', borderRadius: 12, overflow: 'hidden' }}>
-      {/* 헤더 행 */}
-      <div
-        onClick={() => setIsOpen((prev) => !prev)}
-        style={{
-          display: 'flex', alignItems: 'center', gap: 12,
-          padding: '14px 18px', cursor: 'pointer',
-          background: isOpen ? '#f7f8fd' : '#fff',
-          transition: 'background 0.15s',
-        }}
-      >
-        <span style={{
-          display: 'inline-block', padding: '4px 12px', borderRadius: 20,
-          fontSize: 12, fontWeight: 700, flexShrink: 0, ...statusStyle,
-        }}>
-          {result.status}
-        </span>
-        <span style={{ flex: 1, fontSize: 14, color: '#1a1a2e', fontWeight: 500 }}>{result.title}</span>
-        <span style={{ fontSize: 13, color: '#aaa', flexShrink: 0 }}>{result.date}</span>
-        <span style={{
-          fontSize: 16, color: '#aaa', flexShrink: 0,
-          display: 'inline-block',
-          transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
-          transition: 'transform 0.3s ease',
-        }}>→</span>
-      </div>
+    <S.AccordionWrap>
+      <S.AccordionHeader $open={isOpen} onClick={() => setIsOpen((prev) => !prev)}>
+        <S.StatusBadge $status={result.inquireStatus}>
+          {result.inquireStatus}
+        </S.StatusBadge>
+        <S.AccordionTitle>{result.inquireTitle}</S.AccordionTitle>
+        <S.AccordionDate>
+          {result.inquireCreateAt ? result.inquireCreateAt.slice(0, 10).replaceAll("-", ".") : ""}
+        </S.AccordionDate>
+        <S.AccordionArrow $open={isOpen}>→</S.AccordionArrow>
+      </S.AccordionHeader>
 
-      {/* 펼쳐지는 Q&A */}
-      <div
-        ref={contentRef}
-        style={{
-          maxHeight: height,
-          overflow: 'hidden',
-          transition: 'max-height 0.35s ease',
-        }}
-      >
-        <div style={{ borderTop: '1px solid #f0f0f5', padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ fontSize: 13, color: '#444', lineHeight: 1.6 }}>
-            <span style={{ fontWeight: 700, color: '#3a5df5' }}>Q. </span>
-            {result.question}
-          </div>
-          {result.answer ? (
-            <div style={{ fontSize: 13, color: '#444', lineHeight: 1.6 }}>
-              <span style={{ fontWeight: 700, color: '#3a5df5' }}>A. </span>
-              {result.answer}
-            </div>
+      <S.AccordionBody ref={contentRef} $height={height}>
+        <S.AccordionContent>
+          <S.QAText>
+            <S.QALabel>Q. </S.QALabel>
+            {result.inquireContent}
+          </S.QAText>
+          {result.inquireAnswer ? (
+            <S.QAText>
+              <S.QALabel>A. </S.QALabel>
+              {result.inquireAnswer}
+            </S.QAText>
           ) : (
-            <div style={{ fontSize: 13, color: '#aaa' }}>답변 준비 중입니다.</div>
+            <S.PendingText>답변 준비 중입니다.</S.PendingText>
           )}
-        </div>
-      </div>
-    </div>
+
+          {/* 관리자 답변하기 버튼 */}
+          {isAdmin && result.inquireStatus === "대기" && (
+            <S.AnswerBtnWrap>
+              {!showAnswerInput ? (
+                <S.AnswerBtn
+                  onClick={(e) => { e.stopPropagation(); setShowAnswerInput(true); }}
+                >
+                  답변하기
+                </S.AnswerBtn>
+              ) : (
+                <S.AnswerInputWrap>
+                  <S.AnswerTextarea
+                    placeholder="답변 내용을 입력해주세요."
+                    value={answerText}
+                    onChange={(e) => setAnswerText(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <S.AnswerBtnRow>
+                    <S.CancelBtn
+                      onClick={(e) => { e.stopPropagation(); setShowAnswerInput(false); setAnswerText(""); }}
+                    >
+                      취소
+                    </S.CancelBtn>
+                    <S.ConfirmBtn
+                      onClick={(e) => { e.stopPropagation(); handleAnswerSubmit(); }}
+                    >
+                      등록하기
+                    </S.ConfirmBtn>
+                  </S.AnswerBtnRow>
+                </S.AnswerInputWrap>
+              )}
+            </S.AnswerBtnWrap>
+          )}
+        </S.AccordionContent>
+      </S.AccordionBody>
+    </S.AccordionWrap>
   );
 };
 
-const CustomServiceResultComponent = ({ results = [], isLoading, error }) => {
-  if (isLoading) return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: '#aaa', fontSize: 14 }}>
-      불러오는 중...
-    </div>
-  );
-  if (error) return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: '#f55', fontSize: 14 }}>
-      {error}
-    </div>
-  );
+const CustomServiceResultComponent = ({ results = [], isLoading, error, isAdmin, onAnswer }) => {
+  if (isLoading) return <S.StatusMessage>불러오는 중...</S.StatusMessage>;
+  if (error)     return <S.StatusMessage $error>{error}</S.StatusMessage>;
   if (results.length === 0) return (
-    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #eee', padding: '60px 0', textAlign: 'center' }}>
-      <div style={{ fontSize: 36, marginBottom: 12 }}>📭</div>
-      <div style={{ fontSize: 15, fontWeight: 600, color: '#555', marginBottom: 6 }}>문의 내역이 없습니다.</div>
-      <div style={{ fontSize: 13, color: '#aaa' }}>1:1 문의를 통해 궁금한 점을 남겨주세요.</div>
-    </div>
+    <S.EmptyWrap>
+      <S.EmptyIcon>📭</S.EmptyIcon>
+      <S.EmptyTitle>문의 내역이 없습니다.</S.EmptyTitle>
+      <S.EmptySub>1:1 문의를 통해 궁금한 점을 남겨주세요.</S.EmptySub>
+    </S.EmptyWrap>
   );
 
   return (
-    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #eee', padding: '24px 28px' }}>
-      <div style={{ fontSize: 15, fontWeight: 700, color: '#1a1a2e', marginBottom: 16 }}>내 문의 목록</div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <S.ResultWrap>
+      <S.ResultListTitle>내 문의 목록</S.ResultListTitle>
+      <S.ResultList>
         {results.map((result) => (
-          <AccordionItem key={result.id} result={result} />
+          <AccordionItem key={result.id} result={result} isAdmin={isAdmin} onAnswer={onAnswer} />
         ))}
-      </div>
-    </div>
+      </S.ResultList>
+    </S.ResultWrap>
   );
 };
 

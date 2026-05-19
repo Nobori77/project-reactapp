@@ -1,6 +1,5 @@
 import { useNavigate, useLocation, useOutlet } from "react-router-dom";
 import { PRIMARY, styles } from "../style";
-import ExamSidebar from "../ExamSidebar";
 
 const infoCards = [
   { title: "합격자조회", sub: "수험번호로 결과 확인", path: "/exam/results/check" },
@@ -13,23 +12,7 @@ export default function Results() {
   const outlet = useOutlet();
 
   return (
-    <div style={styles.page}>
-      <main style={styles.main}>
-
-        <div style={styles.breadcrumb}>
-          {["홈", "시험", "자격증"].map((item, i) => (
-            <span key={i} style={styles.breadcrumbItem}>
-              <span style={styles.breadcrumbLink}>{item}</span>
-              <span style={styles.breadcrumbSep}>›</span>
-            </span>
-          ))}
-          <span style={styles.breadcrumbActive}>합격자발표</span>
-        </div>
-
-        <div style={styles.contentLayout}>
-          <ExamSidebar />
-
-          <div style={styles.contentArea}>
+    <>
 
             <div style={styles.heroCard}>
               <div>
@@ -79,9 +62,6 @@ export default function Results() {
 
             {outlet}
 
-          </div>
-        </div>
-      </main>
-    </div>
+    </>
   );
 }

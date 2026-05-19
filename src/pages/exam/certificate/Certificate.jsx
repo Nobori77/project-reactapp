@@ -1,6 +1,5 @@
 import { useNavigate, useLocation, useOutlet } from "react-router-dom";
 import { PRIMARY, styles } from "../style";
-import ExamSidebar from "../ExamSidebar";
 
 const CERT_GREEN = "#4eca80";
 
@@ -16,23 +15,7 @@ export default function Certificate() {
   const outlet = useOutlet();
 
   return (
-    <div style={styles.page}>
-      <main style={styles.main}>
-
-        <div style={styles.breadcrumb}>
-          {["홈", "시험", "수료증"].map((item, i) => (
-            <span key={i} style={styles.breadcrumbItem}>
-              <span style={styles.breadcrumbLink}>{item}</span>
-              <span style={styles.breadcrumbSep}>›</span>
-            </span>
-          ))}
-          <span style={styles.breadcrumbActive}>수료증조회</span>
-        </div>
-
-        <div style={styles.contentLayout}>
-          <ExamSidebar />
-
-          <div style={styles.contentArea}>
+    <>
 
             <div style={styles.heroCard}>
               <div>
@@ -78,9 +61,6 @@ export default function Certificate() {
 
             {outlet}
 
-          </div>
-        </div>
-      </main>
-    </div>
+    </>
   );
 }

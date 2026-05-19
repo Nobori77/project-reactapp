@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 export const PRIMARY = "#4359fc";
 export const DARK_BLUE = "#0014a9";
 export const TEXT_BLACK = "#333";
@@ -14,7 +16,7 @@ export const styles = {
   main: {
     maxWidth: 1280,
     margin: "0 auto",
-    padding: "28px 40px 80px",
+    padding: "28px 40px 300px",
   },
   breadcrumb: {
     display: "flex",
@@ -35,6 +37,7 @@ export const styles = {
     display: "flex",
     gap: 24,
     alignItems: "flex-start",
+    minHeight: "calc(100vh - 200px)",
   },
   sidebar: {
     width: 200,
@@ -162,3 +165,54 @@ export const styles = {
   infoCardSub: { fontSize: 11, color: GRAY, marginTop: 2 },
   infoCardArrow: (active = false) => ({ fontSize: 18, color: active ? PRIMARY : "#ccc" }),
 };
+
+/* ── Sidebar styled-components ── */
+
+export const SidebarAside = styled.aside`
+  width: 200px;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #eee;
+  padding: 20px 0;
+  position: sticky;
+  top: 88px;
+`;
+
+export const SidebarInner = styled.div`
+  position: relative;
+`;
+
+export const SlidingBar = styled.div`
+  position: absolute;
+  left: 0;
+  top: ${({ $top }) => $top}px;
+  height: ${({ $height }) => $height}px;
+  width: 3px;
+  background: ${PRIMARY};
+  border-radius: 2px;
+  transition: top 0.25s ease, height 0.25s ease;
+`;
+
+export const SidebarCategory = styled.div`
+  font-size: 12px;
+  font-weight: 700;
+  color: #aaa;
+  padding: 12px 20px 6px;
+  letter-spacing: 0.2px;
+`;
+
+export const SidebarItem = styled.button`
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: ${({ $active }) => ($active ? "#eef0ff" : "none")};
+  border: none;
+  border-left: 3px solid transparent;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: ${({ $active }) => ($active ? 700 : 400)};
+  color: ${({ $active }) => ($active ? PRIMARY : TEXT_BLACK)};
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+`;

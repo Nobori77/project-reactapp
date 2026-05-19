@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, Link, Navigate } from 'react-router-dom';
 import theme from '../../styles/theme';
 import { styles } from './style';
@@ -10,8 +10,23 @@ const navLinks = [
   { label: '고객지원', to: '/customservice/notice' },
 ];
 
-const EumLayout = () => {
+
+
+
+const AuthLayout = () => {
   const [hoveredNav, setHoveredNav] = useState(null);
+  const [hasNotification, setHasNotification] = useState(false);
+  
+    // 백엔드 연동
+    useEffect(() => {
+      // const res = await fetch('/api/notifications/unread');
+      // const data = await res.json();
+      // setHasNotification(data.count > 0);
+    }, []);
+
+
+
+
 
   return (
     <div>
@@ -48,12 +63,22 @@ const EumLayout = () => {
             </nav>
           </nav>
 
-          <nav style={{ marginLeft: 'auto', display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+          <nav style={{ marginLeft: 'auto', display: 'flex', gap: '12px', alignItems: 'center', cursor:'pointer'}}>
+            <div style={{ display: 'flex', gap: '24px', alignItems: 'center'}}>
+              <button style={{paddingTop:'5px'}}>
+                <img src={hasNotification 
+                    ? '/assets/image/layout/bellIconActive.svg'
+                    : '/assets/image/layout/bellIcon.svg'
+                  } style={{width:'44px', height:'44px',display:'flex', alignItems:'center',}}/>
+              </button>
               <Link to="/mypage" style={styles.rightNav}>
                 <span style={styles.rigthBorderNav}>마이페이지</span>
               </Link>
-              <button style={styles.rigthBackGroundNav} onClick={handleLogout}>로그아웃</button>
+              <button style={styles.rigthBackGroundNav}>
+                <span style={styles.join}>
+                  로그아웃
+                </span>
+              </button>
             </div>
           </nav>
         </header>
@@ -119,4 +144,4 @@ const EumLayout = () => {
   );
 };
 
-export default EumLayout;
+export default AuthLayout;
