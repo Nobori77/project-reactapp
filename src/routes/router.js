@@ -27,6 +27,7 @@ import MyPageContainer from "../pages/mypage/MyPageContainer";
 import CommunityContainer from "../pages/community/CommunityContainer";
 import LoginContainer from "../pages/auth/login/LoginContainer";
 import JoinContainer from "../pages/auth/join/JoinContainer";
+import SocialJoinContainer from "../pages/auth/social-join/SocialJoinContainer";
 import CommunityChatContainer from "../pages/community/chat/CommunityChatContainer";
 import CommunityPostContainer from "../pages/community/post/CommunityPostContainer";
 import CommunityPostWriteContainer from "../pages/community/post/write/CommunityPostWriteContainer";
@@ -290,7 +291,7 @@ const router = createBrowserRouter([
                 element: <CustomServiceNoticeContainer />
               },
               {
-                path: ":id/edit",   // ← 추가
+                path: ":id/edit",
                 element: <CustomServiceNoticeEditContainer />
               },
             ]
@@ -338,6 +339,10 @@ const router = createBrowserRouter([
       {
         path: "join",
         element: <JoinContainer />
+      },
+      {
+        path: "social-join",
+        element: <SocialJoinContainer />
       }
     ]
   },

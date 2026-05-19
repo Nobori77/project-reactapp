@@ -4,6 +4,20 @@ import * as S from "./style";
 
 const steps = ["약관동의", "회원정보 입력", "가입완료"];
 
+const formatBirth = (value) => {
+  const digits = value.replace(/\D/g, "").slice(0, 8);
+  if (digits.length <= 4) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+  return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
+};
+
+const formatPhone = (value) => {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+};
+
 const AGREE_ITEMS = [
   { id: "terms", label: "[필수] 이음 서비스 이용약관에 동의합니다." },
   { id: "privacy", label: "[필수] 개인정보 수집 및 이용에 동의합니다." },
@@ -13,6 +27,10 @@ const AGREE_ITEMS = [
 export default function JoinComponent() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
+  const [formStep, setFormStep] = useState(0);
+  const advanceTo = (step) => setFormStep(prev => Math.max(prev, step));
+
+  const [birth, setBirth] = useState("");
 
   // 1단계: 약관동의
   const [agreeAll, setAgreeAll] = useState(false);
@@ -48,7 +66,7 @@ export default function JoinComponent() {
   const handleForm = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const handleSendCode = async () => {
-    const memberPhone = phone.replace(/-/g, "");
+    const memberPhone = phone.replace(/\D/g, "");
     if (!memberPhone) return;
     setSmsLoading(true);
     setSmsMsg("");
@@ -73,7 +91,7 @@ export default function JoinComponent() {
   };
 
   const handleVerifyCode = async () => {
-    const memberPhone = phone.replace(/-/g, "");
+    const memberPhone = phone.replace(/\D/g, "");
     if (!memberPhone || !verifyCode) return;
     setSmsLoading(true);
     setSmsMsg("");
@@ -193,123 +211,152 @@ export default function JoinComponent() {
         {/* 2단계: 회원정보 입력 및 핸드폰 인증 */}
         {currentStep === 1 && (
           <S.FormCard>
-            <S.SectionBlock>
-              <S.SectionTitle>기본 정보</S.SectionTitle>
-              <S.Grid>
-                <div>
-                  <S.Label>이름 *</S.Label>
-                  <S.Input
-                    name="userName"
-                    placeholder="이름을 입력하세요"
-                    value={form.userName}
-                    onChange={handleForm}
-                  />
-                </div>
-                <div>
-                  <S.Label>생년월일</S.Label>
-                  <S.Input placeholder="YYYY-MM-DD" />
-                </div>
-              </S.Grid>
-            </S.SectionBlock>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-            <S.SectionBlock>
-              <S.SectionTitle>계정 정보</S.SectionTitle>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <div>
+              {/* 이름 */}
+              <S.AnimatedField>
+                <S.Label>이름 *</S.Label>
+                <S.Input
+                  name="userName"
+                  placeholder="이름을 입력하세요"
+                  value={form.userName}
+                  onChange={e => {
+                    handleForm(e);
+                    if (e.target.value.trim().length >= 2) advanceTo(1);
+                  }}
+                />
+              </S.AnimatedField>
+
+              {/* 생년월일 */}
+              {formStep >= 1 && (
+                <S.AnimatedField>
+                  <S.Label>생년월일 *</S.Label>
+                  <S.Input
+                    placeholder="YYYY-MM-DD"
+                    style={{ letterSpacing: "1px" }}
+                    value={birth}
+                    onChange={e => {
+                      const v = formatBirth(e.target.value);
+                      setBirth(v);
+                      if (v.length === 10) advanceTo(2);
+                    }}
+                  />
+                </S.AnimatedField>
+              )}
+
+              {/* 이메일 */}
+              {formStep >= 2 && (
+                <S.AnimatedField>
                   <S.Label>아이디 (이메일) *</S.Label>
                   <S.Input
                     name="userEmail"
                     placeholder="example@email.com"
                     value={form.userEmail}
-                    onChange={handleForm}
+                    onChange={e => {
+                      handleForm(e);
+                      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value)) advanceTo(3);
+                    }}
                   />
-                </div>
-                <div>
+                </S.AnimatedField>
+              )}
+
+              {/* 비밀번호 */}
+              {formStep >= 3 && (
+                <S.AnimatedField>
                   <S.Label>비밀번호 *</S.Label>
                   <S.Input
                     type="password"
                     name="userPassword"
-                    placeholder="비밀번호를 입력하세요"
+                    placeholder="8자 이상 입력하세요"
                     value={form.userPassword}
-                    onChange={handleForm}
+                    onChange={e => {
+                      handleForm(e);
+                      if (e.target.value.length >= 8) advanceTo(4);
+                    }}
                   />
-                </div>
-                <div>
+                </S.AnimatedField>
+              )}
+
+              {/* 비밀번호 확인 */}
+              {formStep >= 4 && (
+                <S.AnimatedField>
                   <S.Label>비밀번호 확인 *</S.Label>
                   <S.Input
                     type="password"
                     name="confirmPassword"
                     placeholder="비밀번호를 다시 입력하세요"
                     value={form.confirmPassword}
-                    onChange={handleForm}
+                    onChange={e => {
+                      handleForm(e);
+                      if (e.target.value && form.userPassword === e.target.value) advanceTo(5);
+                    }}
                   />
                   {form.confirmPassword && (
-                    <div style={{ fontSize: 11, color: form.userPassword === form.confirmPassword ? "#03C75A" : "#e74c3c", marginTop: 4 }}>
+                    <S.FieldHint $ok={form.userPassword === form.confirmPassword}>
                       {form.userPassword === form.confirmPassword ? "비밀번호가 일치합니다." : "비밀번호가 일치하지 않습니다."}
-                    </div>
+                    </S.FieldHint>
                   )}
-                </div>
-              </div>
-            </S.SectionBlock>
+                </S.AnimatedField>
+              )}
 
-            <S.SectionBlock>
-              <S.SectionTitle>핸드폰 인증</S.SectionTitle>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <div>
+              {/* 핸드폰 인증 */}
+              {formStep >= 5 && (
+                <S.AnimatedField>
                   <S.Label>핸드폰 번호 *</S.Label>
                   <S.InlineRow>
                     <S.Input
                       placeholder="010-0000-0000"
-                      style={{ flex: 1 }}
+                      style={{ flex: 1, letterSpacing: "1px" }}
                       value={phone}
-                      onChange={e => setPhone(e.target.value)}
+                      onChange={e => setPhone(formatPhone(e.target.value))}
                       disabled={codeVerified}
                     />
                     <S.SmallBtn onClick={handleSendCode} disabled={smsLoading || codeVerified}>
                       {codeSent ? "재발송" : "인증 발송"}
                     </S.SmallBtn>
                   </S.InlineRow>
-                </div>
-                {codeSent && !codeVerified && (
-                  <div>
-                    <S.Label>인증번호 *</S.Label>
-                    <S.InlineRow>
-                      <S.Input
-                        placeholder="인증번호를 입력하세요"
-                        style={{ flex: 1 }}
-                        value={verifyCode}
-                        onChange={e => setVerifyCode(e.target.value)}
-                      />
-                      <S.SmallBtn $green onClick={handleVerifyCode} disabled={smsLoading}>
-                        확인
-                      </S.SmallBtn>
-                    </S.InlineRow>
-                  </div>
-                )}
-                {smsMsg && (
-                  <div style={{ fontSize: 12, color: codeVerified ? "#03C75A" : "#e74c3c", marginTop: 2 }}>
-                    {smsMsg}
-                  </div>
-                )}
-              </div>
-            </S.SectionBlock>
+                  {codeSent && !codeVerified && (
+                    <div style={{ marginTop: 8 }}>
+                      <S.Label>인증번호 *</S.Label>
+                      <S.InlineRow>
+                        <S.Input
+                          placeholder="인증번호를 입력하세요"
+                          style={{ flex: 1 }}
+                          value={verifyCode}
+                          onChange={e => setVerifyCode(e.target.value)}
+                        />
+                        <S.SmallBtn $green onClick={handleVerifyCode} disabled={smsLoading}>
+                          확인
+                        </S.SmallBtn>
+                      </S.InlineRow>
+                    </div>
+                  )}
+                  {smsMsg && (
+                    <S.FieldHint $ok={codeVerified}>{smsMsg}</S.FieldHint>
+                  )}
+                </S.AnimatedField>
+              )}
+
+            </div>
 
             {submitMsg && (
-              <div style={{ fontSize: 13, color: "#e74c3c", marginBottom: 8, textAlign: "center" }}>
+              <div style={{ fontSize: 13, color: "#e74c3c", marginTop: 12, textAlign: "center" }}>
                 {submitMsg}
               </div>
             )}
 
-            <div style={{ display: "flex", gap: 10 }}>
+            <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
               <S.SubmitBtn
                 onClick={() => setCurrentStep(0)}
                 style={{ background: "#fff", color: "#4359fc", border: "1.5px solid #4359fc", flex: 1 }}
               >
                 이전
               </S.SubmitBtn>
-              <S.SubmitBtn onClick={handleSubmit} disabled={submitLoading} style={{ flex: 2 }}>
-                {submitLoading ? "처리 중..." : "이음 시작하기"}
-              </S.SubmitBtn>
+              {formStep >= 5 && (
+                <S.SubmitBtn onClick={handleSubmit} disabled={submitLoading} style={{ flex: 2 }}>
+                  {submitLoading ? "처리 중..." : "이음 시작하기"}
+                </S.SubmitBtn>
+              )}
             </div>
           </S.FormCard>
         )}

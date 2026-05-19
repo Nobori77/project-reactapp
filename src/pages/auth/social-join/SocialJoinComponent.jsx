@@ -1,0 +1,193 @@
+import { useState } from "react";
+import * as S from "./style";
+
+
+const formatPhone = (value) => {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+};
+
+export default function SocialJoinComponent() {
+  const [userNickname, setUserNickname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [verifyCode, setVerifyCode] = useState("");
+  const [codeSent, setCodeSent] = useState(false);
+  const [codeVerified, setCodeVerified] = useState(false);
+  const [smsLoading, setSmsLoading] = useState(false);
+  const [smsMsg, setSmsMsg] = useState("");
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitMsg, setSubmitMsg] = useState("");
+  const [done, setDone] = useState(false);
+
+  const handleSendCode = async () => {
+    const memberPhone = phone.replace(/\D/g, "");
+    if (!memberPhone) return;
+    setSmsLoading(true);
+    setSmsMsg("");
+    try {
+      const res = await fetch("http://localhost:10000/api/sms/phone/verification-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ memberPhone }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCodeSent(true);
+        setSmsMsg("인증번호가 발송되었습니다.");
+      } else {
+        setSmsMsg(data.message || "발송에 실패했습니다.");
+      }
+    } catch {
+      setSmsMsg("서버 오류가 발생했습니다.");
+    } finally {
+      setSmsLoading(false);
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    const memberPhone = phone.replace(/\D/g, "");
+    if (!memberPhone || !verifyCode) return;
+    setSmsLoading(true);
+    setSmsMsg("");
+    try {
+      const res = await fetch("http://localhost:10000/api/sms/phone/verification-code/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ memberPhone, code: verifyCode }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCodeVerified(true);
+        setSmsMsg("인증이 완료되었습니다.");
+      } else {
+        setSmsMsg(data.message || "인증번호가 올바르지 않습니다.");
+      }
+    } catch {
+      setSmsMsg("서버 오류가 발생했습니다.");
+    } finally {
+      setSmsLoading(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!codeVerified) {
+      setSubmitMsg("핸드폰 인증을 완료해주세요.");
+      return;
+    }
+    setSubmitLoading(true);
+    setSubmitMsg("");
+    try {
+      const res = await fetch("http://localhost:10000/api/auth/social-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          userNickname: userNickname.trim() || null,
+          userPhoneNum: phone.replace(/\D/g, ""),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setDone(true);
+      } else {
+        setSubmitMsg(data.message || "회원가입에 실패했습니다.");
+      }
+    } catch {
+      setSubmitMsg("서버 오류가 발생했습니다.");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  if (done) {
+    return (
+      <S.PageWrap>
+        <S.Hero>
+          <S.HeroTitle>이음과 함께<br />새로운 소통을 시작해보세요</S.HeroTitle>
+          <S.HeroSub>SNS 계정으로 이음에 가입합니다</S.HeroSub>
+        </S.Hero>
+        <S.ContentArea>
+          <S.Card style={{ textAlign: "center", padding: "60px 32px" }}>
+            <div style={{ fontSize: 52, marginBottom: 16 }}>🎉</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: "#111", marginBottom: 8 }}>
+              회원가입이 완료되었습니다!
+            </div>
+            <div style={{ fontSize: 14, color: "#888", marginBottom: 32 }}>
+              이음과 함께 새로운 소통을 시작해보세요.
+            </div>
+            <S.SubmitBtn onClick={() => { window.location.href = "/"; }}>
+              시작하기
+            </S.SubmitBtn>
+          </S.Card>
+        </S.ContentArea>
+      </S.PageWrap>
+    );
+  }
+
+  return (
+    <S.PageWrap>
+      <S.Hero>
+        <S.HeroTitle>이음과 함께<br />새로운 소통을 시작해보세요</S.HeroTitle>
+        <S.HeroSub>SNS 계정으로 이음에 가입합니다</S.HeroSub>
+      </S.Hero>
+
+      <S.ContentArea>
+        <S.Card>
+          <S.SectionTitle>추가 정보 입력</S.SectionTitle>
+
+          <S.SectionBlock>
+            <S.BlockTitle>닉네임</S.BlockTitle>
+            <S.Label>닉네임 (선택)</S.Label>
+            <S.Input
+              placeholder="닉네임을 입력하세요 (미입력 시 기본값 사용)"
+              value={userNickname}
+              onChange={e => setUserNickname(e.target.value)}
+            />
+          </S.SectionBlock>
+
+          <S.SectionBlock>
+            <S.BlockTitle>핸드폰 인증</S.BlockTitle>
+            <S.Label>핸드폰 번호 *</S.Label>
+            <S.InlineRow>
+              <S.Input
+                placeholder="010-0000-0000"
+                style={{ flex: 1, letterSpacing: "1px" }}
+                value={phone}
+                onChange={e => setPhone(formatPhone(e.target.value))}
+                disabled={codeVerified}
+              />
+              <S.SmallBtn onClick={handleSendCode} disabled={smsLoading || codeVerified || !phone}>
+                {codeSent ? "재발송" : "인증 발송"}
+              </S.SmallBtn>
+            </S.InlineRow>
+            {codeSent && !codeVerified && (
+              <div style={{ marginTop: 8 }}>
+                <S.Label>인증번호</S.Label>
+                <S.InlineRow>
+                  <S.Input
+                    placeholder="인증번호를 입력하세요"
+                    style={{ flex: 1 }}
+                    value={verifyCode}
+                    onChange={e => setVerifyCode(e.target.value)}
+                  />
+                  <S.SmallBtn $green onClick={handleVerifyCode} disabled={smsLoading}>
+                    확인
+                  </S.SmallBtn>
+                </S.InlineRow>
+              </div>
+            )}
+            {smsMsg && <S.StatusMsg $success={codeVerified}>{smsMsg}</S.StatusMsg>}
+          </S.SectionBlock>
+
+          {submitMsg && <S.ErrorMsg>{submitMsg}</S.ErrorMsg>}
+
+          <S.SubmitBtn onClick={handleSubmit} disabled={submitLoading}>
+            {submitLoading ? "처리 중..." : "이음 시작하기"}
+          </S.SubmitBtn>
+        </S.Card>
+      </S.ContentArea>
+    </S.PageWrap>
+  );
+}

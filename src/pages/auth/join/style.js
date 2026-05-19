@@ -1,4 +1,9 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
 
 const PRIMARY = "#4359fc";
 
@@ -193,4 +198,25 @@ export const SubmitBtn = styled.button`
   font-weight: 700;
   cursor: pointer;
   margin-top: 24px;
+`;
+
+export const AnimatedField = styled.div`
+  animation: ${fadeInUp} 0.3s ease;
+`;
+
+export const SkipLink = styled.button`
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #aaa;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-top: 4px;
+  text-decoration: underline;
+`;
+
+export const FieldHint = styled.div`
+  font-size: 11px;
+  margin-top: 4px;
+  color: ${({ $ok }) => ($ok ? "#03C75A" : "#e74c3c")};
 `;
