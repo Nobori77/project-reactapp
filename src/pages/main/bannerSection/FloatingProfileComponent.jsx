@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import * as S from "./style.js";
 
 const TEMP_PROFILES = [
@@ -11,7 +12,7 @@ const TEMP_PROFILES = [
   "/assets/image/main/dummyUserProFileImg7.svg",
 ];
 
-const FloatingProfile = ({ profile, onRemove }) => (
+const FloatingProfile = React.memo(({ profile, onRemove }) => (
   <S.FloatingItem
     $x={profile.x}
     $y={profile.y}
@@ -20,7 +21,7 @@ const FloatingProfile = ({ profile, onRemove }) => (
   >
     <S.ProfileImg src={profile.src} alt="profile" $size={profile.size} />
   </S.FloatingItem>
-);
+));
 
 const getRandomX = () =>
   Math.random() < 0.5 ? Math.random() * 30 : 70 + Math.random() * 20;
@@ -56,11 +57,11 @@ const FloatingProfiles = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const removeProfile = (id) => {
+  const removeProfile = useCallback((id) => {
     setProfiles((prev) => prev.filter((p) => p.id !== id));
-  };
+  }, []);
 
-  return (
+  return createPortal(
     <S.FloatingWrap>
       {profiles.map((profile) => (
         <FloatingProfile
@@ -69,7 +70,8 @@ const FloatingProfiles = () => {
           onRemove={() => removeProfile(profile.id)}
         />
       ))}
-    </S.FloatingWrap>
+    </S.FloatingWrap>,
+    document.body
   );
 };
 

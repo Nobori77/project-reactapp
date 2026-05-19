@@ -74,12 +74,16 @@ export const RightBgBtn = styled.button`
   letter-spacing: -0.02em;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;  
+  flex-shrink: 0;          
   align-items: center;
   width: 88px;
   height: 32px;
   border: none;
   cursor: pointer;
   text-decoration: none;
+  white-space: nowrap;
+  min-width: 88px;
 `;
 
 export const RightBgBtnLabel = styled.span`
@@ -127,7 +131,7 @@ export const Main = styled.main`
 export const Footer = styled.footer``;
 
 export const FooterInner = styled.div`
-  height: 290px;
+  height: 250px;
   background-color: ${theme.PALETTE.primary.main};
   display: flex;
   justify-content: center;
@@ -137,7 +141,7 @@ export const FooterContent = styled.div`
   width: 105vh;
   display: flex;
   flex-direction: column;
-  margin-top: 70px;
+  margin-top: 40px;
 `;
 
 export const FooterTop = styled.div`
@@ -147,7 +151,7 @@ export const FooterTop = styled.div`
 `;
 
 export const FooterPolicy = styled.span`
-  font-size: ${theme.FONT_SIZE.h9};
+  font-size: ${theme.FONT_SIZE.h10};
   font-weight: ${theme.FONT_WEIGHT.medium};
   color: ${theme.PALETTE.white};
   margin-top: 13px;
@@ -160,7 +164,7 @@ export const FooterSocial = styled.div`
 `;
 
 export const FooterInfoTitle = styled.span`
-  font-size: ${theme.FONT_SIZE.h9};
+  font-size: ${theme.FONT_SIZE.h10};
   font-weight: ${theme.FONT_WEIGHT.bold};
   color: ${theme.PALETTE.white};
   margin-top: 57px;
@@ -170,7 +174,7 @@ export const FooterInfoRow = styled.div`
   display: flex;
   gap: 40px;
   margin-top: ${({ $mt }) => $mt || "8px"};
-  font-size: ${theme.FONT_SIZE.h9};
+  font-size: ${theme.FONT_SIZE.h10};
   font-weight: ${theme.FONT_WEIGHT.regular};
   color: ${theme.PALETTE.white};
 `;

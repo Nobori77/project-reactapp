@@ -4,10 +4,9 @@ import * as S from "./style.js";
 import theme from "../../../styles/theme";
 
 const TAG_COLORS = {
-  "신규 오픈": theme.PALETTE.primary.main,
-  "자격검증":  theme.PALETTE.secondary.main,
-  "학습 팁":   theme.PALETTE.third.main,
-  "업데이트":  theme.PALETTE.warning.main,
+  "공지":     theme.PALETTE.primary.main,
+  "업데이트": theme.PALETTE.warning.main,
+  "이벤트":   theme.PALETTE.third.main,
 };
 
 const NoticeCard = ({ id, tag, title, date }) => {
