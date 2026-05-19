@@ -128,7 +128,7 @@ const LearnComponent = ({ onStartQuiz, onChangeView }) => {
                   return;
                 }
                 if (menu.id === "profile") {
-                  navigate("/mypage");
+                  navigate("/mypage/learning");
                 }
               }}
             >
