@@ -29,7 +29,7 @@ export default function LoginComponent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ userEmail, userPassword }),
+        body: JSON.stringify({ userEmail, userPassword, socialUserProvider: "local" }),
       });
       const data = await res.json();
       if (data.success) {
