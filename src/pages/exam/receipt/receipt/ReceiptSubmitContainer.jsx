@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import * as S from "./style";
 
 const rounds = ["2025년 1회 정기시험", "2025년 2회 정기시험", "2025년 3회 정기시험"];
@@ -7,6 +7,8 @@ const grades = ["1급", "2급", "3급"];
 const ReceiptSubmitContainer = () => {
   const [grade, setGrade] = useState("2급");
   const [round, setRound] = useState("");
+  const [fileName, setFileName] = useState("");
+  const fileRef = useRef(null);
 
   return (
     <S.Wrapper>
@@ -52,7 +54,20 @@ const ReceiptSubmitContainer = () => {
 
         <div>
           <S.Label>증빙서류 첨부 *</S.Label>
-          <input type="file" style={{ fontSize: 13, color: "#555" }} />
+          <input
+            type="file"
+            ref={fileRef}
+            style={{ display: "none" }}
+            onChange={e => setFileName(e.target.files[0]?.name || "")}
+          />
+          <S.FileDropZone onClick={() => fileRef.current.click()}>
+            <S.FileDropText>
+              {fileName ? fileName : "클릭하여 파일을 선택하세요"}
+            </S.FileDropText>
+            <S.FileDropSub>
+              {fileName ? "다른 파일을 선택하려면 클릭하세요" : "PDF, JPG, PNG 등 지원"}
+            </S.FileDropSub>
+          </S.FileDropZone>
         </div>
 
         <S.SubmitBtn>원서접수 및 결제하기</S.SubmitBtn>

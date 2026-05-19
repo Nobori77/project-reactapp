@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import * as S from "./style.js";
+import NotificationDropdown from "./NotificationDropdown";
 
 const navLinks = [
   { label: "커뮤니티", to: "/community" },
@@ -10,15 +11,12 @@ const navLinks = [
 ];
 
 const EumLayout = () => {
-  const [hoveredNav, setHoveredNav]           = useState(null);
-  const [user, setUser]                       = useState(null);
-  const [hasNotification, setHasNotification] = useState(false);
+  const [hoveredNav, setHoveredNav]             = useState(null);
+  const [user, setUser]                         = useState(null);
+  const [notifCount, setNotifCount]             = useState(0);
+  const [showNotification, setShowNotification] = useState(false);
 
-  useEffect(() => {
-    // const res = await fetch('/api/notifications/unread');
-    // const data = await res.json();
-    // setHasNotification(data.count > 0);
-  }, []);
+  useEffect(() => {}, []);
 
   useEffect(() => {
     fetch("http://localhost:10000/private/api/users/me", { credentials: "include" })
@@ -26,6 +24,22 @@ const EumLayout = () => {
       .then((data) => { if (data?.success) setUser(data.data); })
       .catch(() => {});
   }, []);
+
+  // ── 백엔드 연동 시 아래 주석 해제 ──────────────────────────────
+  // useEffect(() => {
+  //   if (!user) return;
+  //   const fetchNotifCount = async () => {
+  //     try {
+  //       const res = await fetch("http://localhost:10000/api/notifications/unread", {
+  //         credentials: "include",
+  //       });
+  //       const data = await res.json();
+  //       setNotifCount(data.count);
+  //     } catch {}
+  //   };
+  //   fetchNotifCount();
+  // }, [user]);
+  // ───────────────────────────────────────────────────────────────
 
   const handleLogout = async () => {
     try {
@@ -40,7 +54,6 @@ const EumLayout = () => {
     <div>
       <S.Header>
         <S.LogoNav>
-          {/* 로고 */}
           <button>
             <Link to="/">
               <img src="/assets/image/layout/logo.svg" alt="logo" style={{ height: "28px" }} />
@@ -72,14 +85,28 @@ const EumLayout = () => {
                 <S.UserAvatar src={user.userProfile} alt="프로필" />
                 <S.UserName>{user.userNickname || user.userName}</S.UserName>
               </S.UserChip>
-              <button style={{ paddingTop: "5px" }}>
-                <img
-                  src={hasNotification
-                    ? "/assets/image/layout/bellIconActive.svg"
-                    : "/assets/image/layout/bellIcon.svg"}
-                  style={{ width: "44px", height: "44px", display: "flex", alignItems: "center" }}
-                />
-              </button>
+
+              {/* 종 버튼 */}
+              <div style={{ position: "relative" }}>
+                <button
+                  style={{ paddingTop: "5px" }}
+                  onClick={() => setShowNotification((prev) => !prev)}
+                >
+                  <img
+                    src={notifCount > 0
+                      ? "/assets/image/layout/bellIconActive.svg"
+                      : "/assets/image/layout/bellIcon.svg"}
+                    style={{ width: "44px", height: "44px", display: "flex", alignItems: "center" }}
+                  />
+                </button>
+                {showNotification && (
+                  <NotificationDropdown
+                    onClose={() => setShowNotification(false)}
+                    onCountChange={setNotifCount}
+                  />
+                )}
+              </div>
+
               <Link to="/mypage" style={{ textDecoration: "none" }}>
                 <S.RightBorderBtn>
                   <S.RightBorderBtnLabel>마이페이지</S.RightBorderBtnLabel>
@@ -116,9 +143,9 @@ const EumLayout = () => {
             <S.FooterTop>
               <S.FooterPolicy>개인정보처리방침 | 서비스 이용약관</S.FooterPolicy>
               <S.FooterSocial>
-                <img src="/assets/image/layout/youtube.svg"   style={{ width: "44px" }} />
-                <img src="/assets/image/layout/naver.svg"     style={{ width: "44px" }} />
-                <img src="/assets/image/layout/instagram.svg" style={{ width: "44px" }} />
+                <img src="/assets/image/layout/youtube.svg"   style={{ width: "40px" }} />
+                <img src="/assets/image/layout/naver.svg"     style={{ width: "40px" }} />
+                <img src="/assets/image/layout/instagram.svg" style={{ width: "40px" }} />
               </S.FooterSocial>
             </S.FooterTop>
             <S.FooterInfoTitle>INFO.</S.FooterInfoTitle>

@@ -93,7 +93,7 @@ export const styles = {
   main: {
     maxWidth: 1280,
     margin: "0 auto",
-    padding: "28px 40px 80px",
+    padding: "28px 40px 300px",
   },
 
   // Breadcrumb
@@ -126,6 +126,7 @@ export const styles = {
     display: "flex",
     gap: 24,
     alignItems: "flex-start",
+    minHeight: "calc(100vh - 200px)",
   },
 
   // Sidebar

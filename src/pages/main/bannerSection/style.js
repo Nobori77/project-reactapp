@@ -7,6 +7,7 @@ export const HeadlineWrapper = styled.div`
   align-content: center;
   align-items: flex-end;
   margin-top: 15vh;
+  min-height: 200px;
 `;
 
 export const HeadlineText = styled.div`
@@ -14,6 +15,7 @@ export const HeadlineText = styled.div`
   font-weight: ${theme.FONT_WEIGHT.bold};
   line-height: ${theme.FONT_LINE.h1};
   text-align: center;
+  will-change: transform;
 `;
 
 export const SubtitleWrapper = styled.div`
@@ -38,7 +40,7 @@ export const BlobGreen = styled.div`
   position: absolute;
   border-radius: 50%;
   left: -80px;
-  top: -60px;
+  top: 500px;
   width: 320px;
   height: 320px;
   background-color: #a8f0d8;
@@ -51,7 +53,7 @@ export const BlobBlue = styled.div`
   position: absolute;
   border-radius: 50%;
   left: -80px;
-  top: 100px;
+  top: 10px;
   width: 416px;
   height: 416px;
   background-color: #7eb8ff;
@@ -63,8 +65,8 @@ export const BlobBlue = styled.div`
 export const BlobOrange = styled.div`
   position: absolute;
   border-radius: 50%;
-  right: 786px;
-  top: 57px;
+  left: 600px;
+  top: 10px;
   width: 283px;
   height: 283px;
   background-color: #ffbf80;
@@ -76,8 +78,8 @@ export const BlobOrange = styled.div`
 export const BlobYellow = styled.div`
   position: absolute;
   border-radius: 50%;
-  left: 850px;
-  top: 688px;
+  left: 800px;
+  top: 500px;
   width: 288px;
   height: 288px;
   background-color: #ffd96b;
@@ -90,7 +92,7 @@ export const BlobYellow = styled.div`
 export const BlobPurple = styled.div`
   position: absolute;
   border-radius: 50%;
-  top: 540px;
+  top: 400px;
   right: -150px;
   width: 384px;
   height: 384px;
@@ -103,8 +105,8 @@ export const BlobPurple = styled.div`
 export const BlobPink = styled.div`
   position: absolute;
   border-radius: 50%;
-  left: 1288px;
-  top: 135px;
+  left: 1100px;
+  top: 50px;
   width: 288px;
   height: 288px;
   background-color: #fbc8ff;

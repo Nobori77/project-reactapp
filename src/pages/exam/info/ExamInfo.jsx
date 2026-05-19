@@ -1,6 +1,5 @@
 import { useNavigate, useLocation, useOutlet } from "react-router-dom";
 import { PRIMARY, styles, statusStyle } from "./style";
-import ExamSidebar from "../ExamSidebar";
 
 // 임시 데이터 — 추후 API로 교체
 const examData = [
@@ -91,30 +90,7 @@ export default function ExamInfo() {
   const outlet = useOutlet();
 
   return (
-    <div style={styles.page}>
-
-      {/* ── 콘텐츠 영역 ── */}
-      <main style={styles.main}>
-
-        {/* 브레드크럼 */}
-        <div style={styles.breadcrumb}>
-          {["홈", "시험", "자격증"].map((item, i) => (
-            <span key={i} style={styles.breadcrumbItem}>
-              <span style={styles.breadcrumbLink}>{item}</span>
-              <span style={styles.breadcrumbSep}>›</span>
-            </span>
-          ))}
-          <span style={styles.breadcrumbActive}>시험정보</span>
-        </div>
-
-        {/* 메인 레이아웃: 사이드바 + 본문 */}
-        <div style={styles.contentLayout}>
-
-          <ExamSidebar />
-
-          {/* ── 본문 ── */}
-          <div style={styles.contentArea}>
-
+    <>
             {/* 히어로 카드 */}
             <div style={styles.heroCard}>
               <div>
@@ -173,10 +149,6 @@ export default function ExamInfo() {
               </div>
             )}
 
-          </div>
-        </div>
-      </main>
-
-    </div>
+    </>
   );
 }

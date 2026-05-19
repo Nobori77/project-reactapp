@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as S from "./style.js";
 import theme from "../../../styles/theme";
 
-const BannerSection = () => {
+const BannerSection = React.memo(() => {
   const navigate = useNavigate();
 
   return (
@@ -37,6 +37,6 @@ const BannerSection = () => {
       </S.BtnChapter>
     </>
   );
-};
+});
 
 export default BannerSection;

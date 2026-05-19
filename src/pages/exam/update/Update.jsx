@@ -1,6 +1,5 @@
 import { useNavigate, useLocation, useOutlet } from "react-router-dom";
 import { PRIMARY, styles } from "../style";
-import ExamSidebar from "../ExamSidebar";
 
 const infoCards = [
   { title: "자격증갱신 / 재발급", sub: "갱신 및 재발급 신청", path: "/exam/update/renew", icon: "/assets/image/exam/exam_update_card1.svg" },
@@ -13,23 +12,7 @@ export default function Update() {
   const outlet = useOutlet();
 
   return (
-    <div style={styles.page}>
-      <main style={styles.main}>
-
-        <div style={styles.breadcrumb}>
-          {["홈", "시험", "자격증"].map((item, i) => (
-            <span key={i} style={styles.breadcrumbItem}>
-              <span style={styles.breadcrumbLink}>{item}</span>
-              <span style={styles.breadcrumbSep}>›</span>
-            </span>
-          ))}
-          <span style={styles.breadcrumbActive}>자격증갱신</span>
-        </div>
-
-        <div style={styles.contentLayout}>
-          <ExamSidebar />
-
-          <div style={styles.contentArea}>
+    <>
 
             <div style={styles.heroCard}>
               <div>
@@ -73,9 +56,6 @@ export default function Update() {
 
             {outlet}
 
-          </div>
-        </div>
-      </main>
-    </div>
+    </>
   );
 }

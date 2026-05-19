@@ -1,6 +1,5 @@
 import { useNavigate, useLocation, useOutlet } from "react-router-dom";
 import { PRIMARY, styles } from "../../style";
-import ExamSidebar from "../../ExamSidebar";
 
 const infoCards = [
   { title: "시험접수안내", sub: "접수 방법 및 유의사항", path: "/exam/receipt/info/guide", icon: "/assets/image/exam/exam_receipt_card1.png" },
@@ -14,23 +13,7 @@ export default function ReceiptInfo() {
   const outlet = useOutlet();
 
   return (
-    <div style={styles.page}>
-      <main style={styles.main}>
-
-        <div style={styles.breadcrumb}>
-          {["홈", "시험", "자격증"].map((item, i) => (
-            <span key={i} style={styles.breadcrumbItem}>
-              <span style={styles.breadcrumbLink}>{item}</span>
-              <span style={styles.breadcrumbSep}>›</span>
-            </span>
-          ))}
-          <span style={styles.breadcrumbActive}>원서접수</span>
-        </div>
-
-        <div style={styles.contentLayout}>
-          <ExamSidebar />
-
-          <div style={styles.contentArea}>
+    <>
 
             <div style={styles.heroCard}>
               <div>
@@ -74,9 +57,6 @@ export default function ReceiptInfo() {
 
             {outlet}
 
-          </div>
-        </div>
-      </main>
-    </div>
+    </>
   );
 }
