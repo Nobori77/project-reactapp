@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import * as S from "./style";
-import { formatBirth, formatPhone } from "../../inputFormat";
 
 const rounds = ["2025년 1회 정기시험", "2025년 2회 정기시험", "2025년 3회 정기시험"];
 const grades = ["1급", "2급", "3급"];
@@ -9,8 +8,6 @@ const ReceiptSubmitContainer = () => {
   const [grade, setGrade] = useState("2급");
   const [round, setRound] = useState("");
   const [fileName, setFileName] = useState("");
-  const [birth, setBirth] = useState("");
-  const [phone, setPhone] = useState("");
   const fileRef = useRef(null);
 
   return (
@@ -43,19 +40,11 @@ const ReceiptSubmitContainer = () => {
           </div>
           <div>
             <S.Label>생년월일 *</S.Label>
-            <S.Input
-              placeholder="YYYY-MM-DD"
-              value={birth}
-              onChange={e => setBirth(formatBirth(e.target.value))}
-            />
+            <S.Input placeholder="YYYY-MM-DD" />
           </div>
           <div>
             <S.Label>연락처 *</S.Label>
-            <S.Input
-              placeholder="010-0000-0000"
-              value={phone}
-              onChange={e => setPhone(formatPhone(e.target.value))}
-            />
+            <S.Input placeholder="010-0000-0000" />
           </div>
           <div>
             <S.Label>이메일 *</S.Label>

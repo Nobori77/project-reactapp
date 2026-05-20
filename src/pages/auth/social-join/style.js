@@ -5,7 +5,7 @@ const PRIMARY = "#4359fc";
 export const PageWrap = styled.div`
   min-height: 100vh;
   background: #f5f5f7;
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
 `;
 
 export const Hero = styled.div`

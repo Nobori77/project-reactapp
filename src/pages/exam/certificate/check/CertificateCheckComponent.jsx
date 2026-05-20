@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./style";
-import { formatBirth } from "../../inputFormat";
 
 const mockData = [
   { no: "CL-2025-00456", course: "수어통역 기초과정", date: "2025.02.28", status: "발급완료" },
@@ -11,23 +10,13 @@ const mockData = [
 const CertificateCheckComponent = () => {
   const navigate = useNavigate();
   const [searched, setSearched] = useState(false);
-  const [name, setName] = useState("");
-  const [birth, setBirth] = useState("");
 
   return (
     <S.Wrapper>
       <S.SectionTitle style={{ marginBottom: 16 }}>수료증 조회</S.SectionTitle>
       <S.SearchRow>
-        <S.SearchInput
-          placeholder="이름"
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-        <S.SearchInput
-          placeholder="생년월일 YYYY-MM-DD"
-          value={birth}
-          onChange={e => setBirth(formatBirth(e.target.value))}
-        />
+        <S.SearchInput placeholder="이름" />
+        <S.SearchInput placeholder="생년월일 YYYY-MM-DD" />
         <S.SearchBtn onClick={() => setSearched(true)}>조회하기</S.SearchBtn>
       </S.SearchRow>
 

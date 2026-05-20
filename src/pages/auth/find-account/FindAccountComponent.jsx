@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import * as S from "./style";햣 
+import * as S from "./style";
 
 const PASSWORD_REGEX = /^[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
