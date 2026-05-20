@@ -123,6 +123,13 @@ export const SearchPage = {
     color: #aaa;
     font-size: 10px;
     text-align: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
   `,
 
   ResultText: styled.div`
@@ -221,6 +228,8 @@ export const SearchPage = {
     border-radius: 0 0 20px 20px;
     background: #ffe417;
     box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+    min-height: 320px;
+    overflow: hidden;
 
     &::before {
       content: "";
@@ -237,6 +246,14 @@ export const SearchPage = {
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    video,
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: inherit;
     }
   `,
 
@@ -425,9 +442,13 @@ export const SearchPage = {
       letter-spacing: -0.24px;
     }
 
-    button {
+    button,
+    a {
       width: 76px;
       height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border: 0;
       border-radius: 8px;
       background: ${PRIMARY};
@@ -436,6 +457,7 @@ export const SearchPage = {
       font-weight: 400;
       line-height: 20px;
       letter-spacing: -0.24px;
+      text-decoration: none;
       cursor: pointer;
     }
   `,

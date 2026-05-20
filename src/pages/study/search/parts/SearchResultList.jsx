@@ -20,7 +20,7 @@ const SearchResultList = ({
       <S.SearchForm onSubmit={handleSubmit}>
         <S.SearchInput
           value={keyword}
-          placeholder="검색어를 입력하세요."
+          placeholder="검색어를 입력하세요"
           onChange={(event) => onChangeKeyword(event.target.value)}
         />
         <S.SearchButton type="submit">검색</S.SearchButton>
@@ -37,19 +37,36 @@ const SearchResultList = ({
       <S.ResultList>
         {results.map((result, index) => (
           <S.ResultItem key={result.id} $featured={index === 0}>
-            <S.ImageSlot $featured={index === 0}>{result.imageLabel}</S.ImageSlot>
-
+            <S.ImageSlot $featured={index === 0}>
+              {result.cardImage ? (
+                <img
+                  src={result.cardImage}
+                  alt={result.word}
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                  }}
+                />
+              ) : (
+                result.imageLabel
+              )}
+            </S.ImageSlot>
             <S.ResultText>
               <S.ResultTitle $featured={index === 0}>{result.word}</S.ResultTitle>
               <S.ResultDesc $featured={index === 0}>{result.shortDesc}</S.ResultDesc>
             </S.ResultText>
 
             <S.ResultActions>
-              <button type="button">▶ 영상 보기</button>
+              <button type="button" onClick={() => onSelectCard(index)}>
+                영상 보기
+              </button>
               <button type="button" className="cardButton" onClick={() => onSelectCard(index)}>
                 카드 보기
               </button>
-              {index === 0 && <a href="https://sldict.korean.go.kr" target="_blank" rel="noreferrer">🔗 한국수어사전 원문 보기</a>}
+              {result.sourceUrl && (
+                <a href={result.sourceUrl} target="_blank" rel="noreferrer">
+                  한국수어사전 원문 보기
+                </a>
+              )}
             </S.ResultActions>
           </S.ResultItem>
         ))}
