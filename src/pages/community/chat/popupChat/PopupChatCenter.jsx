@@ -89,24 +89,24 @@ const PopupChatCenter = ({ messages, onSendMessage }) => {
       {/* 메세지 나열 되는곳 */}
       <S.MessagesArea>
         {messages.map((msg) =>
-          !msg.chatIsMe ? (
+          !msg.isMine ? (
             <S.OtherMsgWrap key={msg.id}>
-              <S.MsgAvatar src={msg.userProfile} alt={msg.userNickname} />
+              <S.MsgAvatar src={msg.profileImage} alt={msg.username} />
               <S.MsgContentCol>
-                <S.SenderName>{msg.userNickname}</S.SenderName>
+                <S.SenderName>{msg.username}</S.SenderName>
                 <S.MsgTimeRow>
                   <S.OtherBubble>
-                    <S.OtherBubbleText>{msg.chatContent}</S.OtherBubbleText>
+                    <S.OtherBubbleText>{msg.content}</S.OtherBubbleText>
                   </S.OtherBubble>
-                  <S.MsgTime>{msg.chatCreateAt}</S.MsgTime>
+                  <S.MsgTime>{msg.time}</S.MsgTime>
                 </S.MsgTimeRow>
               </S.MsgContentCol>
             </S.OtherMsgWrap>
           ) : (
             <S.MyMsgRow key={msg.id}>
-              <S.MsgTime>{msg.chatCreateAt}</S.MsgTime>
+              <S.MsgTime>{msg.time}</S.MsgTime>
               <S.MyBubble>
-                <S.MyBubbleText>{msg.chatContent}</S.MyBubbleText>
+                <S.MyBubbleText>{msg.content}</S.MyBubbleText>
               </S.MyBubble>
             </S.MyMsgRow>
           ),

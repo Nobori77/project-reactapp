@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { colors } from "../constants";
 import {
   PageBg,
@@ -12,12 +12,8 @@ import PopupChatCenter from "./popupChat/PopupChatCenter";
 import PopupRoomInfoPanel from "./popupChat/PopupRoomInfoPanel";
 import PopupUserInfoPanel from "./popupChat/PopupUserInfoPanel";
 import { useChatContext } from "../context/ChatContext";
-import useAuthStore from "../../../store/authStore";
-import {
-  getChatMessages,
-  getChatRoomUsers,
-  getChatRoomInfo,
-} from "../communityApi/chatApi";
+import { getChatRoomUsers, getChatRoomInfo } from "../communityApi/chatApi";
+import useChatRoom from "./hooks/useChatRoom";
 
 const S = {
   PageBg,
@@ -25,8 +21,6 @@ const S = {
   Body,
   RightPanel,
 };
-
-const WS_BASE = "ws://localhost:10000/ws/chat";
 
 const toDisplayUser = (userDTO) => ({
   email: userDTO.userEmail,
@@ -48,56 +42,14 @@ const TAGS = [
   { label: "#초보환영", bg: "#e1beec", color: "#b63fde" },
 ];
 
-const formatTime = (dateStr) => {
-  const d = new Date(dateStr);
-  return d.toLocaleTimeString("ko-KR", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-};
-
-let wsMessageSeq = 0;
-const makeWsMessageId = (msg) =>
-  `ws-${msg.userId}-${msg.chatCreateAt}-${++wsMessageSeq}`;
-
-const toDisplayMessage = (msg, currentUserId) => {
-  const {
-    id,
-    chatContent,
-    chatCreateAt,
-    chatType,
-    userNickname = "사용자",
-    userProfile = "default.jpg",
-    chatRoomId,
-    chatIsMe,
-    userId,
-  } = msg;
-
-  return {
-    id: id ?? makeWsMessageId(msg),
-    chatContent,
-    chatCreateAt: formatTime(chatCreateAt),
-    chatType,
-    userNickname,
-    userProfile,
-    chatRoomId,
-    // WS 메시지는 chatIsMe를 직접 제공, REST 초기 로딩은 userId 비교로 판별
-    chatIsMe: chatIsMe ?? (currentUserId != null && userId === currentUserId),
-  };
-};
-
 const PopupChatScreen = () => {
   const [selectedUser, setSelectedUser] = useState(null);
-  const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [chatRoomInfo, setChatRoomInfo] = useState(null);
   const { activeChatRoom } = useChatContext();
-  const { user } = useAuthStore();
-  const wsRef = useRef(null);
 
   const chatRoomId = activeChatRoom?.id;
-  const currentUserId = user?.id;
+  const { messages, sendMessage: handleSendMessage } = useChatRoom(chatRoomId);
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -112,67 +64,6 @@ const PopupChatScreen = () => {
       .then((data) => setUsers(data.map(toDisplayUser)))
       .catch((err) => console.error("유저 목록 불러오기 실패:", err));
   }, [chatRoomId]);
-
-  useEffect(() => {
-    if (!chatRoomId) return;
-
-    let ws;
-    let cancelled = false;
-
-    const init = async () => {
-      try {
-        const data = await getChatMessages(chatRoomId);
-        if (cancelled) return;
-        const sorted = [...data].sort(
-          (a, b) => new Date(a.chatCreateAt) - new Date(b.chatCreateAt),
-        );
-        setMessages(sorted.map((msg) => toDisplayMessage(msg, currentUserId)));
-      } catch (err) {
-        if (!cancelled) console.error("메시지 불러오기 실패:", err);
-      }
-
-      if (cancelled) return;
-
-      ws = new WebSocket(`${WS_BASE}/${chatRoomId}`);
-      wsRef.current = ws;
-
-      ws.onmessage = (event) => {
-        try {
-          const msg = JSON.parse(event.data);
-          setMessages((prev) => [
-            ...prev,
-            toDisplayMessage(msg, currentUserId),
-          ]);
-        } catch (e) {
-          console.error("WS 메시지 파싱 실패:", e);
-        }
-      };
-
-      ws.onerror = (err) => console.error("WebSocket 오류:", err);
-    };
-
-    init();
-
-    return () => {
-      cancelled = true;
-      ws?.close();
-      wsRef.current = null;
-    };
-  }, [chatRoomId, currentUserId]);
-
-  const handleSendMessage = useCallback(
-    (content) => {
-      const text = content.trim();
-      if (!text || !chatRoomId) return;
-      const ws = wsRef.current;
-      if (!ws || ws.readyState !== WebSocket.OPEN) {
-        console.warn("WebSocket이 아직 연결되지 않았습니다.");
-        return;
-      }
-      ws.send(JSON.stringify({ chatContent: text, chatType: "텍스트" }));
-    },
-    [chatRoomId],
-  );
 
   const handleUserClick = (user) => {
     setSelectedUser((prev) => (prev?.email === user.email ? null : user));
