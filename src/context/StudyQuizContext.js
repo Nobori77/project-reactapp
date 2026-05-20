@@ -1,23 +1,22 @@
 import { createContext, useState } from "react";
 
 export const StudyQuizContext = createContext({
-    
-    state: {
 
-        quizzes: [], 
+    state: {
+        quizzes: [],
         answers: [],
         loading: false,
         error: null,
-        removeQuizzes: []
     },
 
     actions: {
 
-        getQuizzes: () => {}, // -> back 연결 시 사용
+        getQuizzes: () => {},
         insertQuizzes: () => {},
         removeQuizzes: () => {},
         insertAnswers: () => {},
         removeAnswers: () => {},
+        submitQuiz: () => {},
     }
 });
 
@@ -26,12 +25,11 @@ const StudyQuizProvider = ({children}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [quizzes, setQuizzes] = useState([]);
+    const [answers, setAnswers] = useState([]);
 
     // [
     //      { id: 1, title: "이규학이 잘하는 것은?", answers: [{example: "맞는 생각", correct: true}, {example: "자는 생각", correct: false},] }
     // ]
-
-    const [answers, setAnswers] = useState([])
 
     // const getQuizzes = async () => {
     //     const response = await fetch("퀴즈 경로")
@@ -44,8 +42,7 @@ const StudyQuizProvider = ({children}) => {
 
     // getQuizzes()
 
-    const getQuizzes = async (quizType = "sign") => {
-
+    const getQuizzes = async (quizId) => {
         try {
             setLoading(true);
             setError(null);
@@ -54,156 +51,126 @@ const StudyQuizProvider = ({children}) => {
             // const response = await fetch(`/api/study/chapter/${quizType}`);
             // const data = await response.json();
 
-        // 임시 화면용 데이터
-        const signData  = [
-            {
-                id: 1,
-                lessonTitle: "기본 인사 표현",
-                title: '다음 중 어느 수어가 "안녕하세요"인가요?',
-                image: "",
-                exp: 10,
-                heart: 5,
-                correctText: "안녕하세요",
-                feedback: '한 손을 들어 좌우로 흔드는 동작이 "안녕하세요"예요.',
-                review: {
-                    mediaText: "📌 수어 이미지/영상 슬롯",
-                    motion: ["한 손을 들어", "좌우로 흔들어요"],
-                    useCase: ["처음 만났을 때,", "헤어질 때도 사용"],
-                },
-                answers: [
-                    { example: "감사합니다", emoji: "🤲", correct: false },
-                    { example: "미안해요", emoji: "🙏", correct: false },
-                    { example: "안녕하세요", emoji: "👋", correct: true },
-                ],
-            },
-            {
-                id: 2,
-                lessonTitle: "감정 표현",
-                title: '다음 중 어느 수어가 "사랑"인가요?',
-                image: "",
-                exp: 10,
-                heart: 5,
-                correctText: "사랑",
-                feedback: '두 손을 모아 마음을 표현하는 동작이 "사랑"이에요.',
-                review: {
-                    mediaText: "📌 수어 이미지/영상 슬롯",
-                    motion: ["두 손을 가슴 앞에 모아", "부드럽게 표현해요"],
-                    useCase: ["감정을 말할 때,", "가족이나 친구에게 사용"],
-                },
-                answers: [
-                    { example: "사랑", emoji: "🤲", correct: true },
-                    { example: "날씨", emoji: "☀️", correct: false },
-                    { example: "학교", emoji: "🏫", correct: false },
-                ],
-            },
-        ];
+            const questionResponse = await fetch(`http://localhost:10000/api/quizzes/${quizId}/questions`);
 
-        const sosData = [
-            
-            {
-                id: 1,
-                lessonTitle: "응급 수신호",
-                title: "이 수신호는 어떤 뜻인가요?",
-                image: "",
-                exp: 10,
-                heart: 5,
-                correctText: "의료 응급이에요",
-                feedback: "팔꿈치를 굽히고 손을 위로 올리는 동작이 의료 응급 수신호예요.",
-                review: {
-                    mediaText: "📌 수신호 이미지/영상 슬롯",
-                    motion: ["팔꿈치를 굽히고", "손을 위로 올려요"],
-                    useCase: ["의료 도움이 필요할 때,", "응급 상황을 알릴 때 사용"],
-                },
-                answers: [
-                    { example: "도움이 필요해요", emoji: "🆘", correct: false },
-                    { example: "불이 났어요", emoji: "🔥", correct: false },
-                    { example: "의료 응급이에요", emoji: "🏥", correct: true },
-                ],
-            },
-        ];
+            if (!questionResponse.ok) {
+                throw new Error("퀴즈 문제 조회 실패");
+            }
 
-        const morseData = [
-            {
-            id: 1,
-            lessonTitle: "모스부호",
-            title: "이 모스부호는 어떤 의미인가요?",
-            image: "",
-            exp: 10,
-            heart: 5,
-            correctText: "SOS",
-            feedback: "짧은 신호 3번, 긴 신호 3번, 짧은 신호 3번은 SOS를 뜻해요.",
-            review: {
-                mediaText: "📌 모스부호 이미지/영상 슬롯",
-                motion: ["짧게 세 번", "길게 세 번", "다시 짧게 세 번"],
-                useCase: ["구조 요청이 필요할 때,", "빛이나 소리로 신호를 보낼 때 사용"],
-            },
-            answers: [
-                { example: "SOS", emoji: "··· --- ···", correct: true },
-                { example: "HELLO", emoji: "···· · ·-·· ·-·· ---", correct: false },
-                { example: "LOVE", emoji: "·-·· --- ···- ·", correct: false },
-                ],
-            },
-        ];
+            const questionResult = await questionResponse.json();
 
-        let data = signData;
+            if (!questionResult.success) {
+                throw new Error(questionResult.message);
+            }
 
-        if(quizType === "sos"){
-            data = sosData;
-        }
+            const questions = await Promise.all(
+                questionResult.data.map(async (question) => {
+                    const choiceResponse = await fetch(`http://localhost:10000/api/quiz-questions/${question.id}/choices`);
 
-        if (quizType === "mors" || quizType === "morse") {
-            data = morseData;
-        }
-    
+                    if (!choiceResponse.ok) {
+                    throw new Error("퀴즈 보기 조회 실패");
+                    }
 
-            setQuizzes(data);
-        } catch (error) {
-            setError("퀴즈를 불러오지 못했어요.");
-        } finally {
-            setLoading(false);
-        }
-    };
+                    const choiceResult = await choiceResponse.json();
 
-    const insertQuizzes  = (quizList) => {
-        setQuizzes(quizList);
-    };
+                    if (!choiceResult.success) {
+                        throw new Error(choiceResult.message);
+                    }
+                    
+                    const correctChoice = choiceResult.data.find(
+                        (choice) => choice.quizChoiceIsCorrect === 1
+                    );
 
-    const insertAnswers = (answer) => {
-        setAnswers((prev) => [...prev, answer]);
-    };
+                    return {
+                        id: question.id,
+                        title: question.quizQuestionDetail,
+                        lessonTitle: question.quizQuestionType,
+                        exp: 10,
+                        heart: 5,
+                        correctText: correctChoice?.quizChoiceDetail || "",
+                        feedback: "정답을 확인했어요.",
+                        review: {
+                            mediaText: "수어 이미지/영상 준비 중",
+                            motion: [],
+                            useCase: [],
+                        },
+                        answers: choiceResult.data.map((choice) => ({
+                            id: choice.id,
+                            example: choice.quizChoiceDetail,
+                            emoji: "",
+                            correct: choice.quizChoiceIsCorrect === 1,
+                        })),
+                    };
+                })
+            );
 
-    const removeAnswers = () => {
-        setAnswers([]);
-    };
+                setQuizzes(questions);
+            } catch (error) {
+                setError("퀴즈를 불러오지 못했어요.");
+            } finally {
+                setLoading(false);
+            }
+        };
 
+const insertQuizzes = (quizList) => {
+    setQuizzes(quizList);
+};
 
-    const value = {
+const removeQuizzes = () => {
+    setQuizzes([]);
+};
 
-       state: {
-        quizzes: quizzes, 
-        answers: answers,
-        loading: loading,
-        error: error
-        },
+const insertAnswers = (answer) => {
+    setAnswers((prev) => [...prev, answer]);
+};
 
-        actions: {
+const removeAnswers = () => {
+    setAnswers([]);
+};
 
-            getQuizzes,
-            insertQuizzes,
-            // removeQuizzes,
-            insertAnswers,
-            removeAnswers,
+const submitQuiz = async ({ quizId, userId, answers }) => {
+  const response = await fetch(`http://localhost:10000/api/quizzes/${quizId}/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId,
+      answers,
+    }),
+  });
 
-            // getQuizzes: () => {},
-            // insertQuizzes: () => {},
-            removeQuizzes: () => {},
-            // insertAnswers: () => {},
-            // removeAnswers: () => {},
-        },
-    };
+  if (!response.ok) {
+    throw new Error("퀴즈 제출 실패");
+  }
+
+  const result = await response.json();
+
+  if (!result.success) {
+    throw new Error(result.message);
+  }
+
+  return result.data;
+};
+
+const value = {
+  state: {
+    quizzes:quizzes,
+    answers:answers,
+    loading:loading,
+    error:error,
+  },
+  actions: {
+    getQuizzes,
+    insertQuizzes,
+    removeQuizzes,
+    insertAnswers,
+    removeAnswers,
+    submitQuiz,
+  },
+};
 
     return (
-
         <StudyQuizContext.Provider value={value}>
             {children}
         </StudyQuizContext.Provider>

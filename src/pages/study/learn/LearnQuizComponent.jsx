@@ -10,7 +10,7 @@ const LearnQuizComponent = ({ quizType, quizId, onClose, onFinish }) => {
   const id = quizId;
   const {
     state: { quizzes, loading, error },
-    actions: { getQuizzes, insertAnswers, removeAnswers },
+    actions: { getQuizzes, insertAnswers, removeAnswers, submitQuiz },
   } = useContext(StudyQuizContext);
 
   const [selected, setSelected] = useState(null);
@@ -29,8 +29,8 @@ const LearnQuizComponent = ({ quizType, quizId, onClose, onFinish }) => {
   }, [id]);
 
   const foundQuiz = useMemo(
-    () => quizzes.find((item) => item.id === Number(id)),
-    [quizzes, id]
+    () => quizzes[0],
+    [quizzes]
   );
 
   if (loading) {
@@ -79,21 +79,33 @@ const LearnQuizComponent = ({ quizType, quizId, onClose, onFinish }) => {
   const isIncorrect = status === "incorrect";
   const progressColor = isCorrect ? "green" : isIncorrect ? "red" : "blue";
 
-  const handleCheck = () => {
-    if (selected === null) return;
+const handleCheck = async () => {
+  if (selected === null) return;
 
-    const correct = Boolean(selectedAnswer?.correct);
+  const correct = Boolean(selectedAnswer?.correct);
 
+  try {
     insertAnswers({
-      quizType: quiz,
-      quizId: foundQuiz.id,
-      selected,
-      correct,
+      quizQuestionId: foundQuiz.id,
+      quizChoiceId: selectedAnswer.id,
+    });
+
+    await submitQuiz({
+      quizId: Number(id),
+      userId: 1,
+      answers: [
+        {
+          quizQuestionId: foundQuiz.id,
+          quizChoiceId: selectedAnswer.id,
+        },
+      ],
     });
 
     setStatus(correct ? "correct" : "incorrect");
-  };
-
+  } catch (error) {
+    setStatus("incorrect");
+  }
+};
   const handleNext = () => {
     if (isIncorrect) {
       setStatus("review");

@@ -438,6 +438,73 @@ export const LearnPage = {
       line-height: 1;
     }
   `,
+  WordPanel: styled.section`
+    width: 430px;
+    margin: 24px auto 0;
+    display: grid;
+    gap: 10px;
+  `,
+  WordCard: styled.button`
+    width: 100%;
+    min-height: 64px;
+    padding: 14px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fff;
+    text-align: left;
+    cursor: pointer;
+  `,
+  WordTitle: styled.strong`
+    display: block;
+    color: #222;
+    font-size: 15px;
+    font-weight: 700;
+  `,
+  WordDesc: styled.p`
+    margin: 6px 0 0;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.4;
+  `,
+  VideoPanel: styled.section`
+    width: 430px;
+    margin: 18px auto 0;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fff;
+    box-sizing: border-box;
+  `,
+  VideoTitle: styled.h3`
+    margin: 0 0 6px;
+    color: #222;
+    font-size: 16px;
+    font-weight: 700;
+  `,
+  VideoDesc: styled.p`
+    margin: 0 0 12px;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.4;
+  `,
+  Video: styled.video`
+    width: 100%;
+    border-radius: 10px;
+    background: #111;
+  `,
+  FinishButton: styled.button`
+    width: 430px;
+    height: 44px;
+    margin: 14px auto 0;
+    display: block;
+    border: 0;
+    border-radius: 12px;
+    background: #4359fc;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  `,
 };
 
 const quizColor = {

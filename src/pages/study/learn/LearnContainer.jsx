@@ -32,7 +32,6 @@ const LearnContainer = () => {
     //     );
     // }
 
-
     return (
         <StudyQuizProvider>
         {learnQuiz ? (

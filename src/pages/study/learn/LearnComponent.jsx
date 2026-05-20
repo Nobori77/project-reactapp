@@ -1,125 +1,25 @@
-import { useEffect, useState } from "react";
 import { LearnPage as S } from "./style";
 import { useNavigate } from "react-router-dom";
+import { useLearn } from "./hooks/useLearn";
 
-
-// 임시데이터
-const learnData = {
-  streak: 7,
-  sideMenus: [
-    { id: "learn", icon: "韓", label: "학습", active: true },
-    { id: "letter", icon: "♟", label: "문자", active: false },
-    { id: "signal", icon: "🚨", label: "수신호", active: false },
-    { id: "profile", icon: "👤", label: "프로필", active: false },
-    { id: "more", icon: "⋯", label: "더 보기", active: false },
-  ],
-  chapter: {
-    title: "인사말 배워보기",
-    guideLabel: "📖 가이드북",
-    progressTitle: "챕터 진행도",
-    progressDesc: "인사말 배워보기 · 1 / 4 완료",
-    percent: 25,
-    exp: 120,
-  },
-  lessons: [
-    {
-      id: 1,
-      status: "done",
-      icon: "✓",
-      title: "안녕하세요 배우기",
-      desc: "기본 인사말을 손으로 표현해요",
-      buttonText: "완료",
-    },
-    {
-      id: 2,
-      status: "done",
-      icon: "✓",
-      title: "감사합니다 배우기",
-      desc: "고마움을 전하는 수어 표현",
-      buttonText: "완료",
-    },
-    {
-      id: 3,
-      status: "active",
-      icon: "⭐",
-      title: "미안합니다 배우기",
-      desc: "사과와 양해를 구하는 표현",
-      buttonText: "시작 →",
-      quizType: "sign",
-      quizId: 1,
-    },
-    {
-      id: 4,
-      status: "active",
-      icon: "🚨",
-      title: "응급수신호 배우기",
-      desc: "위험 상황을 알리는 기본 신호",
-      buttonText: "시작 →",
-      quizType: "sos",
-      quizId: 1,
-    },
-    {
-      id: 5,
-      status: "locked",
-      icon: "⭐",
-      title: "자신의 출신지 말하기",
-      desc: "앞 단계를 완료하면 열려요",
-      buttonText: "🔒 잠금",
-    },
-  ],
-  nextChapter: {
-    title: "다음 챕터 · 숫자 표현 배우기",
-    desc: "이 챕터를 완료하면 잠금이 해제돼요 →",
-  },
-  quests: [
-    { id: 1, icon: "⚡", title: "10 EXP 획득하기", current: 0, total: 10 },
-    { id: 2, icon: "🤟", title: "레슨 2개에서 연속 5개 정답", current: 0, total: 2 },
-    { id: 3, icon: "⏱️", title: "10분 동안 학습하기", current: 0, total: 10 },
-  ],
-};
-
-const loadLearnData = async () => {
-  // 백엔드 연결 시 이 부분 수정
-  // const response = await fetch("/api/study/learn");
-  // const data = await response.json();
-  return learnData;
-};
 
 const LearnComponent = ({ onStartQuiz, onChangeView }) => {
-  const [data, setData] = useState(learnData);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { data, loading, error, selectedEduId, words, selectedWord, selectedVideo,
+    handleSelectEdu, handleSelectWord, handleFinishWordStudy,} = useLearn();
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const showLearnData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const result = await loadLearnData();
-        setData(result);
-      } catch (error) {
-        setError("학습 정보를 불러오지 못했어요.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    showLearnData();
-  }, []);
-
-  return (
+return (
     <S.Page>
       <S.ContentWrap>
         <S.SideMenu>
           {data.sideMenus.map((menu) => (
-            <S.SideButton 
-              key={menu.id} 
-              type="button" 
+            <S.SideButton
+              key={menu.id}
+              type="button"
               $active={menu.active}
               onClick={() => {
-                if(menu.id === "letter"){
+                if (menu.id === "letter") {
                   onChangeView?.("alphabet");
                   return;
                 }
@@ -128,7 +28,7 @@ const LearnComponent = ({ onStartQuiz, onChangeView }) => {
                   return;
                 }
                 if (menu.id === "profile") {
-                  navigate("/mypage");
+                  navigate("/mypage/learning");
                 }
               }}
             >
@@ -172,7 +72,11 @@ const LearnComponent = ({ onStartQuiz, onChangeView }) => {
                       {lesson.buttonText}
                     </S.LessonStartButton>
                   ) : (
-                    <S.LessonButton type="button" $status={lesson.status}>
+                    <S.LessonButton
+                      type="button"
+                      $status={lesson.status}
+                      onClick={() => handleSelectEdu(lesson.id)}
+                    >
                       {lesson.buttonText}
                     </S.LessonButton>
                   )}
@@ -180,6 +84,37 @@ const LearnComponent = ({ onStartQuiz, onChangeView }) => {
               </S.LessonItem>
             ))}
           </S.RoadMap>
+
+          {selectedEduId && words.length === 0 && !loading && (
+            <S.StatusText>등록된 단어가 없습니다.</S.StatusText>
+          )}
+
+          {words.length > 0 && (
+            <S.WordPanel>
+              {words.map((word) => (
+                <S.WordCard key={word.id} type="button" onClick={() => handleSelectWord(word)}>
+                  <S.WordTitle>{word.wordsTitle}</S.WordTitle>
+                  <S.WordDesc>{word.wordsDetail}</S.WordDesc>
+                </S.WordCard>
+              ))}
+            </S.WordPanel>
+          )}
+
+          {selectedVideo && (
+            <S.VideoPanel>
+              <S.VideoTitle>{selectedVideo.eduVideoTitle}</S.VideoTitle>
+              <S.VideoDesc>{selectedVideo.eduVideoDetail}</S.VideoDesc>
+              <S.Video controls>
+                <source src={selectedVideo.eduVideoUrl} type="video/mp4" />
+              </S.Video>
+            </S.VideoPanel>
+          )}
+
+          {selectedWord && (
+            <S.FinishButton type="button" onClick={handleFinishWordStudy}>
+              학습 완료
+            </S.FinishButton>
+          )}
 
           <S.NextChapter type="button">
             <strong>{data.nextChapter.title}</strong>
