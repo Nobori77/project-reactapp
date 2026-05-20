@@ -117,6 +117,10 @@ export const ActivityDivider = styled.div`
 /* 그룹 */
 export const ActivityGroup = styled.div`
   margin-top: ${({ $first }) => ($first ? "14px" : "12px")};
+
+  padding-left: 14px;
+  padding-right: 6px;
+  box-sizing: border-box;
 `;
 
 /* 한 줄 */
@@ -591,7 +595,7 @@ export const MenuButton = styled.button`
 export const StudyStatusWrapper = styled(CardBox)`
   width: 312px;
   height: 181px;
-  padding: 18px 20px 36px;
+  padding: 18px 20px 22px;
 `;
 
 /* 제목 */
@@ -616,6 +620,10 @@ export const StudyStatusDivider = styled.div`
 export const StudyStatusList = styled.div`
   margin-top: 8px;
 
+  padding-left: 14px;
+  padding-right: 6px;
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -632,19 +640,23 @@ export const StudyStatusRow = styled.div`
 export const StudyStatusLabel = styled.span`
   font-size: 13px;
   font-weight: ${FONT_WEIGHT.regular};
-  color: ${TEXT_COLOR.basic};
+  color: #333333;
 `;
 
 /* 퍼센트 */
 export const StudyStatusPercent = styled.span`
-  font-size: 13px;
+  min-width: 44px;
+
+  font-size: 14px;
   font-weight: ${FONT_WEIGHT.bold};
   color: ${PALETTE.primary.main};
+
+  text-align: right;
 `;
 
 /* 진행 바 */
 export const ProgressBar = styled.div`
-  width: 256px;
+  width: 100%;
   height: 7px;
   margin-top: 8px;
 
@@ -657,6 +669,8 @@ export const ProgressBar = styled.div`
 export const ProgressFill = styled.div`
   width: ${({ $percent }) => $percent}%;
   height: 100%;
+
+  border-radius: 999px;
   background: ${PALETTE.primary.main};
 `;
 
