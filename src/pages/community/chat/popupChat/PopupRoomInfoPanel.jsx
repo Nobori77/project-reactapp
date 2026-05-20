@@ -11,7 +11,7 @@ import defaultProfileImg from "../../assets/chat/chat_default_profile.svg";
 const liveVectorUrl =
   "https://www.figma.com/api/mcp/asset/79378b34-81dd-4aef-bc8a-2e9814e941b7";
 
-const PopupRoomInfoPanel = ({ profileUrl, tags }) => {
+const PopupRoomInfoPanel = ({ chatRoomInfo, tags }) => {
   const { handleLeave } = useChatContext();
   const [signToggle, setSignToggle] = useState(false);
   const [readToggle, setReadToggle] = useState(false);
@@ -20,38 +20,34 @@ const PopupRoomInfoPanel = ({ profileUrl, tags }) => {
     <S.RightPanelScroll>
       <S.PanelSection $center $gap="12px">
         <PopupChatRoomInfoThumbnail
-          src={profileUrl || defaultProfileImg}
+          src={chatRoomInfo?.chatRoomProfile || defaultProfileImg}
           alt="채팅방"
           onError={(e) => {
             e.target.src = defaultProfileImg;
           }}
         />
         <S.RoomTitleCenter>
-          <S.RoomTitleText>수어 일상 대화방</S.RoomTitleText>
+          <S.RoomTitleText>{chatRoomInfo?.chatRoomName ?? "채팅방"}</S.RoomTitleText>
           <S.StatusRow>
             <S.LiveStatusRow>
               <S.LiveDot src={liveVectorUrl} alt="" />
               <S.LiveLabel>라이브</S.LiveLabel>
             </S.LiveStatusRow>
-            <S.ParticipantCount>00명</S.ParticipantCount>
+            <S.ParticipantCount>{chatRoomInfo?.chatRoomUsers ?? 0}명</S.ParticipantCount>
           </S.StatusRow>
         </S.RoomTitleCenter>
       </S.PanelSection>
 
-      <S.PanelSection>
-        <S.SectionLabel>채팅방 소개</S.SectionLabel>
-        <S.IntroText>
-          <T.H11Regular $color={colors.textMain}>
-            수어로 일상 대화를 나누는
-          </T.H11Regular>
-          <T.H11Regular $color={colors.textMain}>
-            공간이에요. 초보자도 환영!
-          </T.H11Regular>
-          <T.H11Regular $color={colors.textMain}>
-            서로 격려하며 함께 배워요 🌱
-          </T.H11Regular>
-        </S.IntroText>
-      </S.PanelSection>
+      {chatRoomInfo?.chatRoomDetail && (
+        <S.PanelSection>
+          <S.SectionLabel>채팅방 소개</S.SectionLabel>
+          <S.IntroText>
+            <T.H11Regular $color={colors.textMain}>
+              {chatRoomInfo.chatRoomDetail}
+            </T.H11Regular>
+          </S.IntroText>
+        </S.PanelSection>
+      )}
 
       <S.PanelSection $gap="9px">
         <S.SectionLabel>태그</S.SectionLabel>

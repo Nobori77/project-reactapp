@@ -96,6 +96,7 @@ export const sideCardStyle = css`
 
 // 커뮤니티 에서 좌측 9개, 우측 3 개로 나누는 과정을 위한 Page
 export const Page = styled.div`
+  padding-top: 40px;
   background: ${theme.GRAYSCALE[10]};
   min-width: 1320px;
   margin: 0 auto;
@@ -115,6 +116,7 @@ export const ContentArea = styled.main`
   align-items: start;
   gap: 24px;
   box-sizing: border-box;
+  padding-bottom: 160px;
 `;
 
 export const LeftBlock = styled.div`

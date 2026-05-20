@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { Page, ContentArea } from "./communityStyle";
 import MainRightSide from "./common/MainRightSide";
 import { ChatProvider } from "./context/ChatContext";
+import CommunityHeader from "./common/CommunityHeader";
 
 const S = {
   Page,
@@ -15,6 +16,8 @@ const CommunityContainer = () => {
     <ChatProvider>
       <>
         <div>
+          {/* 헤더 */}
+          <CommunityHeader />
           <S.Page>
             <S.ContentArea>
               {/* 좌측 메인 */}

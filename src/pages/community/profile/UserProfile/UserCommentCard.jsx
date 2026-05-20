@@ -2,8 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { h10Regular, h11Regular, h9Bold } from "../../../../styles/common";
 import theme from "../../../../styles/theme";
-import { COMMENT, LAYOUT, RADIUS } from "../../constants";
-import { Divider } from "../../communityStyle";
+import { BORDER_STYLE, COMMENT, LAYOUT, RADIUS } from "../../constants";
+import { Divider, hoverStyle } from "../../communityStyle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { ReactionItem, ReactionsRow } from "../../comment/commentStyle";
+import { useNavigate } from "react-router-dom";
+
+const S = {
+  ReactionsRow,
+  ReactionItem,
+};
 
 // 감싸는 카드 만들기
 const UserCommentWrapper = styled.div`
@@ -19,6 +28,9 @@ const UserCommentWrapper = styled.div`
   flex-direction: column;
   padding: 16px;
   gap: 12px;
+
+  border: ${BORDER_STYLE.original};
+  ${hoverStyle}
 `;
 
 // 유저 프로필 및 댓글 내용 row 로 묶기
@@ -35,11 +47,13 @@ const UserCommentTitleAndDetail = styled.div`
 `;
 
 // 유저 프로필
-const UserCommentProfile = styled.div`
+const UserCommentProfile = styled.img`
   width: ${COMMENT.avatarSize};
   height: ${COMMENT.avatarSize};
   border-radius: ${RADIUS.smallCard};
+  object-fit: cover;
   background: gray;
+  flex-shrink: 0;
 `;
 
 // 댓글 작성자 및 댓글 내용
@@ -53,6 +67,13 @@ const UserCommentDetail = styled.div`
   color: ${theme.GRAYSCALE[9]};
 `;
 
+// 댓글 내 작성시간 및 좋아요, 답글 수 정보 묶은것
+const UserCommentStateRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+
 // 댓글 작성 시간
 const UserCommentCreateAt = styled.div`
   ${h11Regular};
@@ -60,30 +81,54 @@ const UserCommentCreateAt = styled.div`
   margin-left: 52px;
 `;
 
-// comment DTO 고려하기
-const UserCommentCard = () => {
+const formatDate = (dateStr) => {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+const UserCommentCard = ({
+  userNickname,
+  userProfile,
+  commentContent,
+  commentCreateAt,
+  commentLikeCount,
+  commentReplyCount,
+  postId,
+}) => {
+  const navigate = useNavigate();
   return (
     <div>
-      <UserCommentWrapper>
-        {/* 유저 프로필과 내용 단 row 로 감싸는 블럭 */}
+      <UserCommentWrapper onClick={() => navigate(`/community/post/${postId}`)}>
         <UserCommentMid>
-          {/* 유저 프로필 이미지 */}
-          <UserCommentProfile />
-
-          {/* 작성자 및 댓글 내용 */}
+          <UserCommentProfile src={userProfile} alt={userNickname} />
           <UserCommentTitleAndDetail>
-            <UserCommentWriter>작성자</UserCommentWriter>
-            <UserCommentDetail>
-              내용이 이렇게 있습니다. 감사합니다
-            </UserCommentDetail>
+            <UserCommentWriter>{userNickname}</UserCommentWriter>
+            <UserCommentDetail>{commentContent}</UserCommentDetail>
           </UserCommentTitleAndDetail>
         </UserCommentMid>
 
-        {/* 구분선 */}
         <Divider />
 
-        {/* 작성 시간 */}
-        <UserCommentCreateAt>5분 전</UserCommentCreateAt>
+        <UserCommentStateRow>
+          <UserCommentCreateAt>
+            {formatDate(commentCreateAt)}
+          </UserCommentCreateAt>
+
+          <S.ReactionsRow>
+            <S.ReactionItem>
+              <FontAwesomeIcon icon={faHeart} />
+              <span>{commentLikeCount}</span>
+            </S.ReactionItem>
+            <S.ReactionItem>
+              <FontAwesomeIcon icon={faCommentDots} />
+              <span>{commentReplyCount}</span>
+            </S.ReactionItem>
+          </S.ReactionsRow>
+        </UserCommentStateRow>
       </UserCommentWrapper>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { ColumnBlock } from "../communityStyle";
-import SideUserProfile from "./SideUserProfile copy";
+import SideUserProfile from "./SideUserProfile";
 import SideNotice from "./SideNotice";
 import FloatingChatButton from "./FloatingChatButton";
 import PopupChatScreen from "../chat/PopupChatScreen";

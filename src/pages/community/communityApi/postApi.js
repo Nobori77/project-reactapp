@@ -20,3 +20,11 @@ export const fetchUserPosts = async ({ page = 1, userId = 1 }) => {
   if (!res.ok) throw new Error("유저가 작성한 게시글 목록 조회 실패");
   return res.json();
 };
+
+export const fetchUserLikedPosts = async ({ page = 1, userId = 1 }) => {
+  const params = new URLSearchParams({ page });
+
+  const res = await fetch(`${ROOT_URL}/posts/user/${userId}/likes?${params}`);
+  if (!res.ok) throw new Error("유저 좋아요 게시글 목록 조회 실패");
+  return res.json();
+};

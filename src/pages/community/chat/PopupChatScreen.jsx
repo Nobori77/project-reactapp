@@ -8,72 +8,24 @@ import PopupRoomInfoPanel from "./popupChat/PopupRoomInfoPanel";
 import PopupUserInfoPanel from "./popupChat/PopupUserInfoPanel";
 import { useChatContext } from "../context/ChatContext";
 import useAuthStore from "../../../store/authStore";
-import { getChatMessages } from "../communityApi/chatApi";
+import {
+  getChatMessages,
+  getChatRoomUsers,
+  getChatRoomInfo,
+} from "../communityApi/chatApi";
 
 const WS_BASE = "ws://localhost:10000/ws/chat";
 
-const USERS = [
-  {
-    id: 1,
-    name: "이규학",
-    role: "학습자",
-    level: 7,
-    avatar:
-      "https://www.figma.com/api/mcp/asset/08386982-c82d-42f5-af37-598a6fd8785a",
-    iconProfile: true,
-    online: false,
-  },
-  {
-    id: 2,
-    name: "사용자 2",
-    role: "학습자",
-    level: 5,
-    avatar:
-      "https://www.figma.com/api/mcp/asset/83e9a63d-b47c-449f-b99b-fcf322b5e2bd",
-    iconProfile: false,
-    online: true,
-  },
-  {
-    id: 3,
-    name: "사용자 3",
-    role: "학습자",
-    level: 7,
-    avatar:
-      "https://www.figma.com/api/mcp/asset/cc784c94-994e-4a8f-91f1-23642503d8d9",
-    iconProfile: false,
-    online: true,
-  },
-  {
-    id: 4,
-    name: "사용자 4",
-    role: "학습자",
-    level: 7,
-    avatar:
-      "https://www.figma.com/api/mcp/asset/ba8e3192-8c1a-4388-baa8-a512da31e094",
-    iconProfile: false,
-    online: true,
-  },
-  {
-    id: 5,
-    name: "사용자 5",
-    role: "학습자",
-    level: 8,
-    avatar:
-      "https://www.figma.com/api/mcp/asset/6d0896e4-c001-4785-806b-e2b3e7943f21",
-    iconProfile: false,
-    online: true,
-  },
-  {
-    id: 6,
-    name: "사용자 6",
-    role: "학습자",
-    level: 7,
-    avatar:
-      "https://www.figma.com/api/mcp/asset/08386982-c82d-42f5-af37-598a6fd8785a",
-    iconProfile: true,
-    online: false,
-  },
-];
+const toDisplayUser = (userDTO) => ({
+  email: userDTO.userEmail,
+  id: userDTO.id,
+  name: userDTO.userNickname,
+  role: "학습자",
+  level: Math.max(1, Math.floor(userDTO.userExp / 100)),
+  avatar: userDTO.userProfile,
+  iconProfile: false,
+  online: false,
+});
 
 const TAGS = [
   { label: "#수어기초", bg: colors.primaryLight, color: colors.primary },
@@ -97,24 +49,57 @@ let wsMessageSeq = 0;
 const makeWsMessageId = (msg) =>
   `ws-${msg.userId}-${msg.chatCreateAt}-${++wsMessageSeq}`;
 
-const toDisplayMessage = (msg, currentUserId) => ({
-  id: msg.id ?? makeWsMessageId(msg),
-  type: msg.userId === currentUserId ? "mine" : "other",
-  sender: msg.userNickname ?? `사용자 ${msg.userId}`,
-  avatar: msg.userProfile ?? "",
-  content: msg.chatContent,
-  time: formatTime(msg.chatCreateAt),
-});
+const toDisplayMessage = (msg, currentUserId) => {
+  const {
+    id,
+    chatContent,
+    chatCreateAt,
+    chatType,
+    userNickname = "사용자",
+    userProfile = "default.jpg",
+    chatRoomId,
+    chatIsMe,
+    userId,
+  } = msg;
+
+  return {
+    id: id ?? makeWsMessageId(msg),
+    chatContent,
+    chatCreateAt: formatTime(chatCreateAt),
+    chatType,
+    userNickname,
+    userProfile,
+    chatRoomId,
+    // WS 메시지는 chatIsMe를 직접 제공, REST 초기 로딩은 userId 비교로 판별
+    chatIsMe: chatIsMe ?? (currentUserId != null && userId === currentUserId),
+  };
+};
 
 const PopupChatScreen = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [chatRoomInfo, setChatRoomInfo] = useState(null);
   const { activeChatRoom } = useChatContext();
   const { user } = useAuthStore();
   const wsRef = useRef(null);
 
   const chatRoomId = activeChatRoom?.id;
   const currentUserId = user?.id;
+
+  useEffect(() => {
+    if (!chatRoomId) return;
+    getChatRoomInfo(chatRoomId)
+      .then(setChatRoomInfo)
+      .catch((err) => console.error("채팅방 정보 불러오기 실패:", err));
+  }, [chatRoomId]);
+
+  useEffect(() => {
+    if (!chatRoomId) return;
+    getChatRoomUsers(chatRoomId)
+      .then((data) => setUsers(data.map(toDisplayUser)))
+      .catch((err) => console.error("유저 목록 불러오기 실패:", err));
+  }, [chatRoomId]);
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -142,7 +127,10 @@ const PopupChatScreen = () => {
       ws.onmessage = (event) => {
         try {
           const msg = JSON.parse(event.data);
-          setMessages((prev) => [...prev, toDisplayMessage(msg, currentUserId)]);
+          setMessages((prev) => [
+            ...prev,
+            toDisplayMessage(msg, currentUserId),
+          ]);
         } catch (e) {
           console.error("WS 메시지 파싱 실패:", e);
         }
@@ -175,19 +163,20 @@ const PopupChatScreen = () => {
   );
 
   const handleUserClick = (user) => {
-    setSelectedUser((prev) => (prev?.id === user.id ? null : user));
+    setSelectedUser((prev) => (prev?.email === user.email ? null : user));
   };
 
   return (
     <S.PageBg>
       <S.Popup>
-        <PopupChatHeader />
+        <PopupChatHeader chatRoomInfo={chatRoomInfo} />
         <S.Body>
           <PopupParticipantList
-            users={USERS}
-            selectedUserId={selectedUser?.id}
+            users={users}
+            selectedUserEmail={selectedUser?.email}
             onUserClick={handleUserClick}
           />
+          {/* 채팅 메세지 나열되는 곳 */}
           <PopupChatCenter
             messages={messages}
             onSendMessage={handleSendMessage}
@@ -199,7 +188,7 @@ const PopupChatScreen = () => {
                 onClose={() => setSelectedUser(null)}
               />
             ) : (
-              <PopupRoomInfoPanel tags={TAGS} />
+              <PopupRoomInfoPanel chatRoomInfo={chatRoomInfo} tags={TAGS} />
             )}
           </S.RightPanel>
         </S.Body>

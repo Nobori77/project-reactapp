@@ -7,6 +7,9 @@ import { flexCenterRow } from "../../../styles/common";
 import { useChatContext } from "../context/ChatContext";
 import { getChatRooms } from "../communityApi/chatApi";
 
+import LiveChatCardCandidate1 from "../chat/chatComponents/chatCardCandidate/LiveChatCardCandidate1.jsx";
+import LiveChatCardCandidate2 from "../chat/chatComponents/chatCardCandidate/LiveChatCardCandidate2.jsx";
+
 const HeaderBlock = styled.div`
   ${flexCenterRow}
   justify-content: space-between;
@@ -33,7 +36,7 @@ const CommunityChatComponent = () => {
 
         <RowBlock flexWrap="wrap">
           {rooms.map((room) => (
-            <LiveChatCard
+            <LiveChatCardCandidate2
               key={room.id}
               chatRoomName={room.chatRoomName}
               chatRoomDetail={room.chatRoomDetail}
