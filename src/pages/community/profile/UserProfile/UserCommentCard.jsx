@@ -4,6 +4,14 @@ import { h10Regular, h11Regular, h9Bold } from "../../../../styles/common";
 import theme from "../../../../styles/theme";
 import { COMMENT, LAYOUT, RADIUS } from "../../constants";
 import { Divider } from "../../communityStyle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { ReactionItem, ReactionsRow } from "../../comment/commentStyle";
+
+const S = {
+  ReactionsRow,
+  ReactionItem,
+};
 
 // 감싸는 카드 만들기
 const UserCommentWrapper = styled.div`
@@ -55,6 +63,13 @@ const UserCommentDetail = styled.div`
   color: ${theme.GRAYSCALE[9]};
 `;
 
+// 댓글 내 작성시간 및 좋아요, 답글 수 정보 묶은것
+const UserCommentStateRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+
 // 댓글 작성 시간
 const UserCommentCreateAt = styled.div`
   ${h11Regular};
@@ -76,6 +91,8 @@ const UserCommentCard = ({
   userProfile,
   commentContent,
   commentCreateAt,
+  commentLikeCount,
+  commentReplyCount,
 }) => {
   return (
     <div>
@@ -90,7 +107,22 @@ const UserCommentCard = ({
 
         <Divider />
 
-        <UserCommentCreateAt>{formatDate(commentCreateAt)}</UserCommentCreateAt>
+        <UserCommentStateRow>
+          <UserCommentCreateAt>
+            {formatDate(commentCreateAt)}
+          </UserCommentCreateAt>
+
+          <S.ReactionsRow>
+            <S.ReactionItem>
+              <FontAwesomeIcon icon={faHeart} />
+              <span>{commentLikeCount}</span>
+            </S.ReactionItem>
+            <S.ReactionItem>
+              <FontAwesomeIcon icon={faCommentDots} />
+              <span>{commentReplyCount}</span>
+            </S.ReactionItem>
+          </S.ReactionsRow>
+        </UserCommentStateRow>
       </UserCommentWrapper>
     </div>
   );

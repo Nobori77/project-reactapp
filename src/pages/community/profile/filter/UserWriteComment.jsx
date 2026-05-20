@@ -43,18 +43,41 @@ const UserWriteComment = () => {
 
   if (isLoading) return <div>로딩 중...</div>;
 
+  //  "id": 11,
+  //       "commentContent": "정말 유익한 정보 감사해요. 통역사 준비 파이팅!",
+  //       "commentCreateAt": "2026-03-18T15:00:00",
+  //       "commentLikeCount": 4,
+  //       "commentReplyCount": 1,
+  //       "userNickname": "minjun_k",
+  //       "userProfile": "https://gi.esmplus.com/cjfals1015/eum/userProfile/thumbnail/default1.png",
+  //       "postId": 7,
+  //       "userId": 1,
+  //       "commentId": null
+
   return (
     <div>
       <Wrapper>
-        {comments.map((comment) => (
-          <UserCommentCard
-            key={comment.id}
-            userNickname={comment.userNickname}
-            userProfile={comment.userProfile}
-            commentContent={comment.commentContent}
-            commentCreateAt={comment.commentCreateAt}
-          />
-        ))}
+        {comments.map(
+          ({
+            id,
+            userNickname,
+            userProfile,
+            commentContent,
+            commentCreateAt,
+            commentReplyCount,
+            commentLikeCount,
+          }) => (
+            <UserCommentCard
+              key={id}
+              userNickname={userNickname}
+              userProfile={userProfile}
+              commentContent={commentContent}
+              commentCreateAt={commentCreateAt}
+              commentReplyCount={commentReplyCount}
+              commentLikeCount={commentLikeCount}
+            />
+          ),
+        )}
         {totalPages > 1 && (
           <PageCount
             totalPages={totalPages}
