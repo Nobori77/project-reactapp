@@ -8,7 +8,11 @@ import PopupRoomInfoPanel from "./popupChat/PopupRoomInfoPanel";
 import PopupUserInfoPanel from "./popupChat/PopupUserInfoPanel";
 import { useChatContext } from "../context/ChatContext";
 import useAuthStore from "../../../store/authStore";
-import { getChatMessages, getChatRoomUsers, getChatRoomInfo } from "../communityApi/chatApi";
+import {
+  getChatMessages,
+  getChatRoomUsers,
+  getChatRoomInfo,
+} from "../communityApi/chatApi";
 
 const WS_BASE = "ws://localhost:10000/ws/chat";
 
@@ -172,6 +176,7 @@ const PopupChatScreen = () => {
             selectedUserEmail={selectedUser?.email}
             onUserClick={handleUserClick}
           />
+          {/* 채팅 메세지 나열되는 곳 */}
           <PopupChatCenter
             messages={messages}
             onSendMessage={handleSendMessage}
