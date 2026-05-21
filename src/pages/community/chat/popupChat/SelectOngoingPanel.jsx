@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SelectRightPanel,
   PanelHeader,
@@ -17,6 +17,7 @@ import {
   OngoingLastMsg,
 } from "../ChatStyle";
 import useJoinedChatRoomList from "../hooks/useJoinedChatRoomList";
+import { useChatContext } from "../../context/ChatContext";
 
 const S = {
   SelectRightPanel,
@@ -38,6 +39,8 @@ const S = {
 
 const SelectOngoingPanel = () => {
   const { rooms, isLoading, hasMore, loaderRef } = useJoinedChatRoomList();
+  const { handleSelectRoom } = useChatContext();
+  const [activeRoom, setActiveRoom] = useState(null);
 
   return (
     <S.SelectRightPanel>
@@ -58,7 +61,14 @@ const SelectOngoingPanel = () => {
         ) : (
           <>
             {rooms.map((room) => (
-              <S.OngoingRoomItem key={room.id}>
+              <S.OngoingRoomItem
+                key={room.id}
+                $active={activeRoom === room.id}
+                onClick={() => {
+                  setActiveRoom(room.id);
+                  handleSelectRoom(room);
+                }}
+              >
                 <S.OngoingProfileBox />
                 <S.OngoingRoomInfo>
                   <S.OngoingRoomTopRow>
