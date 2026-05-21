@@ -4,33 +4,64 @@ const PRIMARY = "#4359fc";
 
 export const PageWrap = styled.div`
   min-height: 100vh;
+  background: #f5f5f7;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+`;
+
+export const Hero = styled.div`
   background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Pretendard', sans-serif;
-  padding: 60px 20px;
-`;
-
-export const LoginBox = styled.div`
-  width: 100%;
-  max-width: 400px;
-`;
-
-export const BrandLogo = styled.div`
+  border-bottom: 1px solid #eee;
+  padding: 48px 0 40px;
   text-align: center;
-  margin-bottom: 40px;
+`;
+
+export const HeroTitle = styled.h1`
+  font-size: 26px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+`;
+
+export const HeroSub = styled.p`
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+`;
+
+export const ContentArea = styled.div`
+  max-width: 900px;
+  margin: 40px auto 80px;
+  padding: 0 20px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+`;
+
+export const LoginCard = styled.div`
+  flex: 1;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 36px 32px;
+`;
+
+export const CardTitle = styled.h2`
+  font-size: 17px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 24px;
 `;
 
 export const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 16px;
 `;
 
 export const Label = styled.label`
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #555;
   margin-bottom: 4px;
@@ -39,10 +70,10 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   width: 100%;
-  padding: 14px 16px;
+  padding: 10px 14px;
   border: 1.5px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 15px;
+  border-radius: 8px;
+  font-size: 14px;
   color: #111;
   outline: none;
   box-sizing: border-box;
@@ -59,50 +90,36 @@ export const Input = styled.input`
 
 export const PrimaryBtn = styled.button`
   width: 100%;
-  padding: 14px;
-  background: #111;
+  padding: 12px;
+  background: ${PRIMARY};
   color: #fff;
   border: none;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  margin-bottom: 12px;
-  font-family: 'Pretendard', sans-serif;
-  transition: background 0.15s;
-
-  &:hover { background: #333; }
-  &:disabled { opacity: 0.6; cursor: not-allowed; }
+  margin-bottom: 8px;
 `;
 
-export const TextLinkRow = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 28px;
-`;
-
-export const TextLink = styled.button`
-  background: none;
-  border: none;
-  font-size: 13px;
-  color: #888;
+export const OutlineBtn = styled.button`
+  width: 100%;
+  padding: 12px;
+  background: #fff;
+  color: ${PRIMARY};
+  border: 1.5px solid ${PRIMARY};
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  padding: 0;
-  font-family: 'Pretendard', sans-serif;
-
-  &:hover {
-    color: #444;
-    text-decoration: underline;
-  }
+  margin-bottom: 16px;
 `;
 
 export const Divider = styled.div`
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   color: #bbb;
   position: relative;
-  margin: 0 0 16px;
+  margin: 4px 0 16px;
 
   &::before, &::after {
     content: '';
@@ -116,60 +133,52 @@ export const Divider = styled.div`
   &::after { right: 0; }
 `;
 
-export const SocialTitle = styled.div`
-  text-align: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 16px;
-`;
-
-export const SocialIconRow = styled.div`
+export const SocialBtnRow = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 14px;
-  margin-bottom: 8px;
+  flex-direction: column;
+  gap: 8px;
 `;
 
-export const SocialIconBtn = styled.button`
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 1.5px solid ${({ $outline }) => ($outline ? '#e0e0e0' : 'transparent')};
-  background: ${({ $bg }) => $bg || '#fff'};
+export const SocialBtn = styled.button`
+  width: 100%;
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  font-size: 17px;
-  font-weight: 800;
-  color: ${({ $color }) => $color || '#111'};
-  font-family: 'Pretendard', sans-serif;
-  transition: transform 0.15s, box-shadow 0.15s;
+  gap: 8px;
+  border: 1.5px solid ${({ $outline }) => ($outline ? "#e0e0e0" : "transparent")};
+  background: ${({ $bg }) => $bg || "#fff"};
+  color: ${({ $color }) => $color || "#111"};
+`;
 
-  &:hover {
-    transform: scale(1.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+export const FindPwLink = styled.button`
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 12px;
+  text-decoration: underline;
 `;
 
 export const FindPwCard = styled.div`
-  margin-top: 24px;
-  background: #f9f9fc;
+  width: 320px;
+  flex-shrink: 0;
+  background: #fff;
   border: 1px solid #eee;
-  border-radius: 14px;
-  padding: 24px;
-`;
-
-export const CardTitle = styled.h2`
-  font-size: 17px;
-  font-weight: 700;
-  color: #111;
-  margin: 0 0 20px;
+  border-radius: 16px;
+  padding: 28px 24px;
 `;
 
 export const StepLabel = styled.div`
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   color: ${PRIMARY};
   margin-bottom: 8px;
@@ -195,35 +204,21 @@ export const InlineRow = styled.div`
 
 export const SmallInput = styled(Input)`
   flex: 1;
-  padding: 10px 14px;
-  font-size: 14px;
 `;
 
 export const SmallBtn = styled.button`
   padding: 10px 14px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
   border: none;
-  background: ${({ $green }) => ($green ? '#03C75A' : PRIMARY)};
+  background: ${({ $green }) => ($green ? "#03C75A" : PRIMARY)};
   color: #fff;
-  font-family: 'Pretendard', sans-serif;
 `;
 
-export const ChangeBtn = styled.button`
-  width: 100%;
-  padding: 13px;
-  background: ${PRIMARY};
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
+export const ChangeBtn = styled(PrimaryBtn)`
   margin-top: 16px;
-  font-family: 'Pretendard', sans-serif;
-
-  &:hover { background: #2e47e0; }
+  margin-bottom: 0;
 `;

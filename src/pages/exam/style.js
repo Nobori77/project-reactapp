@@ -8,7 +8,7 @@ export const LIGHT_GRAY = "#f5f5f7";
 
 export const styles = {
   page: {
-    fontFamily: "'Pretendard', sans-serif",
+    fontFamily: "'Pretendard', 'Noto Sans KR', sans-serif",
     minHeight: "100vh",
     background: LIGHT_GRAY,
     color: TEXT_BLACK,
@@ -106,7 +106,7 @@ export const styles = {
     margin: "0 0 8px",
     letterSpacing: "-0.5px",
   },
-  heroSub: { fontSize: 13, color: GRAY, margin: 0 },
+  heroSub: { fontSize: 12, color: GRAY, margin: 0 },
   heroIllust: {
     width: 80,
     height: 80,
@@ -125,12 +125,12 @@ export const styles = {
     display: "flex",
     alignItems: "center",
     gap: 10,
-    fontSize: 13,
-    fontWeight: 400,
+    fontSize: 12,
+    fontWeight: 500,
     color: DARK_BLUE,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 700,
     color: "#111",
     margin: "0 0 14px",
@@ -161,8 +161,8 @@ export const styles = {
     justifyContent: "center",
     flexShrink: 0,
   },
-  infoCardTitle: { fontSize: 15, fontWeight: 700, color: TEXT_BLACK },
-  infoCardSub: { fontSize: 12, color: GRAY, marginTop: 2 },
+  infoCardTitle: { fontSize: 14, fontWeight: 700, color: TEXT_BLACK },
+  infoCardSub: { fontSize: 11, color: GRAY, marginTop: 2 },
   infoCardArrow: (active = false) => ({ fontSize: 18, color: active ? PRIMARY : "#ccc" }),
 };
 
@@ -174,7 +174,7 @@ export const SidebarAside = styled.aside`
   background: #fff;
   border-radius: 14px;
   border: 1px solid #eee;
-  padding: 10px 0;
+  padding: 20px 0;
   position: sticky;
   top: 88px;
 `;
@@ -195,7 +195,7 @@ export const SlidingBar = styled.div`
 `;
 
 export const SidebarCategory = styled.div`
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #aaa;
   padding: 12px 20px 6px;
@@ -210,7 +210,7 @@ export const SidebarItem = styled.button`
   border: none;
   border-left: 3px solid transparent;
   padding: 9px 20px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: ${({ $active }) => ($active ? 700 : 400)};
   color: ${({ $active }) => ($active ? PRIMARY : TEXT_BLACK)};
   cursor: pointer;

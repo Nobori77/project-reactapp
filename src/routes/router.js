@@ -28,7 +28,6 @@ import CommunityContainer from "../pages/community/CommunityContainer";
 import LoginContainer from "../pages/auth/login/LoginContainer";
 import JoinContainer from "../pages/auth/join/JoinContainer";
 import SocialJoinContainer from "../pages/auth/social-join/SocialJoinContainer";
-import FindAccountContainer from "../pages/auth/find-account/FindAccountContainer";
 import CommunityChatContainer from "../pages/community/chat/CommunityChatContainer";
 import CommunityPostContainer from "../pages/community/post/CommunityPostContainer";
 import CommunityPostWriteContainer from "../pages/community/post/write/CommunityPostWriteContainer";
@@ -333,24 +332,20 @@ const router = createBrowserRouter([
           }
         ]
       },
+      {
+        path: "login",
+        element: <LoginContainer />
+      },
+      {
+        path: "join",
+        element: <JoinContainer />
+      },
+      {
+        path: "social-join",
+        element: <SocialJoinContainer />
+      }
     ]
   },
-  {
-    path: "/login",
-    element: <LoginContainer />
-  },
-  {
-    path: "/join",
-    element: <JoinContainer />
-  },
-  {
-    path: "/social-join",
-    element: <SocialJoinContainer />
-  },
-  {
-    path: "/find-account",
-    element: <FindAccountContainer />
-  }
 ])
 
 export default router;

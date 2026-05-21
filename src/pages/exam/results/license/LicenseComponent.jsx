@@ -1,11 +1,8 @@
 import { useState } from "react";
 import * as S from "./style";
-import { formatExamNo, formatBirth } from "../../inputFormat";
 
 const LicenseComponent = () => {
   const [cert, setCert] = useState(null);
-  const [examNo, setExamNo] = useState("");
-  const [birth, setBirth] = useState("");
 
   const handleSearch = () => {
     setCert({
@@ -21,18 +18,8 @@ const LicenseComponent = () => {
     <S.Wrapper>
       <S.SectionTitle style={{ marginBottom: 16 }}>합격증 조회</S.SectionTitle>
       <S.SearchRow>
-        <S.SearchInput
-          $flex={2}
-          placeholder="수험번호 예: 2025-01-00001"
-          value={examNo}
-          onChange={e => setExamNo(formatExamNo(e.target.value))}
-        />
-        <S.SearchInput
-          $flex={1}
-          placeholder="생년월일 YYYY-MM-DD"
-          value={birth}
-          onChange={e => setBirth(formatBirth(e.target.value))}
-        />
+        <S.SearchInput $flex={2} placeholder="수험번호 예: 2025-01-00001" />
+        <S.SearchInput $flex={1} placeholder="생년월일 YYYYMMDD" />
         <S.SearchBtn onClick={handleSearch}>조회하기</S.SearchBtn>
       </S.SearchRow>
 
