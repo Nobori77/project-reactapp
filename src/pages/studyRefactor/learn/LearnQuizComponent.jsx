@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { submitQuizAnswers } from "../apis/QuizApi";
 import { StudyQuizContext } from "../context/StudyQuizContext";
 import { useStudyUser } from "../hooks/useStudyUser";
-import { mapQuizAnswersForSubmit } from "../mappers/quizMapper";
+import { canSubmitQuizAnswers, mapQuizAnswersForSubmit } from "../mappers/quizMapper";
 import { getLearnQuiz } from "./data/learnQuizMock";
 import LearnQuizFeedback from "./parts/LearnQuizFeedback";
 import LearnQuizOptionCard from "./parts/LearnQuizOptionCard";
@@ -18,7 +18,7 @@ const LearnQuizComponent = () => {
     state,
     actions: { setQuiz, selectAnswer, setResult },
   } = useContext(StudyQuizContext);
-  const { userId } = useStudyUser();
+  const { userId, isGuest } = useStudyUser();
 
   const quiz = useMemo(() => getLearnQuiz(type), [type]);
   const currentIndex = Math.max(Number(id) - 1, 0);
@@ -71,6 +71,18 @@ const LearnQuizComponent = () => {
 
   // 퀴즈완료함수: 마지막 복습까지 끝나면 백엔드 저장을 시도하고 학습 화면으로 돌아갑니다.
   const handleFinish = async () => {
+    if (isGuest || !userId || !canSubmitQuizAnswers(quiz.id, state.answers)) {
+      setResult({
+        quizId: quiz.id,
+        completed: true,
+        submitted: false,
+        reason: isGuest || !userId ? "guest" : "mock",
+        finishedAt: new Date().toISOString(),
+      });
+      navigate("/study/learn");
+      return;
+    }
+
     const answers = mapQuizAnswersForSubmit(state.answers);
 
     try {

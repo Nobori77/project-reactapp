@@ -19,8 +19,12 @@ export const mapQuizQuestion = (question, choices = []) => {
 
 export const mapQuizAnswersForSubmit = (answers = []) =>
   answers.map((answer) => ({
-    questionId: answer.questionId,
-    choiceId: answer.selectedId || answer.answerId,
-    answerId: answer.selectedId || answer.answerId,
-    correct: answer.isCorrect ?? answer.correct ?? false,
+    quizQuestionId: answer.questionId,
+    quizChoiceId: answer.selectedId || answer.answerId,
   }));
+
+// 퀴즈제출가능확인: 백엔드가 받을 수 있는 숫자 id 답안인지 확인합니다.
+export const canSubmitQuizAnswers = (quizId, answers = []) =>
+  Number.isFinite(Number(quizId)) &&
+  answers.length > 0 &&
+  answers.every((answer) => Number.isFinite(Number(answer.questionId)) && Number.isFinite(Number(answer.selectedId || answer.answerId)));

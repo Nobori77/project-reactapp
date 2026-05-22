@@ -7,7 +7,7 @@ import QuizProgress from "../components/QuizProgress";
 import QuizShell from "../components/QuizShell";
 import { submitQuizAnswers } from "../apis/QuizApi";
 import { StudyQuizContext } from "../context/StudyQuizContext";
-import { mapQuizAnswersForSubmit } from "../mappers/quizMapper";
+import { canSubmitQuizAnswers, mapQuizAnswersForSubmit } from "../mappers/quizMapper";
 import { useStudyUser } from "../hooks/useStudyUser";
 import { chapterQuizMock } from "./data/chapterQuizMock";
 import * as S from "./style";
@@ -16,7 +16,7 @@ const StudyChapterQuizComponent = () => {
   const navigate = useNavigate();
   const { quiz, id } = useParams();
   const { state, actions } = useContext(StudyQuizContext);
-  const { userId } = useStudyUser();
+  const { userId, isGuest } = useStudyUser();
   const [selectedOption, setSelectedOption] = useState(null);
   const chapter = chapterQuizMock.find((item) => item.id === quiz);
   const currentIndex = Math.max(Number(id || 1) - 1, 0);
@@ -66,6 +66,17 @@ const StudyChapterQuizComponent = () => {
   // 퀴즈제출함수: 마지막 문제 이후 백엔드에 답안을 저장합니다.
   const submitChapterQuiz = async () => {
     if (!chapter) return;
+
+    if (isGuest || !userId || !canSubmitQuizAnswers(chapter.id, state.answers)) {
+      actions.setResult({
+        quizId: chapter.id,
+        completed: true,
+        submitted: false,
+        reason: isGuest || !userId ? "guest" : "mock",
+        finishedAt: new Date().toISOString(),
+      });
+      return;
+    }
 
     const answers = mapQuizAnswersForSubmit(state.answers);
 

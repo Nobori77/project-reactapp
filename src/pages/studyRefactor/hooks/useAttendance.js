@@ -6,7 +6,7 @@ import { mapAttendanceSummary } from "../mappers/attendanceMapper";
 import { useStudyUser } from "./useStudyUser";
 
 export const useAttendance = () => {
-  const { userId } = useStudyUser();
+  const { userId, isGuest } = useStudyUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [summary, setSummary] = useState(attendanceMock);
@@ -18,6 +18,17 @@ export const useAttendance = () => {
     const loadAttendance = async () => {
       setLoading(true);
       setError(null);
+
+      if (isGuest || !userId) {
+        setSummary({
+          ...attendanceMock,
+          checkedToday: false,
+          todayLabel: "로그인 후 출석체크 가능",
+        });
+        setError("로그인 후 실제 출석 정보를 확인할 수 있어요.");
+        setLoading(false);
+        return;
+      }
 
       try {
         const data = await fetchAttendanceSummary(userId);
@@ -37,7 +48,7 @@ export const useAttendance = () => {
     return () => {
       ignore = true;
     };
-  }, [userId]);
+  }, [isGuest, userId]);
 
   return {
     loading,

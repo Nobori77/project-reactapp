@@ -312,6 +312,187 @@ export const NextChapter = styled.button`
   }
 `;
 
+export const LearnDetailPanel = styled.section`
+  width: calc(100% - 120px);
+  margin: 0 auto 40px;
+  padding: 22px;
+  border: 1px solid #e5e8f2;
+  border-radius: 8px;
+  background: #fbfcff;
+
+  @media (max-width: 760px) {
+    width: calc(100% - 40px);
+  }
+`;
+
+export const LearnDetailHead = styled.header`
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+
+  span {
+    display: block;
+    margin-bottom: 7px;
+    color: #4359fc;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  strong {
+    display: block;
+    color: #1f2430;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.35;
+  }
+
+  em {
+    color: #888;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 800;
+  }
+`;
+
+export const DetailNotice = styled.p`
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fff7ed;
+  color: #d97706;
+  font-size: 13px;
+  font-weight: 800;
+`;
+
+export const WordCardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const WordCardButton = styled.button`
+  display: grid;
+  gap: 8px;
+  min-height: 116px;
+  padding: 16px;
+  border: 1px solid ${({ $active }) => ($active ? "#4359fc" : "#e1e6f2")};
+  border-radius: 8px;
+  background: ${({ $active }) => ($active ? "#eef1ff" : "#fff")};
+  text-align: left;
+  cursor: pointer;
+
+  strong {
+    color: #1f2430;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  span {
+    width: fit-content;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #f2f4ff;
+    color: #4359fc;
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  p {
+    margin: 0;
+    color: #777f8e;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+`;
+
+export const DetailEmpty = styled.p`
+  margin: 0;
+  padding: 22px;
+  border: 1px dashed #cfd6ff;
+  border-radius: 8px;
+  color: #8893b0;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+`;
+
+export const VideoPreviewCard = styled.article`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 18px;
+  align-items: center;
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 0 1px #e6eaf5 inset;
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const VideoText = styled.div`
+  min-width: 0;
+
+  span {
+    display: block;
+    margin-bottom: 8px;
+    color: #4359fc;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  strong {
+    display: block;
+    color: #1f2430;
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.35;
+  }
+
+  p {
+    margin: 10px 0 0;
+    color: #777f8e;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+`;
+
+export const VideoBox = styled.div`
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  background: #eef1ff;
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+export const FinishWordButton = styled.button`
+  grid-column: 1 / -1;
+  justify-self: end;
+  height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #4359fc;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+`;
+
 export const QuestPanel = styled.aside`
   align-self: start;
   margin-top: 0;
