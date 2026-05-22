@@ -11,21 +11,7 @@ const SERVICE_READY_MESSAGE = "\uc11c\ube44\uc2a4 \uc900\ube44\uc911\uc785\ub2c8
 const LearnComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    data,
-    loading,
-    error,
-    wordLoading,
-    wordError,
-    selectedLearnId,
-    selectedLessonTitle,
-    words,
-    selectedWord,
-    selectedVideo,
-    handleSelectLearn,
-    handleSelectWord,
-    handleFinishWord,
-  } = useLearn();
+  const { data, loading, error } = useLearn();
   const [activeType, setActiveType] = useState(location.state?.activeType || "sign");
   const roadmap = data.roadmaps[activeType] || data.roadmaps.sign;
   const currentMenus = useMemo(
@@ -40,7 +26,12 @@ const LearnComponent = () => {
   // 레슨 시작 함수: 선택한 학습 경로로 이동합니다.
   const handleStartLesson = (lesson) => {
     if (activeType === "sign" && Number.isFinite(Number(lesson.id))) {
-      handleSelectLearn(lesson);
+      navigate("/study/learn/quiz/greeting/questions/1", {
+        state: {
+          eduId: lesson.id,
+          lessonTitle: lesson.title,
+        },
+      });
       return;
     }
 
@@ -119,56 +110,6 @@ const LearnComponent = () => {
               <span>{roadmap.chapter.nextDesc} {"\u2192"}</span>
             </S.NextChapter>
 
-            {(selectedLearnId || wordLoading || wordError) && (
-              <S.LearnDetailPanel>
-                <S.LearnDetailHead>
-                  <div>
-                    <span>학습 자료</span>
-                    <strong>{selectedLessonTitle || "선택한 학습"}</strong>
-                  </div>
-                  {wordLoading && <em>불러오는 중</em>}
-                </S.LearnDetailHead>
-
-                {wordError && <S.DetailNotice>{wordError}</S.DetailNotice>}
-
-                {words.length > 0 ? (
-                  <S.WordCardGrid>
-                    {words.map((word) => (
-                      <S.WordCardButton
-                        type="button"
-                        key={word.id}
-                        $active={selectedWord?.id === word.id}
-                        onClick={() => handleSelectWord(word)}
-                      >
-                        <strong>{word.wordsTitle}</strong>
-                        <span>{word.wordsType || "수어"}</span>
-                        <p>{word.wordsDetail}</p>
-                      </S.WordCardButton>
-                    ))}
-                  </S.WordCardGrid>
-                ) : (
-                  !wordLoading && <S.DetailEmpty>등록된 단어가 아직 없어요.</S.DetailEmpty>
-                )}
-
-                {selectedVideo && (
-                  <S.VideoPreviewCard>
-                    <S.VideoText>
-                      <span>영상 미리보기</span>
-                      <strong>{selectedVideo.eduVideoTitle}</strong>
-                      <p>{selectedVideo.eduVideoDetail}</p>
-                    </S.VideoText>
-                    <S.VideoBox>
-                      <video controls src={selectedVideo.eduVideoUrl}>
-                        수어 영상을 재생할 수 없어요.
-                      </video>
-                    </S.VideoBox>
-                    <S.FinishWordButton type="button" onClick={handleFinishWord}>
-                      학습 완료 기록하기
-                    </S.FinishWordButton>
-                  </S.VideoPreviewCard>
-                )}
-              </S.LearnDetailPanel>
-            )}
           </S.ChapterPanel>
         </S.MainArea>
 

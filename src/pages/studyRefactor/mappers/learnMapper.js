@@ -6,8 +6,8 @@ export const mapLearnItem = (learn, index = 0) => ({
   requiredDia: learn.eduDia || 0,
   status: index === 0 ? "active" : "locked",
   badge: index === 0 ? "★" : "★",
-  buttonText: index === 0 ? "시작" : "잠금",
-  to: index === 0 ? "/study/learn/quiz/greeting/questions/1" : null,
+  buttonText: index === 0 ? "시작 →" : "잠금",
+  to: null,
 });
 
 export const mapLearnList = (learnList = []) => learnList.map(mapLearnItem);

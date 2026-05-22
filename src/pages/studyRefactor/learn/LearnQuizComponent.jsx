@@ -1,6 +1,7 @@
 ﻿// 학습퀴즈컴포넌트: 문제 풀이, 정답 확인, 오답 복습 흐름을 담당합니다.
 import { useContext, useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { fetchEduVideoById, fetchWordsByLearnId, finishLearnWord } from "../apis/LearnApi";
 import { submitQuizAnswers } from "../apis/QuizApi";
 import { StudyQuizContext } from "../context/StudyQuizContext";
 import { useStudyUser } from "../hooks/useStudyUser";
@@ -13,6 +14,7 @@ import * as S from "./style";
 
 const LearnQuizComponent = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { type = "greeting", id = "1" } = useParams();
   const {
     state,
@@ -20,11 +22,111 @@ const LearnQuizComponent = () => {
   } = useContext(StudyQuizContext);
   const { userId, isGuest } = useStudyUser();
 
-  const quiz = useMemo(() => getLearnQuiz(type), [type]);
+  const routeEduId = location.state?.eduId;
+  const lessonTitle = location.state?.lessonTitle;
+  const [sessionWords, setSessionWords] = useState([]);
+  const [sessionVideos, setSessionVideos] = useState({});
+  const [sessionLoading, setSessionLoading] = useState(false);
+  const [sessionError, setSessionError] = useState(null);
+  const baseQuiz = useMemo(() => getLearnQuiz(type), [type]);
+  const quiz = useMemo(() => {
+    if (sessionWords.length === 0) return baseQuiz;
+
+    return {
+      ...baseQuiz,
+      id: routeEduId || baseQuiz.id,
+      title: lessonTitle || baseQuiz.title,
+      questions: sessionWords.map((word, index) => {
+        const fallback = baseQuiz.questions[index % baseQuiz.questions.length];
+        const correctLabel = word.wordsTitle || fallback.targetWord || fallback.options.find((option) => option.correct)?.label;
+        const wrongOptions = baseQuiz.questions
+          .flatMap((item) => item.options)
+          .filter((option) => option.label !== correctLabel)
+          .slice(0, 2)
+          .map((option, optionIndex) => ({
+            ...option,
+            id: `wrong-${word.id}-${optionIndex}`,
+            correct: false,
+          }));
+
+        return {
+          ...fallback,
+          id: word.id,
+          title: `다음 중 어느 수어가 "${correctLabel}"인가요?`,
+          targetWord: correctLabel,
+          hint: word.wordsDetail || fallback.hint,
+          word,
+          video: sessionVideos[word.id],
+          options: [
+            ...wrongOptions,
+            {
+              id: word.id,
+              label: correctLabel,
+              desc: word.wordsDetail || "학습한 수어 표현이에요.",
+              icon: "👋",
+              correct: true,
+            },
+          ],
+          feedback: {
+            ...fallback.feedback,
+            correct: `"${correctLabel}" 표현을 잘 골랐어요.`,
+            incorrect: `정답은 "${correctLabel}"이에요.`,
+            reviewTitle: correctLabel,
+            reviewDesc: word.wordsDetail || fallback.feedback.reviewDesc,
+          },
+        };
+      }),
+    };
+  }, [baseQuiz, lessonTitle, routeEduId, sessionVideos, sessionWords]);
   const currentIndex = Math.max(Number(id) - 1, 0);
   const question = quiz.questions[currentIndex] || quiz.questions[0];
   const [selectedOptionId, setSelectedOptionId] = useState(null);
   const [status, setStatus] = useState("solving");
+
+  // 세션자료조회함수: 학습 시작 시 단어와 영상을 불러와 문제형 세션으로 구성합니다.
+  useEffect(() => {
+    if (!routeEduId) return;
+
+    let ignore = false;
+
+    const loadSession = async () => {
+      setSessionLoading(true);
+      setSessionError(null);
+
+      try {
+        const words = await fetchWordsByLearnId(routeEduId);
+        if (ignore) return;
+        setSessionWords(words || []);
+
+        const videoEntries = await Promise.all(
+          (words || [])
+            .filter((word) => word.eduVideoId)
+            .map(async (word) => {
+              try {
+                const video = await fetchEduVideoById(word.eduVideoId);
+                return [word.id, video];
+              } catch {
+                return [word.id, null];
+              }
+            })
+        );
+
+        if (!ignore) {
+          setSessionVideos(Object.fromEntries(videoEntries.filter(([, video]) => video)));
+        }
+      } catch {
+        if (!ignore) setSessionError("학습 세션을 불러오지 못해 임시 문제를 보여주고 있어요.");
+      } finally {
+        if (!ignore) setSessionLoading(false);
+      }
+    };
+
+    loadSession();
+
+    return () => {
+      ignore = true;
+    };
+  }, [routeEduId]);
 
   // 퀴즈초기화: URL의 퀴즈 종류가 바뀌면 컨텍스트에 문제 목록을 저장합니다.
   useEffect(() => {
@@ -71,6 +173,14 @@ const LearnQuizComponent = () => {
 
   // 퀴즈완료함수: 마지막 복습까지 끝나면 백엔드 저장을 시도하고 학습 화면으로 돌아갑니다.
   const handleFinish = async () => {
+    if (question?.word?.eduWordMapId && !isGuest && userId) {
+      try {
+        await finishLearnWord({ userId, eduWordMapId: question.word.eduWordMapId });
+      } catch {
+        // 학습 완료 저장 실패는 세션 종료를 막지 않습니다.
+      }
+    }
+
     if (isGuest || !userId || !canSubmitQuizAnswers(quiz.id, state.answers)) {
       setResult({
         quizId: quiz.id,
@@ -171,6 +281,25 @@ const LearnQuizComponent = () => {
             {currentIndex + 1} / {quiz.questions.length}
           </S.LearnQuizCount>
         </S.LearnQuizTop>
+
+        {(sessionLoading || sessionError || question.video) && (
+          <S.LearnSessionIntro>
+            {sessionLoading && <S.SessionStatus>학습 자료를 불러오는 중이에요.</S.SessionStatus>}
+            {sessionError && <S.SessionStatus>{sessionError}</S.SessionStatus>}
+            {question.video && (
+              <S.SessionVideoCard>
+                <div>
+                  <span>수어 미리보기</span>
+                  <strong>{question.video.eduVideoTitle || question.targetWord}</strong>
+                  <p>{question.video.eduVideoDetail || question.hint}</p>
+                </div>
+                <video controls src={question.video.eduVideoUrl}>
+                  수어 영상을 재생할 수 없어요.
+                </video>
+              </S.SessionVideoCard>
+            )}
+          </S.LearnSessionIntro>
+        )}
 
         <S.LearnQuizHeader>
           <S.LearnQuizTitle>{question.title}</S.LearnQuizTitle>
