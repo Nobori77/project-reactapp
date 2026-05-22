@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,10 +9,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import theme from "../../../../styles/theme";
 import { useChatContext } from "../../context/ChatContext";
+import { PageBg } from "../ChatStyle";
+import { getChatRoomInfo, insertChatRoom } from "../../communityApi/chatApi";
 
 // ─── Popup ───────────────────────────────────────────────────────────────────
 
-const Popup = styled.div`
+const ChatRoomCreatePopup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -434,6 +437,17 @@ const ThumbnailPreview = styled.img`
   border: 1px solid ${theme.GRAYSCALE[8]};
 `;
 
+// ─── Error Text ───────────────────────────────────────────────────────────────
+
+const ErrorText = styled.p`
+  font-family: "Pretendard", sans-serif;
+  font-weight: ${theme.FONT_WEIGHT.regular};
+  font-size: ${theme.FONT_SIZE.h12};
+  color: #e53e3e;
+  margin: 2px 0 0;
+  letter-spacing: -0.2px;
+`;
+
 // ─── Submit ───────────────────────────────────────────────────────────────────
 
 const SubmitArea = styled.div`
@@ -472,19 +486,28 @@ const SubmitBtnText = styled.span`
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const CreateChatRoomModal = ({ onClose, onSubmit }) => {
-  const [roomName, setRoomName] = useState("");
-  const [roomDesc, setRoomDesc] = useState("");
+const CreateChatRoomModal = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      chatRoomName: "",
+      chatRoomDetail: "",
+      chatRoomLimit: "",
+    },
+  });
+
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState([]);
-  const [maxUsers, setMaxUsers] = useState("");
   const [isUnlimited, setIsUnlimited] = useState(true);
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const fileInputRef = useRef(null);
 
   // 프로바이더
-  const { closeCreateRoomPopup } = useChatContext();
+  const { closeCreateRoomPopup, createChatRoom } = useChatContext();
 
   const handleTagKeyDown = (e) => {
     if (e.key === "Enter" && tagInput.trim() && tags.length < 5) {
@@ -509,171 +532,198 @@ const CreateChatRoomModal = ({ onClose, onSubmit }) => {
     fileInputRef.current?.click();
   };
 
-  const handleSubmit = () => {
-    onSubmit?.({
-      roomName,
-      roomDesc,
-      tags,
-      maxUsers: isUnlimited ? null : Number(maxUsers),
-      thumbnailFile,
-    });
+  const handleCreateRoom = async (formData) => {
+    const chatRoomRequestDTO = {
+      chatRoomName: formData.chatRoomName,
+      chatRoomDetail: formData.chatRoomDetail,
+      chatRoomLimit: isUnlimited ? 100 : Number(formData.chatRoomLimit),
+    };
+
+    // 채팅방 생성
+    const chatRoomId = await insertChatRoom(chatRoomRequestDTO);
+
+    // 채팅방 정보 불러오기
+    const chatRoomDTO = await getChatRoomInfo(chatRoomId);
+
+    // 프로바이더에 정보 전달
+    createChatRoom(chatRoomDTO);
+  };
+
+  const S = {
+    PageBg,
   };
 
   return (
-    <Popup>
-      <TopBar>
-        <TitlePill>
-          <TitleIconWrap>
-            <FontAwesomeIcon icon={faComments} />
-          </TitleIconWrap>
-          <TitleTextGroup>
-            <TitleMain>새로운 채팅방 만들기</TitleMain>
-            <TitleSub>수어 학습 커뮤니티에 새 공간을 만들어보세요</TitleSub>
-          </TitleTextGroup>
-        </TitlePill>
-        <CloseBtn onClick={closeCreateRoomPopup} aria-label="닫기">
-          <FontAwesomeIcon icon={faXmark} />
-        </CloseBtn>
-      </TopBar>
-
-      <FormCard>
-        <SectionLabel>기본 정보</SectionLabel>
-
-        <FormInputsArea>
-          <FieldGroup>
-            <FieldTitleRow>
-              <FieldLabel>방 이름</FieldLabel>
-              <RequiredMark>*</RequiredMark>
-            </FieldTitleRow>
-            <InputField
-              type="text"
-              placeholder="이름을 입력해주세요"
-              value={roomName}
-              onChange={(e) => setRoomName(e.target.value)}
-            />
-          </FieldGroup>
-
-          <FieldGroup>
-            <FieldTitleRow>
-              <FieldLabel>방 소개</FieldLabel>
-              <RequiredMark>*</RequiredMark>
-            </FieldTitleRow>
-            <TextareaField
-              placeholder="방 소개를 입력해주세요"
-              value={roomDesc}
-              onChange={(e) => setRoomDesc(e.target.value)}
-            />
-          </FieldGroup>
-
-          <FieldGroup>
-            <FieldTitleRow>
-              <FieldLabel>태그</FieldLabel>
-            </FieldTitleRow>
-            <TagInputWrap>
-              {tags.map((tag, i) => (
-                <TagBadge key={i}>
-                  #{tag}
-                  <TagRemoveBtn
-                    onClick={() => handleRemoveTag(i)}
-                    aria-label="태그 삭제"
-                  >
-                    <FontAwesomeIcon icon={faXmark} />
-                  </TagRemoveBtn>
-                </TagBadge>
-              ))}
-              {tags.length < 5 && (
-                <InlineTagInput
-                  placeholder={
-                    tags.length === 0 ? "태그 입력 후 Enter, 최대 5개" : ""
-                  }
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagKeyDown}
-                />
-              )}
-            </TagInputWrap>
-          </FieldGroup>
-        </FormInputsArea>
-
-        <Divider />
-
-        <SectionLabel>채팅방 설정</SectionLabel>
-
-        <FormBottomArea>
-          <FieldGroup>
-            <FieldTitleRow>
-              <FieldLabel>최대 참여 인원</FieldLabel>
-              <RequiredMark>*</RequiredMark>
-            </FieldTitleRow>
-            <MaxUsersRow>
-              <MaxUsersInput
-                type="number"
-                placeholder="인원수 입력"
-                value={maxUsers}
-                onChange={(e) => setMaxUsers(e.target.value)}
-                disabled={isUnlimited}
-              />
-              <UnlimitRow>
-                <ToggleTrack
-                  $on={isUnlimited}
-                  onClick={() => setIsUnlimited((prev) => !prev)}
-                  role="switch"
-                  aria-checked={isUnlimited}
-                >
-                  <ToggleThumb $on={isUnlimited} />
-                </ToggleTrack>
-                <UnlimitText>제한 없음 (최대 999명)</UnlimitText>
-              </UnlimitRow>
-            </MaxUsersRow>
-          </FieldGroup>
-
-          <FieldGroup>
-            <FieldTitleRow>
-              <FieldLabel>대표 썸네일</FieldLabel>
-              <OptionalLabel>(선택)</OptionalLabel>
-            </FieldTitleRow>
-            <UploadArea onClick={handleUploadAreaClick}>
-              <HiddenFileInput
-                ref={fileInputRef}
-                type="file"
-                accept="image/jpeg,image/png"
-                onChange={handleFileChange}
-              />
-              {thumbnailPreview ? (
-                <ThumbnailPreview
-                  src={thumbnailPreview}
-                  alt="썸네일 미리보기"
-                />
-              ) : (
-                <>
-                  <UploadIconWrap>
-                    <FontAwesomeIcon icon={faArrowUpFromBracket} />
-                  </UploadIconWrap>
-                  <UploadMainText>
-                    파일을 드래그하거나 클릭해서 첨부하세요
-                  </UploadMainText>
-                  <UploadSubText>
-                    JPG, PNG 지원 · 파일당 최대 10MB
-                  </UploadSubText>
-                  <UploadBtnWrap>
-                    <UploadBtn type="button">이미지 첨부</UploadBtn>
-                  </UploadBtnWrap>
-                </>
-              )}
-            </UploadArea>
-          </FieldGroup>
-        </FormBottomArea>
-
-        <SubmitArea>
-          <SubmitBtn type="button" onClick={handleSubmit}>
-            <SubmitBtnIcon>
+    <S.PageBg>
+      <ChatRoomCreatePopup>
+        <TopBar>
+          <TitlePill>
+            <TitleIconWrap>
               <FontAwesomeIcon icon={faComments} />
-            </SubmitBtnIcon>
-            <SubmitBtnText>채팅방 만들기</SubmitBtnText>
-          </SubmitBtn>
-        </SubmitArea>
-      </FormCard>
-    </Popup>
+            </TitleIconWrap>
+            <TitleTextGroup>
+              <TitleMain>새로운 채팅방 만들기</TitleMain>
+              <TitleSub>수어 학습 커뮤니티에 새 공간을 만들어보세요</TitleSub>
+            </TitleTextGroup>
+          </TitlePill>
+          <CloseBtn onClick={closeCreateRoomPopup} aria-label="닫기">
+            <FontAwesomeIcon icon={faXmark} />
+          </CloseBtn>
+        </TopBar>
+
+        <FormCard>
+          <SectionLabel>기본 정보</SectionLabel>
+
+          <FormInputsArea>
+            <FieldGroup>
+              <FieldTitleRow>
+                <FieldLabel>방 이름</FieldLabel>
+                <RequiredMark>*</RequiredMark>
+              </FieldTitleRow>
+              <InputField
+                type="text"
+                placeholder="이름을 입력해주세요"
+                {...register("chatRoomName", {
+                  required: "방 이름을 입력해주세요",
+                })}
+              />
+              {errors.chatRoomName && (
+                <ErrorText>{errors.chatRoomName.message}</ErrorText>
+              )}
+            </FieldGroup>
+
+            <FieldGroup>
+              <FieldTitleRow>
+                <FieldLabel>방 소개</FieldLabel>
+                <RequiredMark>*</RequiredMark>
+              </FieldTitleRow>
+              <TextareaField
+                placeholder="방 소개를 입력해주세요"
+                {...register("chatRoomDetail", {
+                  required: "방 소개를 입력해주세요",
+                })}
+              />
+              {errors.chatRoomDetail && (
+                <ErrorText>{errors.chatRoomDetail.message}</ErrorText>
+              )}
+            </FieldGroup>
+
+            <FieldGroup>
+              <FieldTitleRow>
+                <FieldLabel>태그</FieldLabel>
+              </FieldTitleRow>
+              <TagInputWrap>
+                {tags.map((tag, i) => (
+                  <TagBadge key={i}>
+                    #{tag}
+                    <TagRemoveBtn
+                      onClick={() => handleRemoveTag(i)}
+                      aria-label="태그 삭제"
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </TagRemoveBtn>
+                  </TagBadge>
+                ))}
+                {tags.length < 5 && (
+                  <InlineTagInput
+                    placeholder={
+                      tags.length === 0 ? "태그 입력 후 Enter, 최대 5개" : ""
+                    }
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagKeyDown}
+                  />
+                )}
+              </TagInputWrap>
+            </FieldGroup>
+          </FormInputsArea>
+
+          <Divider />
+
+          <SectionLabel>채팅방 설정</SectionLabel>
+
+          <FormBottomArea>
+            <FieldGroup>
+              <FieldTitleRow>
+                <FieldLabel>최대 참여 인원</FieldLabel>
+                <RequiredMark>*</RequiredMark>
+              </FieldTitleRow>
+              <MaxUsersRow>
+                <MaxUsersInput
+                  type="number"
+                  placeholder="인원수 입력"
+                  {...register("chatRoomLimit", {
+                    validate: (value) =>
+                      isUnlimited || value !== "" || "인원수를 입력해주세요",
+                  })}
+                  disabled={isUnlimited}
+                />
+                {errors.chatRoomLimit && (
+                  <ErrorText>{errors.chatRoomLimit.message}</ErrorText>
+                )}
+                <UnlimitRow>
+                  <ToggleTrack
+                    $on={isUnlimited}
+                    onClick={() => setIsUnlimited((prev) => !prev)}
+                    role="switch"
+                    aria-checked={isUnlimited}
+                  >
+                    <ToggleThumb $on={isUnlimited} />
+                  </ToggleTrack>
+                  <UnlimitText>제한 없음 (최대 100명)</UnlimitText>
+                </UnlimitRow>
+              </MaxUsersRow>
+            </FieldGroup>
+
+            <FieldGroup>
+              <FieldTitleRow>
+                <FieldLabel>대표 썸네일</FieldLabel>
+                <OptionalLabel>(선택)</OptionalLabel>
+              </FieldTitleRow>
+              <UploadArea onClick={handleUploadAreaClick}>
+                <HiddenFileInput
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png"
+                  onChange={handleFileChange}
+                />
+                {thumbnailPreview ? (
+                  <ThumbnailPreview
+                    src={thumbnailPreview}
+                    alt="썸네일 미리보기"
+                  />
+                ) : (
+                  <>
+                    <UploadIconWrap>
+                      <FontAwesomeIcon icon={faArrowUpFromBracket} />
+                    </UploadIconWrap>
+                    <UploadMainText>
+                      파일을 드래그하거나 클릭해서 첨부하세요
+                    </UploadMainText>
+                    <UploadSubText>
+                      JPG, PNG 지원 · 파일당 최대 10MB
+                    </UploadSubText>
+                    <UploadBtnWrap>
+                      <UploadBtn type="button">이미지 첨부</UploadBtn>
+                    </UploadBtnWrap>
+                  </>
+                )}
+              </UploadArea>
+            </FieldGroup>
+          </FormBottomArea>
+
+          <SubmitArea>
+            {/* 채팅방 생성 버튼 */}
+            <SubmitBtn type="button" onClick={handleSubmit(handleCreateRoom)}>
+              <SubmitBtnIcon>
+                <FontAwesomeIcon icon={faComments} />
+              </SubmitBtnIcon>
+              <SubmitBtnText>채팅방 만들기</SubmitBtnText>
+            </SubmitBtn>
+          </SubmitArea>
+        </FormCard>
+      </ChatRoomCreatePopup>
+    </S.PageBg>
   );
 };
 

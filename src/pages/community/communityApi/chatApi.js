@@ -1,5 +1,17 @@
 const ROOT_URL = "http://localhost:10000/api";
 
+// 채팅방 생성
+export const insertChatRoom = async (chatRoomRequestDTO) => {
+  const response = await fetch(`${ROOT_URL}/chat-rooms`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chatRoomRequestDTO }),
+  });
+  if (!response.ok) throw new Error("채팅방 생성에 실패했습니다");
+  const { data } = await response.json();
+  return data;
+};
+
 export const getChatRooms = async (page = 1) => {
   const response = await fetch(`${ROOT_URL}/chats/rooms?page=${page}`);
   if (!response.ok) throw new Error("채팅방 목록을 불러오는 데 실패했습니다.");
@@ -16,11 +28,13 @@ export const getChatMessages = async (chatRoomId) => {
 
 export const getChatRoomUsers = async (chatRoomId) => {
   const response = await fetch(`${ROOT_URL}/chat-rooms/${chatRoomId}/users`);
-  if (!response.ok) throw new Error("채팅 참여 유저를 불러오는 데 실패했습니다.");
+  if (!response.ok)
+    throw new Error("채팅 참여 유저를 불러오는 데 실패했습니다.");
   const { data } = await response.json();
   return data;
 };
 
+// 단일 채팅방 불러오는 api
 export const getChatRoomInfo = async (chatRoomId) => {
   const response = await fetch(`${ROOT_URL}/chat-rooms/${chatRoomId}`);
   if (!response.ok) throw new Error("채팅방 정보를 불러오는 데 실패했습니다.");
@@ -30,7 +44,8 @@ export const getChatRoomInfo = async (chatRoomId) => {
 
 export const getJoinedChatRooms = async (page = 1) => {
   const response = await fetch(`${ROOT_URL}/chat-rooms/joined?page=${page}`);
-  if (!response.ok) throw new Error("참여중인 채팅방 목록을 불러오는 데 실패했습니다.");
+  if (!response.ok)
+    throw new Error("참여중인 채팅방 목록을 불러오는 데 실패했습니다.");
   const { data } = await response.json();
   return data;
 };

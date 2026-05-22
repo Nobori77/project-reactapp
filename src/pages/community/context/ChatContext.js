@@ -69,7 +69,15 @@ export const ChatProvider = ({ children }) => {
   // 목록(사이드/팝업)에서 방 선택 → 현재 view 유지하고 ROOM 으로 전환
   const selectRoom = useCallback((room) => {
     if (room) setChatRoomDTO(room);
-    console.log("방이 없네요 ㅠㅠ");
+    setScreen(SCREEN.ROOM);
+  }, []);
+
+  // 채팅방 생성 시 할 동작
+  // 불러온 정보 저장
+  // 해당 정보를 바탕으로 만든 채팅방으로 이동
+  const createChatRoom = useCallback((chatRoomDTO) => {
+    // 반환되는 채팅방 id 를 통해서 채팅방 정보 불러오기
+    setChatRoomDTO(chatRoomDTO);
     setScreen(SCREEN.ROOM);
   }, []);
 
@@ -131,6 +139,7 @@ export const ChatProvider = ({ children }) => {
         listFilter,
         isLoading,
         // actions
+        createChatRoom,
         openCreateChatRoom,
         openChatRoom,
         selectRoom,
@@ -139,6 +148,7 @@ export const ChatProvider = ({ children }) => {
         minimizeView,
         expandView,
         closeView,
+        closeCreateRoomPopup,
         reopenChat,
       }}
     >
