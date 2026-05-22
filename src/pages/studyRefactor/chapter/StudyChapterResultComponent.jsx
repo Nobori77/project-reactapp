@@ -1,4 +1,4 @@
-// 오!퀴즈 결과 컴포넌트: 정확도, 틀린 문제, 뱃지 획득 표시를 담당
+﻿// 오!퀴즈 결과 컴포넌트: 정확도, 틀린 문제, 뱃지 획득 표시를 담당
 import { useContext, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { StudyQuizContext } from "../context/StudyQuizContext";
@@ -44,7 +44,7 @@ const StudyChapterResultComponent = () => {
       <S.ChapterWrap>
         <S.ChapterReadyCard>
           <h1>결과를 찾을 수 없습니다.</h1>
-          <S.ResultTextAction to="/study-preview/chapter">목록으로 돌아가기</S.ResultTextAction>
+          <S.ResultTextAction to="/study/chapter">목록으로 돌아가기</S.ResultTextAction>
         </S.ChapterReadyCard>
       </S.ChapterWrap>
     );
@@ -90,8 +90,8 @@ const StudyChapterResultComponent = () => {
         <S.ResultLine />
 
         <S.ResultTextActions>
-          <S.ResultTextAction to="/study-preview/chapter">목록으로</S.ResultTextAction>
-          <S.ResultTextAction to={`/study-preview/chapter/${quiz}`}>다시풀기</S.ResultTextAction>
+          <S.ResultTextAction to="/study/chapter">목록으로</S.ResultTextAction>
+          <S.ResultTextAction to={`/study/chapter/${quiz}`}>다시풀기</S.ResultTextAction>
         </S.ResultTextActions>
       </S.ChapterResultContent>
 
@@ -135,7 +135,7 @@ const StudyChapterResultComponent = () => {
               <button type="button" onClick={() => setIsBadgeOpen(false)}>
                 결과 화면으로 돌아가기
               </button>
-              <S.ResultTextAction to="/study-preview/chapter">계속 학습하기</S.ResultTextAction>
+              <S.ResultTextAction to="/study/chapter">계속 학습하기</S.ResultTextAction>
             </S.BadgeModalActions>
           </S.BadgeModal>
         </S.BadgeModalOverlay>

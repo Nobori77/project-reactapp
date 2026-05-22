@@ -1,4 +1,4 @@
-// 학습 데이터 변환 담당: 백엔드 학습 응답을 학습 화면 데이터로 변환
+﻿// 학습 데이터 변환 담당: 백엔드 학습 응답을 학습 화면 데이터로 변환
 export const mapLearnItem = (learn, index = 0) => ({
   id: learn.id || `learn-${index + 1}`,
   title: learn.eduTitle || learn.title || "학습 제목",
@@ -7,7 +7,7 @@ export const mapLearnItem = (learn, index = 0) => ({
   status: index === 0 ? "active" : "locked",
   badge: index === 0 ? "★" : "★",
   buttonText: index === 0 ? "시작" : "잠금",
-  to: index === 0 ? "/study-preview/learn/quiz/greeting/questions/1" : null,
+  to: index === 0 ? "/study/learn/quiz/greeting/questions/1" : null,
 });
 
 export const mapLearnList = (learnList = []) => learnList.map(mapLearnItem);

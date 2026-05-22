@@ -1,4 +1,4 @@
-// 학습퀴즈컴포넌트: 문제 풀이, 정답 확인, 오답 복습 흐름을 담당합니다.
+﻿// 학습퀴즈컴포넌트: 문제 풀이, 정답 확인, 오답 복습 흐름을 담당합니다.
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { submitQuizAnswers } from "../apis/QuizApi";
@@ -96,7 +96,7 @@ const LearnQuizComponent = () => {
       });
     }
 
-    navigate("/study-preview/learn");
+    navigate("/study/learn");
   };
 
   // 다음문제함수: 다음 문제로 이동하거나 마지막 문제에서는 복습 화면으로 넘어갑니다.
@@ -106,12 +106,12 @@ const LearnQuizComponent = () => {
       return;
     }
 
-    navigate(`/study-preview/learn/quiz/${type}/questions/${currentIndex + 2}`);
+    navigate(`/study/learn/quiz/${type}/questions/${currentIndex + 2}`);
   };
 
   // 닫기함수: 학습 메인 화면으로 돌아갑니다.
   const handleClose = () => {
-    navigate("/study-preview/learn");
+    navigate("/study/learn");
   };
 
   if (status === "review") {

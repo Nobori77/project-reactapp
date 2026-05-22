@@ -1,9 +1,9 @@
-// 학습 메인 임시데이터: 백엔드 연결 전 화면 확인용 데이터입니다.
+﻿// 학습 메인 임시데이터: 백엔드 연결 전 화면 확인용 데이터입니다.
 export const learnHomeMock = {
   streak: "7",
   menus: [
     { id: "learn", type: "sign", label: "\ud559\uc2b5", icon: "\u25c6" },
-    { id: "letter", label: "\ubb38\uc790", icon: "\u97d3", to: "/study-preview/learn/alphabet" },
+    { id: "letter", label: "\ubb38\uc790", icon: "\u97d3", to: "/study/learn/alphabet" },
     { id: "signal", type: "signal", label: "\uc218\uc2e0\ud638", icon: "\u25b2" },
     { id: "profile", label: "\ud504\ub85c\ud544", icon: "\ud83d\udc64", to: "/mypage/learning" },
     { id: "more", label: "\ub354 \ubcf4\uae30", icon: "\u22ef" },
@@ -28,7 +28,7 @@ export const learnHomeMock = {
       status: "done",
       badge: "\u2713",
       buttonText: "\uc644\ub8cc",
-      to: "/study-preview/learn/quiz/greeting/questions/1",
+      to: "/study/learn/quiz/greeting/questions/1",
     },
     {
       id: "thanks",
@@ -37,7 +37,7 @@ export const learnHomeMock = {
       status: "done",
       badge: "\u2713",
       buttonText: "\uc644\ub8cc",
-      to: "/study-preview/learn/quiz/greeting/questions/1",
+      to: "/study/learn/quiz/greeting/questions/1",
     },
     {
       id: "sorry",
@@ -46,7 +46,7 @@ export const learnHomeMock = {
       status: "active",
       badge: "\u2605",
       buttonText: "\uc2dc\uc791",
-      to: "/study-preview/learn/quiz/greeting/questions/1",
+      to: "/study/learn/quiz/greeting/questions/1",
     },
     {
       id: "reward",
@@ -87,7 +87,7 @@ export const learnHomeMock = {
           status: "active",
           badge: "\u25b2",
           buttonText: "\uc2dc\uc791",
-          to: "/study-preview/learn/quiz/signal/questions/1",
+          to: "/study/learn/quiz/signal/questions/1",
         },
         {
           id: "signal-complete",

@@ -17,12 +17,6 @@ import LicenseContainer from "../pages/exam/results/license/LicenseContainer";
 import UpdateCheckContainer from "../pages/exam/update/check/UpdateCheckContainer";
 import UpdateContainer from "../pages/exam/update/UpdateContainer";
 import RenewContainer from "../pages/exam/update/renew/RenewContainer";
-import StudyContainer from "../pages/study/StudyContainer";
-import StudyChapterContainer from "../pages/study/chapter/StudyChapterContainer";
-import StudyChapterQuizContainer from "../pages/study/chapter/StudyChapterQuizContainer";
-import StudyChapterComponent from "../pages/study/chapter/StudyChapterComponent";
-import LearnContainer from "../pages/study/learn/LearnContainer";
-import StudyAttendanceContainer from "../pages/study/attendance/StudyAttendanceContainer";
 import MyPageContainer from "../pages/mypage/MyPageContainer";
 import CommunityContainer from "../pages/community/CommunityContainer";
 import LoginContainer from "../pages/auth/login/LoginContainer";
@@ -40,9 +34,6 @@ import CertificateContainer from "../pages/exam/certificate/CertificateContainer
 import CertificateCheckContainer from "../pages/exam/certificate/check/CertificateCheckContainer";
 import CertificatePrintContainer from "../pages/exam/certificate/print/CertificatePrintContainer";
 import CertificateReissueContainer from "../pages/exam/certificate/reissue/CertificateReissueContainer";
-import StudyExperienceContainer from "../pages/study/experience/StudyExperienceContainer";
-import StudyExperienceQuizContainer from "../pages/study/experience/StudyExperienceQuizContainer";
-import StudyExperienceQuizComponent from "../pages/study/experience/StudyExperienceQuizComponent";
 import MyPageLearningContainer from "../pages/mypage/learning/MyPageLearningContainer";
 import MyPageSettingContainer from "../pages/mypage/setting/MyPageSettingContainer";
 import MyPageCertificateConfirmContainer from "../pages/mypage/certificate/confirm/MyPageCertificateConfirmContainer";
@@ -50,7 +41,6 @@ import MyPageCertificateContainer from "../pages/mypage/certificate/MyPageCertif
 import MyPageCertificateGuideContainer from "../pages/mypage/certificate/guide/MyPageCertificateGuideContainer";
 import MyPageCertificateCompleteContainer from "../pages/mypage/certificate/complete/MyPageCertificateCompleteContainer";
 import ConfirmAddressSearchContainer from "../pages/mypage/certificate/confirm/address-search/ConfirmAddressSearchContainer";
-import StudySearchContainer from "../pages/study/search/StudySearchContainer";
 import CustomServiceContainer from "../pages/customservice/CustomServiceContainer";
 import CustomServiceInquireContainer from "../pages/customservice/inquire/CustomServiceInquireContainer";
 import CustomServiceNoticeContainer from "../pages/customservice/notice/CustomServiceNoticeContainer";
@@ -180,51 +170,91 @@ const router = createBrowserRouter([
       },
       {
         path: "study",
-        element: <StudyContainer />,
+        element: <StudyRefactorContainer />,
         children: [
           {
+            index: true,
+            element: <StudyRefactorComponent />
+          },
+          {
             path: "experience",
-            element: <StudyExperienceContainer />,
+            element: <StudyRefactorExperienceContainer />,
             children: [
               {
-                path: ":quiz", 
-                element: <StudyExperienceQuizContainer />,
+                index: true,
+                element: <StudyRefactorExperienceComponent />
+              },
+              {
+                path: ":quiz",
+                element: <StudyRefactorExperienceQuizContainer />,
                 children: [
                   {
-                    path: ":id",
-                    element: <StudyExperienceQuizComponent />
+                    path: "questions/:id",
+                    element: <StudyRefactorExperienceQuizComponent />
                   }
                 ]
-              },
+              }
             ]
           },
           {
             path: "attendance",
-            element: <StudyAttendanceContainer />
+            element: <StudyRefactorAttendanceContainer />
           },
           {
-            path: "chapter", 
-            element: <StudyChapterContainer />,
+            path: "chapter",
+            element: <StudyRefactorChapterContainer />,
             children: [
               {
-                path: ":quiz", 
-                element: <StudyChapterQuizContainer />,
+                index: true,
+                element: <StudyRefactorChapterComponent />
+              },
+              {
+                path: ":quiz",
+                element: <StudyRefactorChapterQuizContainer />,
                 children: [
                   {
-                    path: ":id",
-                    element: <StudyChapterComponent />
+                    index: true,
+                    element: <StudyRefactorChapterQuizComponent />
+                  },
+                  {
+                    path: "questions/:id",
+                    element: <StudyRefactorChapterQuizComponent />
+                  },
+                  {
+                    path: "result",
+                    element: <StudyRefactorChapterResultContainer />
                   }
                 ]
-              },
+              }
             ]
           },
           {
             path: "search",
-            element: <StudySearchContainer />
+            element: <StudyRefactorSearchContainer />
           },
           {
             path: "learn",
-            element: <LearnContainer />
+            element: <StudyRefactorLearnContainer />,
+            children: [
+              {
+                index: true,
+                element: <StudyRefactorLearnComponent />
+              },
+              {
+                path: "alphabet",
+                element: <StudyRefactorLearnAlphabetContainer />
+              },
+              {
+                path: "quiz/:type",
+                element: <StudyRefactorLearnQuizContainer />,
+                children: [
+                  {
+                    path: "questions/:id",
+                    element: <StudyRefactorLearnQuizComponent />
+                  }
+                ]
+              }
+            ]
           }
         ]
       },

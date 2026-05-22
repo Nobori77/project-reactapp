@@ -1,10 +1,10 @@
-// 문자 학습 임시데이터: 백엔드 연결 전 한글 자모 학습 화면 확인용 데이터입니다.
+﻿// 문자 학습 임시데이터: 백엔드 연결 전 한글 자모 학습 화면 확인용 데이터입니다.
 export const alphabetHandImageUrl = "https://www.figma.com/api/mcp/asset/9ffc9818-567f-497f-998b-4db4b5cb5998";
 
 export const alphabetMenus = [
-  { id: "learn", label: "학습", icon: "◆", to: "/study-preview/learn" },
+  { id: "learn", label: "학습", icon: "◆", to: "/study/learn" },
   { id: "letter", label: "문자", icon: "韓", active: true },
-  { id: "signal", label: "수신호", icon: "▲", to: "/study-preview/learn", activeType: "signal" },
+  { id: "signal", label: "수신호", icon: "▲", to: "/study/learn", activeType: "signal" },
   { id: "profile", label: "프로필", icon: "👤", to: "/mypage/learning" },
   { id: "more", label: "더 보기", icon: "⋯" },
 ];

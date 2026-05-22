@@ -1,4 +1,4 @@
-// 체험 퀴즈 컴포넌트: 비회원 퀴즈 문제, 정답 피드백, 완료 유도를 담당
+﻿// 체험 퀴즈 컴포넌트: 비회원 퀴즈 문제, 정답 피드백, 완료 유도를 담당
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import QuizFeedback from "../components/QuizFeedback";
@@ -65,7 +65,7 @@ const StudyExperienceQuizComponent = () => {
       return;
     }
 
-    navigate(`/study-preview/experience/${quiz}/questions/${currentIndex + 2}`);
+    navigate(`/study/experience/${quiz}/questions/${currentIndex + 2}`);
   };
 
   // 선택 없이 확인을 눌렀을 때 안내하는 함수
@@ -90,7 +90,7 @@ const StudyExperienceQuizComponent = () => {
     <QuizShell>
       <S.ExperienceQuizPage $dimmed={isComplete}>
         <S.ExperienceQuizHeader>
-          <button type="button" onClick={() => navigate("/study-preview/experience")}>
+          <button type="button" onClick={() => navigate("/study/experience")}>
             ←
           </button>
           <span>{currentQuestion.category || quizData.title}</span>
@@ -148,7 +148,7 @@ const StudyExperienceQuizComponent = () => {
       {isComplete && (
         <S.AuthPromptOverlay>
           <S.AuthPromptModal>
-            <S.ModalClose type="button" onClick={() => navigate("/study-preview")}>
+            <S.ModalClose type="button" onClick={() => navigate("/study")}>
               ×
             </S.ModalClose>
             <S.CheckIcon>✓</S.CheckIcon>

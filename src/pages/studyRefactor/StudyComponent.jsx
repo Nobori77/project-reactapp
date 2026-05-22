@@ -1,4 +1,4 @@
-// 학습 홈 화면 컴포넌트: 메인 카드, 검색 진입, 로그인 필요 기능 분기를 담당
+﻿// 학습 홈 화면 컴포넌트: 메인 카드, 검색 진입, 로그인 필요 기능 분기를 담당
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import StudyAttendancePopup from "./attendance/StudyAttendancePopup";
@@ -38,7 +38,7 @@ const featureCards = [
     desc: "알아두면 좋을 퀴즈",
     image: "/assets/image/quiz.png",
     tone: "blue",
-    to: "/study-preview/chapter",
+    to: "/study/chapter",
     requiresLogin: true,
   },
   {
@@ -47,7 +47,7 @@ const featureCards = [
     desc: "눈으로 듣는 새로운 대화법",
     image: "/assets/image/signLearn.png",
     tone: "yellow",
-    to: "/study-preview/learn",
+    to: "/study/learn",
     requiresLogin: true,
   },
   {
@@ -56,7 +56,7 @@ const featureCards = [
     desc: "위험을 알리는 방법",
     image: "/assets/image/emergency.png",
     tone: "red",
-    to: "/study-preview/learn/quiz/sos/questions/1",
+    to: "/study/learn/quiz/sos/questions/1",
     requiresLogin: true,
   },
   {
@@ -65,7 +65,7 @@ const featureCards = [
     desc: "빛과 점으로 전하는 신호",
     image: "/assets/image/mors.png",
     tone: "purple",
-    to: "/study-preview/chapter/morse",
+    to: "/study/chapter/morse",
     requiresLogin: true,
   },
 ];
@@ -140,7 +140,7 @@ const StudyComponent = () => {
   // 검색어를 검색 페이지로 넘기는 함수
   const handleSearch = (event) => {
     event.preventDefault();
-    navigate("/study-preview/search", { state: { keyword } });
+    navigate("/study/search", { state: { keyword } });
   };
 
   // 로그인 필요한 링크 이동 함수
@@ -172,7 +172,7 @@ const StudyComponent = () => {
   const handleAttendanceDetail = () => {
     requireLogin(() => {
       setIsAttendanceOpen(false);
-      navigate("/study-preview/attendance");
+      navigate("/study/attendance");
     });
   };
 
@@ -191,7 +191,7 @@ const StudyComponent = () => {
           <p className="heroIcons">👋 ✌️</p>
           <h1>지금 바로 배워보세요!</h1>
           <p>회원가입 없이 다양한 언어표현을 재미있게 체험할 수 있어요</p>
-          <Link to="/study-preview/experience">지금 체험하기 →</Link>
+          <Link to="/study/experience">지금 체험하기 →</Link>
         </S.BannerContent>
       </S.Banner>
 
@@ -242,7 +242,7 @@ const StudyComponent = () => {
           ))}
         </S.WordGrid>
 
-        <S.ActionLink to="/study-preview/search">더 많은 단어 보기 →</S.ActionLink>
+        <S.ActionLink to="/study/search">더 많은 단어 보기 →</S.ActionLink>
       </S.SearchArea>
 
       <S.VideoArea>
@@ -253,7 +253,7 @@ const StudyComponent = () => {
 
         <S.VideoTabs>
           {videoTabs.map((tab) => (
-            <button type="button" key={tab.label} onClick={() => requireLogin(() => navigate("/study-preview/learn"))}>
+            <button type="button" key={tab.label} onClick={() => requireLogin(() => navigate("/study/learn"))}>
               <img src={tab.image} alt="" />
               {tab.label}
             </button>
@@ -276,7 +276,7 @@ const StudyComponent = () => {
           ))}
         </S.VideoGrid>
 
-        <S.ActionLink to="/study-preview/learn" onClick={(event) => handleProtectedLink(event, "/study-preview/learn")}>
+        <S.ActionLink to="/study/learn" onClick={(event) => handleProtectedLink(event, "/study/learn")}>
           더 많은 영상 보기 →
         </S.ActionLink>
       </S.VideoArea>

@@ -1,4 +1,4 @@
-// 오!퀴즈 문제 컴포넌트: 로그인 퀴즈 문제 풀이와 정답/오답 상태를 담당
+﻿// 오!퀴즈 문제 컴포넌트: 로그인 퀴즈 문제 풀이와 정답/오답 상태를 담당
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import QuizFeedback from "../components/QuizFeedback";
@@ -48,7 +48,7 @@ const StudyChapterQuizComponent = () => {
 
   // 첫 번째 정규 퀴즈 문제로 이동하는 함수
   const handleStartQuiz = () => {
-    navigate(`/study-preview/chapter/${quiz}/questions/1`);
+    navigate(`/study/chapter/${quiz}/questions/1`);
   };
 
   // 보기를 선택했을 때 답안을 저장하는 함수
@@ -97,11 +97,11 @@ const StudyChapterQuizComponent = () => {
   const handleNextQuestion = async () => {
     if (isLastQuestion) {
       await submitChapterQuiz();
-      navigate(`/study-preview/chapter/${quiz}/result`);
+      navigate(`/study/chapter/${quiz}/result`);
       return;
     }
 
-    navigate(`/study-preview/chapter/${quiz}/questions/${currentIndex + 2}`);
+    navigate(`/study/chapter/${quiz}/questions/${currentIndex + 2}`);
   };
 
   // 선택 없이 확인했을 때 안내하는 함수
@@ -119,7 +119,7 @@ const StudyChapterQuizComponent = () => {
       <S.ChapterWrap>
         <S.ChapterReadyCard>
           <h1>퀴즈를 찾을 수 없습니다.</h1>
-          <button type="button" onClick={() => navigate("/study-preview/chapter")}>
+          <button type="button" onClick={() => navigate("/study/chapter")}>
             목록으로 돌아가기
           </button>
         </S.ChapterReadyCard>
@@ -132,7 +132,7 @@ const StudyChapterQuizComponent = () => {
       <QuizShell>
         <S.ChapterQuestionCard>
           <h1>문제를 찾을 수 없습니다.</h1>
-          <button type="button" onClick={() => navigate(`/study-preview/chapter/${quiz}`)}>
+          <button type="button" onClick={() => navigate(`/study/chapter/${quiz}`)}>
             퀴즈 안내로 돌아가기
           </button>
         </S.ChapterQuestionCard>
@@ -144,7 +144,7 @@ const StudyChapterQuizComponent = () => {
     return (
       <QuizShell>
         <S.ChapterQuestionHeader>
-          <button type="button" onClick={() => navigate(`/study-preview/chapter/${quiz}`)}>
+          <button type="button" onClick={() => navigate(`/study/chapter/${quiz}`)}>
             ←
           </button>
           <div>

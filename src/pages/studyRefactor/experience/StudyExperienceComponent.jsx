@@ -1,4 +1,4 @@
-// 체험학습 목록 컴포넌트: 비회원 미리보기 학습 카드 목록을 담당
+﻿// 체험학습 목록 컴포넌트: 비회원 미리보기 학습 카드 목록을 담당
 import { useNavigate } from "react-router-dom";
 import ExperienceCard from "./parts/ExperienceCard";
 import * as S from "./style";
@@ -39,7 +39,7 @@ const StudyExperienceComponent = () => {
 
   // 선택한 체험 퀴즈 첫 문제로 이동하는 함수
   const handleStart = (item) => {
-    navigate(`/study-preview/experience/${item.quiz}/questions/1`);
+    navigate(`/study/experience/${item.quiz}/questions/1`);
   };
 
   return (

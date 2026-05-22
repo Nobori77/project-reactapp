@@ -1,4 +1,4 @@
-// 오!퀴즈 임시데이터: 백엔드 연결 전 챕터 카드와 진행 정보 확인용
+﻿// 오!퀴즈 임시데이터: 백엔드 연결 전 챕터 카드와 진행 정보 확인용
 export const chapterQuizMock = [
   {
     id: "sign-history",
@@ -11,7 +11,7 @@ export const chapterQuizMock = [
     questionCount: 5,
     exp: 30,
     progress: 40,
-    path: "/study-preview/chapter/sign-history",
+    path: "/study/chapter/sign-history",
     questions: [
       {
         id: "sign-history-1",
@@ -59,7 +59,7 @@ export const chapterQuizMock = [
     questionCount: 5,
     exp: 30,
     progress: 20,
-    path: "/study-preview/chapter/sos",
+    path: "/study/chapter/sos",
     questions: [
       {
         id: "sos-1",
@@ -107,7 +107,7 @@ export const chapterQuizMock = [
     questionCount: 5,
     exp: 30,
     progress: 0,
-    path: "/study-preview/chapter/morse",
+    path: "/study/chapter/morse",
     questions: [
       {
         id: "morse-1",
