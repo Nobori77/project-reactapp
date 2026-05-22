@@ -170,13 +170,7 @@ export const shadows = {
   float: "0 8px 24px rgba(0, 0, 0, 0.12)",
 };
 
-// 사이드 채팅 패널 내부 뷰 타입
-export const TYPE = {
-  LIST: "list",
-  REQUEST: "request",
-  ROOM: "room",
-  ONGOING: "ongoing",
-};
+// 채팅 상태 enum 은 context/ChatContext.js 에서 관리 (VIEW / SCREEN / LIST_FILTER)
 
 // 게시글 상세 기본 이미지 (URL 로딩 실패 시 폴백용)
 export const DEFAULT_IMAGES = {

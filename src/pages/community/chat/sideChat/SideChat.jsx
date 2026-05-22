@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { LAYOUT, radius, shadows, TYPE } from "../../constants";
+import { LAYOUT, radius, shadows } from "../../constants";
+import {
+  useChatContext,
+  SCREEN,
+  LIST_FILTER,
+} from "../../context/ChatContext";
 import SideChatHeader from "../chatComponents/SideChatHeader";
 import SideChatListComponent from "../chatComponents/SideChatListComponent";
 import SideChatRequestComponent from "../chatComponents/SideChatRequestComponent";
 import SideChatComponent from "../chatComponents/SideChatComponent";
 import SideChatOngoingComponent from "../chatComponents/SideChatOngoingComponent";
-import { useChatContext } from "../../context/ChatContext";
 
 // ─── Panel ───────────────────────────────────────────────────────────────────
 
@@ -22,56 +26,42 @@ const ChatPanel = styled.div`
 // ─── Component ────────────────────────────────────────────────────────────────
 
 const SideChat = () => {
-  const { sideInitialType, closeSideChat, expandFromSide, activeChatRoom } =
-    useChatContext();
-  const [type, setType] = useState(sideInitialType);
-  const [selectedRoom, setSelectedRoom] = useState(null);
+  const {
+    screen,
+    listFilter,
+    activeChatRoom,
+    closeView,
+    expandView,
+    leaveRoom,
+  } = useChatContext();
 
-  const handleTabChange = (tab) => {
-    if (tab === "request") setType(TYPE.REQUEST);
-    else if (tab === "chatting") setType(TYPE.ONGOING);
-    else setType(TYPE.LIST);
-  };
-
-  const handleRoomClick = (room) => {
-    setSelectedRoom(room);
-    setType(TYPE.ROOM);
-  };
-
-  const handleBack = () => setType(TYPE.LIST);
+  // 사이드의 minus 버튼은 ROOM 화면에선 "목록으로 되돌리기", 그 외엔 "닫기"
+  const handleMinimize = screen === SCREEN.ROOM ? leaveRoom : closeView;
 
   return (
     <ChatPanel>
       <SideChatHeader
-        type={type}
-        chatPartnerName={selectedRoom?.name}
-        onMinimize={type === TYPE.ROOM ? handleBack : closeSideChat}
-        onExpand={() => expandFromSide(type)}
-        onClose={closeSideChat}
+        screen={screen}
+        listFilter={listFilter}
+        chatPartnerName={activeChatRoom?.name ?? activeChatRoom?.chatRoomName}
+        onMinimize={handleMinimize}
+        onExpand={expandView}
+        onClose={closeView}
       />
-      {type === TYPE.LIST && (
-        <SideChatListComponent
-          onRoomClick={handleRoomClick}
-          onTabChange={handleTabChange}
-        />
+
+      {screen === SCREEN.LIST && listFilter === LIST_FILTER.LIVE && (
+        <SideChatListComponent />
       )}
-      {type === TYPE.REQUEST && (
-        <SideChatRequestComponent
-          activeTab="request"
-          onTabChange={handleTabChange}
-        />
+      {screen === SCREEN.LIST && listFilter === LIST_FILTER.REQUEST && (
+        <SideChatRequestComponent />
       )}
-      {type === TYPE.ONGOING && (
-        <SideChatOngoingComponent
-          onRoomClick={handleRoomClick}
-          onTabChange={handleTabChange}
-        />
+      {screen === SCREEN.LIST && listFilter === LIST_FILTER.ONGOING && (
+        <SideChatOngoingComponent />
       )}
-      {type === TYPE.ROOM && (
-        // 채팅 메세지 입력 하는 채팅방
+      {screen === SCREEN.ROOM && (
         <SideChatComponent
-          chatRoomId={selectedRoom?.id ?? activeChatRoom?.id}
-          onViewAll={handleBack}
+          chatRoomId={activeChatRoom?.id}
+          onViewAll={leaveRoom}
         />
       )}
     </ChatPanel>

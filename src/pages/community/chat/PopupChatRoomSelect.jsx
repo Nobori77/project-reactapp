@@ -32,7 +32,7 @@ const S = {
 
 // 채팅방 헤더 버튼
 const PopupChatRoomSelect = () => {
-  const { handleSelectMinimize, handleSelectClose } = useChatContext();
+  const { minimizeView, closeView } = useChatContext();
 
   return (
     <S.SelectPageBg>
@@ -40,10 +40,10 @@ const PopupChatRoomSelect = () => {
         <S.Header>
           <S.HeaderTitle>채팅방 선택</S.HeaderTitle>
           <S.HeaderBtns>
-            <S.MinimizeBtn onClick={handleSelectMinimize}>
+            <S.MinimizeBtn onClick={minimizeView}>
               <img src={minusIcon} alt="최소화" />
             </S.MinimizeBtn>
-            <S.CloseBtn onClick={handleSelectClose}>
+            <S.CloseBtn onClick={closeView}>
               <img src={closeIcon} alt="닫기" />
             </S.CloseBtn>
           </S.HeaderBtns>

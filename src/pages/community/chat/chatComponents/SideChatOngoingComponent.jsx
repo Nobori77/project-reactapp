@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { colors, radius } from "../../constants";
 import { h10Bold, h11Bold, h11Regular } from "../../../../styles/common";
 import chatDefaultProfile from "../../assets/chat/chat_default_profile.svg";
 import { ThumbnailBox } from "./chatComponentStyle";
 import useJoinedChatRoomList from "../hooks/useJoinedChatRoomList";
+import { useChatContext } from "../../context/ChatContext";
+import { SIDE_TABS } from "./sideChatTabs";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 
@@ -114,22 +116,11 @@ const TabBtn = styled.button`
     color 0.15s;
 `;
 
-const TABS = [
-  { key: "all", label: "모든 채팅방" },
-  { key: "chatting", label: "채팅중인 방" },
-  { key: "request", label: "요청" },
-];
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const SideChatOngoingComponent = ({ onRoomClick, onTabChange }) => {
+const SideChatOngoingComponent = () => {
+  const { listFilter, changeListFilter, selectRoom } = useChatContext();
   const { rooms, isLoading, hasMore, loaderRef } = useJoinedChatRoomList();
-  const [selectedRoomId, setSelectedRoomId] = useState(null);
-
-  const handleRoomClick = (room) => {
-    setSelectedRoomId(room.id);
-    onRoomClick?.(room);
-  };
 
   return (
     <ListBody>
@@ -141,11 +132,7 @@ const SideChatOngoingComponent = ({ onRoomClick, onTabChange }) => {
         ) : (
           <>
             {rooms.map((room) => (
-              <RoomItem
-                key={room.id}
-                $isActive={room.id === selectedRoomId}
-                onClick={() => handleRoomClick(room)}
-              >
+              <RoomItem key={room.id} onClick={() => selectRoom(room)}>
                 <ThumbnailBox
                   src={room.thumbnail || chatDefaultProfile}
                   alt={room.name}
@@ -172,11 +159,11 @@ const SideChatOngoingComponent = ({ onRoomClick, onTabChange }) => {
       </RoomList>
 
       <TabGroup>
-        {TABS.map((tab) => (
+        {SIDE_TABS.map((tab) => (
           <TabBtn
             key={tab.key}
-            $isActive={tab.key === "chatting"}
-            onClick={() => onTabChange?.(tab.key)}
+            $isActive={tab.key === listFilter}
+            onClick={() => changeListFilter(tab.key)}
           >
             {tab.label}
           </TabBtn>

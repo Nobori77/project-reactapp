@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { colors, radius } from "../../constants";
 import { h10Bold, h11Bold, h11Regular } from "../../../../styles/common";
 import chatDefaultProfile from "../../assets/chat/chat_default_profile.svg";
 import { ThumbnailBox } from "./chatComponentStyle";
 import useChatRoomList from "../hooks/useChatRoomList";
+import { useChatContext, LIST_FILTER } from "../../context/ChatContext";
+import { SIDE_TABS } from "./sideChatTabs";
 
 import defaultProfileImg from "../../assets/chat/chat_default_profile.svg";
 
@@ -128,35 +130,17 @@ const TabBtn = styled.button`
     color 0.15s;
 `;
 
-const TABS = [
-  { key: "all", label: "모든 채팅방" },
-  { key: "chatting", label: "채팅중인 방" },
-  { key: "request", label: "요청" },
-];
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const SideChatListComponent = ({ onRoomClick, onTabChange }) => {
-  const [activeTab, setActiveTab] = useState("all");
-  const [selectedRoomId, setSelectedRoomId] = useState(null);
+const SideChatListComponent = () => {
+  const { listFilter, changeListFilter, selectRoom } = useChatContext();
   const { rooms, isLoading, hasMore, loaderRef } = useChatRoomList();
-
-  console.log("사이트 채팅방 리스트");
-
-  const handleRoomClick = (room) => {
-    setSelectedRoomId(room.id);
-    onRoomClick?.(room);
-  };
 
   return (
     <ListBody>
       <RoomList>
         {rooms.map((room) => (
-          <RoomItem
-            key={room.id}
-            $isActive={room.id === selectedRoomId}
-            onClick={() => handleRoomClick(room)}
-          >
+          <RoomItem key={room.id} onClick={() => selectRoom(room)}>
             <RoomLeft>
               {/* 방 썸네일 */}
               <ThumbnailBox
@@ -190,14 +174,11 @@ const SideChatListComponent = ({ onRoomClick, onTabChange }) => {
       </RoomList>
 
       <TabGroup>
-        {TABS.map((tab) => (
+        {SIDE_TABS.map((tab) => (
           <TabBtn
             key={tab.key}
-            $isActive={tab.key === activeTab}
-            onClick={() => {
-              setActiveTab(tab.key);
-              onTabChange?.(tab.key);
-            }}
+            $isActive={tab.key === listFilter}
+            onClick={() => changeListFilter(tab.key)}
           >
             {tab.label}
           </TabBtn>
