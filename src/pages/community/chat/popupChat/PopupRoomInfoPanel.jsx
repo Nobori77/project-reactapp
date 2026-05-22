@@ -46,7 +46,7 @@ const liveVectorUrl =
   "https://www.figma.com/api/mcp/asset/79378b34-81dd-4aef-bc8a-2e9814e941b7";
 
 const PopupRoomInfoPanel = ({ chatRoomInfo, tags }) => {
-  const { handleLeave } = useChatContext();
+  const { leaveRoom } = useChatContext();
   const [signToggle, setSignToggle] = useState(false);
   const [readToggle, setReadToggle] = useState(false);
 
@@ -121,7 +121,7 @@ const PopupRoomInfoPanel = ({ chatRoomInfo, tags }) => {
         <OutlineButton
           borderColor={colors.live}
           textColor={colors.live}
-          onClick={handleLeave}
+          onClick={leaveRoom}
         >
           채팅방 나가기
         </OutlineButton>

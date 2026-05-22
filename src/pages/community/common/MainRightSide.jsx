@@ -7,7 +7,8 @@ import FloatingChatButton from "./FloatingChatButton";
 import PopupChatScreen from "../chat/PopupChatScreen";
 import PopupChatRoomSelect from "../chat/PopupChatRoomSelect";
 import SideChat from "../chat/sideChat/SideChat";
-import { useChatContext, VIEW } from "../context/ChatContext";
+import { useChatContext, VIEW, SCREEN } from "../context/ChatContext";
+import CreateChatRoomModal from "../chat/createChatRoom/CreateChatRoomModal";
 
 const PopupOverlay = styled.div`
   position: fixed;
@@ -17,7 +18,7 @@ const PopupOverlay = styled.div`
 `;
 
 const MainRightSide = () => {
-  const { activeChatRoom, view, isLoading, reopenChat } = useChatContext();
+  const { chatRoomDTO, view, screen, isLoading } = useChatContext();
 
   return (
     <div>
@@ -25,28 +26,29 @@ const MainRightSide = () => {
         <SideUserProfile />
         <SideNotice />
 
-        {/* 플로팅 버튼 — 진행 중인 채팅이 있고 팝업이 닫혀 있을 때만 표시 */}
-        {!isLoading && view === null && activeChatRoom !== null && (
-          <FloatingChatButton
-            roomName={activeChatRoom.title}
-            liveCount={`${activeChatRoom.participantCount}명`}
-            onClick={reopenChat}
-          />
+        {/* 플로팅 버튼 — 진행 중인 채팅이 있고 창이 닫혀 있을 때만 표시 */}
+        {!isLoading && view === null && chatRoomDTO !== null && (
+          <FloatingChatButton />
         )}
       </ColumnBlock>
 
-      {/* 사이드 채팅 — 팝업 축소 시 표시 */}
+      {/* 사이드 채팅 — view=SIDE 일 때 (내부에서 screen 으로 ROOM/LIST 분기) */}
       {view === VIEW.SIDE && <SideChat />}
 
-      {/* 팝업 채팅 화면 — position: fixed 오버레이 */}
-      {view === VIEW.POPUP && (
+      {/* 채팅방 생성 팝업 */}
+      {view === VIEW.POPUP && screen === SCREEN.CREATE && (
+        <PopupOverlay>
+          <CreateChatRoomModal />
+        </PopupOverlay>
+      )}
+
+      {/* 팝업 — view=POPUP 일 때 screen 으로 채팅방/선택 화면 분기 */}
+      {view === VIEW.POPUP && screen === SCREEN.ROOM && (
         <PopupOverlay>
           <PopupChatScreen />
         </PopupOverlay>
       )}
-
-      {/* 채팅방 선택 팝업 — 채팅방 나가기 시 표시 */}
-      {view === VIEW.POPUP_SELECT && (
+      {view === VIEW.POPUP && screen === SCREEN.LIST && (
         <PopupOverlay>
           <PopupChatRoomSelect />
         </PopupOverlay>

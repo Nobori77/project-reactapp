@@ -5,8 +5,10 @@ import styled from "styled-components";
 import { flexCenterRow } from "../../../styles/common";
 import { useChatContext } from "../context/ChatContext";
 import { getChatRooms } from "../communityApi/chatApi";
+import PageCount from "../post/postComponents/PageCount";
 
 import LiveChatCardCandidate2 from "../chat/chatComponents/chatCardCandidate/LiveChatCardCandidate2.jsx";
+import LiveChatCardCandidate1 from "./chatComponents/chatCardCandidate/LiveChatCardCandidate1.jsx";
 
 const HeaderBlock = styled.div`
   ${flexCenterRow}
@@ -15,26 +17,48 @@ const HeaderBlock = styled.div`
 `;
 
 const CommunityChatComponent = () => {
-  const { openChatRoom } = useChatContext();
+  const { openChatRoom, openCreateChatRoom } = useChatContext();
   const [rooms, setRooms] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getChatRooms(1)
-      .then((data) => setRooms(data.rooms))
-      .catch((err) => console.error(err));
-  }, []);
+    const load = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getChatRooms(currentPage);
+        setRooms(data.rooms);
+        setTotalPages(data.totalPages);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    load();
+  }, [currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (isLoading) return <div>로딩 중...</div>;
 
   return (
     <div>
-      <ColumnBlock>
+      <ColumnBlock marginBottom="42px">
         <HeaderBlock>
           <T.H6Bold>실시간 채팅방</T.H6Bold>
-          <ActionBtn $type="submit">+채팅방 만들기</ActionBtn>
+          <ActionBtn $type="submit" onClick={openCreateChatRoom}>
+            +채팅방 만들기
+          </ActionBtn>
         </HeaderBlock>
 
         <RowBlock flexWrap="wrap">
           {rooms.map((room) => (
-            <LiveChatCardCandidate2
+            <LiveChatCardCandidate1
               key={room.id}
               chatRoomName={room.chatRoomName}
               chatRoomDetail={room.chatRoomDetail}
@@ -43,6 +67,14 @@ const CommunityChatComponent = () => {
             />
           ))}
         </RowBlock>
+
+        {totalPages > 1 && (
+          <PageCount
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        )}
       </ColumnBlock>
     </div>
   );

@@ -51,7 +51,7 @@ const MOCK_FEATURED_ROOMS = [
 
 // 컴포넌트
 const CommunityPostContainer = () => {
-  const { openChatRoom } = useChatContext();
+  const { openChatRoom, openCreateChatRoom } = useChatContext();
   const [selectedTag, setSelectedTag] = useState("");
 
   console.log("메인 영역 그려지기");
@@ -65,7 +65,9 @@ const CommunityPostContainer = () => {
           <T.H6Bold>실시간 채팅방</T.H6Bold>
 
           {/* 글쓰기 버튼 */}
-          <S.ActionBtn $type="submit">+채팅방 만들기</S.ActionBtn>
+          <S.ActionBtn $type="submit" onClick={openCreateChatRoom}>
+            +채팅방 만들기
+          </S.ActionBtn>
         </S.HeaderBlock>
         {/* 채팅방 */}
         <S.LiveChatRow>

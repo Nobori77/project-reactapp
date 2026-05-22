@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { colors } from "../constants";
-import {
-  PageBg,
-  Popup,
-  Body,
-  RightPanel,
-} from "./ChatStyle";
+import { PageBg, Popup, Body, RightPanel } from "./ChatStyle";
 import PopupChatHeader from "./popupChat/PopupChatHeader";
 import PopupParticipantList from "./popupChat/PopupParticipantList";
 import PopupChatCenter from "./popupChat/PopupChatCenter";
@@ -13,7 +8,6 @@ import PopupRoomInfoPanel from "./popupChat/PopupRoomInfoPanel";
 import PopupUserInfoPanel from "./popupChat/PopupUserInfoPanel";
 import { useChatContext } from "../context/ChatContext";
 import { getChatRoomUsers, getChatRoomInfo } from "../communityApi/chatApi";
-import useChatRoom from "./hooks/useChatRoom";
 
 const S = {
   PageBg,
@@ -42,15 +36,16 @@ const TAGS = [
   { label: "#초보환영", bg: "#e1beec", color: "#b63fde" },
 ];
 
+// 메인 에서 채팅방 카드 클릭 시 뜨는 팝업 채팅창 (채팅방)
 const PopupChatScreen = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [chatRoomInfo, setChatRoomInfo] = useState(null);
-  const { activeChatRoom } = useChatContext();
+  // 프로바이더 에서 현재 사용자가 선택 한 방 정보 불러온 뒤에 채팅방 아이디 할당
+  const { chatRoomDTO } = useChatContext();
+  const chatRoomId = chatRoomDTO?.id;
 
-  const chatRoomId = activeChatRoom?.id;
-  const { messages, sendMessage: handleSendMessage } = useChatRoom(chatRoomId);
-
+  // 채팅방 정보 불러오기
   useEffect(() => {
     if (!chatRoomId) return;
     getChatRoomInfo(chatRoomId)
@@ -58,6 +53,7 @@ const PopupChatScreen = () => {
       .catch((err) => console.error("채팅방 정보 불러오기 실패:", err));
   }, [chatRoomId]);
 
+  // 채팅방 내 참여 유저들 불러오기
   useEffect(() => {
     if (!chatRoomId) return;
     getChatRoomUsers(chatRoomId)
@@ -74,16 +70,14 @@ const PopupChatScreen = () => {
       <S.Popup>
         <PopupChatHeader chatRoomInfo={chatRoomInfo} />
         <S.Body>
+          {/* 왼쪽 판넬 (참여 유저 목록) */}
           <PopupParticipantList
             users={users}
             selectedUserEmail={selectedUser?.email}
             onUserClick={handleUserClick}
           />
           {/* 채팅 메세지 나열되는 곳 */}
-          <PopupChatCenter
-            messages={messages}
-            onSendMessage={handleSendMessage}
-          />
+          <PopupChatCenter chatRoomId={chatRoomId} key={chatRoomId} />
           <S.RightPanel>
             {selectedUser ? (
               <PopupUserInfoPanel

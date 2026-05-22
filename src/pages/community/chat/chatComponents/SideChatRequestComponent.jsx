@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { colors, fonts, radius } from "../../constants";
 import chatDefaultProfile from "../../assets/chat/chat_default_profile.svg";
 import { ThumbnailBox } from "./chatComponentStyle";
+import { useChatContext } from "../../context/ChatContext";
+import { SIDE_TABS } from "./sideChatTabs";
 
 // ─── Body ────────────────────────────────────────────────────────────────────
 
@@ -100,20 +102,14 @@ const defaultRequests = [
   { id: 2, username: "헬스하는칼국수", timeAgo: "1시간 전", avatar: null },
 ];
 
-const TABS = [
-  { key: "all", label: "모든 채팅방" },
-  { key: "chatting", label: "채팅중인 방" },
-  { key: "request", label: "요청" },
-];
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
 const SideChatRequestComponent = ({
   requests = defaultRequests,
-  activeTab = "request",
-  onTabChange,
   onRequestClick,
 }) => {
+  const { listFilter, changeListFilter } = useChatContext();
+
   return (
     <Body>
       <RequestList>
@@ -132,11 +128,11 @@ const SideChatRequestComponent = ({
       </RequestList>
 
       <TabGroup>
-        {TABS.map((tab) => (
+        {SIDE_TABS.map((tab) => (
           <TabBtn
             key={tab.key}
-            $isActive={tab.key === activeTab}
-            onClick={() => onTabChange?.(tab.key)}
+            $isActive={tab.key === listFilter}
+            onClick={() => changeListFilter(tab.key)}
           >
             {tab.label}
           </TabBtn>

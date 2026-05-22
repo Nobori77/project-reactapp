@@ -47,7 +47,7 @@ const liveVectorUrl =
   "https://www.figma.com/api/mcp/asset/79378b34-81dd-4aef-bc8a-2e9814e941b7";
 
 const PopupChatHeader = ({ chatRoomInfo }) => {
-  const { handleLeave, minimizeChat, closeChat } = useChatContext();
+  const { leaveRoom, minimizeView, closeView } = useChatContext();
 
   return (
     <S.Header>
@@ -79,11 +79,11 @@ const PopupChatHeader = ({ chatRoomInfo }) => {
         </S.MessageStatus>
       </S.HeaderLeft>
       <S.HeaderRight>
-        <S.LeaveBtn onClick={handleLeave}>채팅방 나가기</S.LeaveBtn>
-        <S.MinimizeBtn onClick={minimizeChat}>
+        <S.LeaveBtn onClick={leaveRoom}>채팅방 나가기</S.LeaveBtn>
+        <S.MinimizeBtn onClick={minimizeView}>
           <img src={minusIcon} alt="최소화" />
         </S.MinimizeBtn>
-        <S.CloseBtn onClick={closeChat}>
+        <S.CloseBtn onClick={closeView}>
           <img src={closeIcon} alt="닫기" />
         </S.CloseBtn>
       </S.HeaderRight>

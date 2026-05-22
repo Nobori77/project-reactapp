@@ -5,6 +5,7 @@ import { ALPHA, RADIUS, SHADOW } from "../constants";
 import chatDefaultProfile from "../assets/chat/chat_default_profile.svg";
 import expandImg from "../assets/chat/expand.svg";
 import { h10Bold, h11Medium } from "../../../styles/common";
+import { useChatContext } from "../context/ChatContext";
 
 const { PALETTE, GRADIENT, GRAYSCALE } = theme;
 const liveDotsImg =
@@ -101,13 +102,11 @@ const ExpandIcon = styled.img`
   background: ${ALPHA.white15};
 `;
 
-const FloatingChatButton = ({
-  roomName = "수어 일상 대화방",
-  liveCount = "200명",
-  onClick,
-}) => {
+const FloatingChatButton = () => {
   const initialDPR = useRef(window.devicePixelRatio);
   const [scale, setScale] = useState(1);
+  const { chatRoomDTO, reopenChat } = useChatContext();
+  const { chatRoomName, chatRoomUsers } = chatRoomDTO ?? {};
 
   useEffect(() => {
     const handleResize = () => {
@@ -120,15 +119,15 @@ const FloatingChatButton = ({
   return (
     <Wrapper style={{ transform: `scale(${scale})` }}>
       {/* 사이드 채팅 창 여는 버튼 개념 */}
-      <Button onClick={onClick} aria-label={`${roomName} 열기`}>
+      <Button onClick={reopenChat} aria-label={`${chatRoomName} 열기`}>
         {/* 기본 프로필 */}
         <DefaultProfile src={chatDefaultProfile} alt="" />
         <TextArea>
-          <RoomTitle>{roomName}</RoomTitle>
+          <RoomTitle>{chatRoomName}</RoomTitle>
           <MetaRow>
             <LiveDot src={liveDotsImg} alt="" />
             <LiveLabel>라이브</LiveLabel>
-            <CountLabel>{liveCount}</CountLabel>
+            <CountLabel>{chatRoomUsers}</CountLabel>
           </MetaRow>
         </TextArea>
 

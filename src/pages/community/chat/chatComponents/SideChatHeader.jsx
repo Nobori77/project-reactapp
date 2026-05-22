@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { colors } from "../../constants";
 import { h11Bold } from "../../../../styles/common";
-import { TYPE } from "../../constants";
+import { SCREEN, LIST_FILTER } from "../../context/ChatContext";
 import minusIcon from "../../assets/chat/minus_icon.svg";
 import expandIcon from "../../assets/chat/expand.svg";
 import closeIcon from "../../assets/chat/close_icon.svg";
@@ -63,24 +63,33 @@ const CloseBtn = styled(HeaderBtn)`
   background: rgba(255, 80, 80, 0.5);
 `;
 
+const LIST_TITLES = {
+  [LIST_FILTER.LIVE]: "전체 채팅 리스트",
+  [LIST_FILTER.REQUEST]: "채팅 요청 리스트",
+  [LIST_FILTER.ONGOING]: "진행중인 채팅",
+};
+
 const SideChatHeader = ({
   chatPartnerName = "ㅇㅇ",
   onMinimize,
   onExpand,
   onClose,
-  type,
+  screen,
+  listFilter,
 }) => {
+  const isRoom = screen === SCREEN.ROOM;
+  const listTitle = LIST_TITLES[listFilter];
+
   return (
     <div>
       <Header>
-        {/* 해당 부분만 좀 다름 */}
-        {type === TYPE.LIST && <TitleText>전체 채팅 리스트</TitleText>}
-        {type === TYPE.REQUEST && <TitleText>채팅 요청 리스트</TitleText>}
-        {type === TYPE.ROOM && (
+        {isRoom ? (
           <HeaderTitle>
             <ChatDot />
             <TitleText>{chatPartnerName}님과 채팅</TitleText>
           </HeaderTitle>
+        ) : (
+          listTitle && <TitleText>{listTitle}</TitleText>
         )}
         <ButtonGroup>
           <HeaderBtn onClick={onMinimize} aria-label="최소화">

@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { TAG_ON_PRIMARY } from "../../constants";
 import PostContent from "./detailComponent/PostContent";
-import FloatingChatButton from "../../common/FloatingChatButton";
 import PostSidebar from "../sidebar/component/PostSidebar";
 import { Page, ContentArea, ColumnBlock } from "../../communityStyle";
 import {
@@ -87,8 +86,6 @@ const PostDetailPage = () => {
         {/* 우측 3개 사이드 바 영역 */}
         <PostSidebar />
       </S.ContentArea>
-
-      <FloatingChatButton />
     </S.Page>
   );
 };

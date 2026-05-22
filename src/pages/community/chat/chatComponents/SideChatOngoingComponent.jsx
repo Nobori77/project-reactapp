@@ -4,13 +4,11 @@ import { colors, radius } from "../../constants";
 import { h10Bold, h11Bold, h11Regular } from "../../../../styles/common";
 import chatDefaultProfile from "../../assets/chat/chat_default_profile.svg";
 import { ThumbnailBox } from "./chatComponentStyle";
-import useChatRoomList from "../hooks/useChatRoomList";
+import useJoinedChatRoomList from "../hooks/useJoinedChatRoomList";
 import { useChatContext } from "../../context/ChatContext";
 import { SIDE_TABS } from "./sideChatTabs";
 
-import defaultProfileImg from "../../assets/chat/chat_default_profile.svg";
-
-// ─── List Body ───────────────────────────────────────────────────────────────
+// ─── Styles ───────────────────────────────────────────────────────────────────
 
 const ListBody = styled.div`
   background: ${colors.bgCard};
@@ -37,12 +35,10 @@ const LoaderRow = styled.div`
   flex-shrink: 0;
 `;
 
-// ─── Room Item ───────────────────────────────────────────────────────────────
-
 const RoomItem = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   padding: 8px;
   border-radius: ${radius.input};
   cursor: pointer;
@@ -57,16 +53,18 @@ const RoomItem = styled.div`
   }
 `;
 
-const RoomLeft = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
 const RoomInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+`;
+
+const RoomTopRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const RoomName = styled.p`
@@ -74,38 +72,26 @@ const RoomName = styled.p`
   color: ${colors.textMain};
   margin: 0;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
-const LiveBadge = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-
-const LiveDot = styled.span`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: ${colors.live};
-  flex-shrink: 0;
-`;
-
-const LiveText = styled.p`
-  ${h11Bold}
-  color: ${colors.live};
-  margin: 0;
-`;
-
-const CountText = styled.p`
+const RoomTime = styled.p`
   ${h11Regular}
   color: ${colors.textSub};
   margin: 0;
   white-space: nowrap;
-  text-align: right;
   flex-shrink: 0;
 `;
 
-// ─── Tab Buttons ─────────────────────────────────────────────────────────────
+const RoomLastMsg = styled.p`
+  ${h11Regular}
+  color: ${colors.textSub};
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const TabGroup = styled.div`
   display: flex;
@@ -132,44 +118,43 @@ const TabBtn = styled.button`
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const SideChatListComponent = () => {
+const SideChatOngoingComponent = () => {
   const { listFilter, changeListFilter, selectRoom } = useChatContext();
-  const { rooms, isLoading, hasMore, loaderRef } = useChatRoomList();
+  const { rooms, isLoading, hasMore, loaderRef } = useJoinedChatRoomList();
 
   return (
     <ListBody>
       <RoomList>
-        {rooms.map((room) => (
-          <RoomItem key={room.id} onClick={() => selectRoom(room)}>
-            <RoomLeft>
-              {/* 방 썸네일 */}
-              <ThumbnailBox
-                src={room.chatRoomProfile || chatDefaultProfile}
-                alt={room.chatRoomName}
-                onError={(e) => {
-                  e.target.src = defaultProfileImg;
-                }}
-              />
-              <RoomInfo>
-                <RoomName>{room.chatRoomName}</RoomName>
-                {room.isLive && (
-                  <LiveBadge>
-                    <LiveDot />
-                    <LiveText>라이브</LiveText>
-                  </LiveBadge>
-                )}
-              </RoomInfo>
-            </RoomLeft>
-            <CountText>{room.chatRoomUsers}명</CountText>
-          </RoomItem>
-        ))}
-        {hasMore && (
-          <LoaderRow ref={loaderRef}>
-            {isLoading ? "불러오는 중..." : ""}
-          </LoaderRow>
-        )}
-        {!hasMore && rooms.length === 0 && !isLoading && (
-          <LoaderRow>채팅방이 없습니다.</LoaderRow>
+        {isLoading && rooms.length === 0 ? (
+          <LoaderRow>불러오는 중...</LoaderRow>
+        ) : !isLoading && rooms.length === 0 ? (
+          <LoaderRow>진행중인 채팅방이 없습니다.</LoaderRow>
+        ) : (
+          <>
+            {rooms.map((room) => (
+              <RoomItem key={room.id} onClick={() => selectRoom(room)}>
+                <ThumbnailBox
+                  src={room.chatRoomProfile || chatDefaultProfile}
+                  alt={room.chatRoomName}
+                  onError={(e) => {
+                    e.target.src = chatDefaultProfile;
+                  }}
+                />
+                <RoomInfo>
+                  <RoomTopRow>
+                    <RoomName>{room.chatRoomName}</RoomName>
+                    <RoomTime>{room.time}</RoomTime>
+                  </RoomTopRow>
+                  <RoomLastMsg>{room.chatRoomDetail || `${room.chatRoomUsers}명`}</RoomLastMsg>
+                </RoomInfo>
+              </RoomItem>
+            ))}
+            {hasMore && (
+              <LoaderRow ref={loaderRef}>
+                {isLoading ? "불러오는 중..." : ""}
+              </LoaderRow>
+            )}
+          </>
         )}
       </RoomList>
 
@@ -188,4 +173,4 @@ const SideChatListComponent = () => {
   );
 };
 
-export default SideChatListComponent;
+export default SideChatOngoingComponent;

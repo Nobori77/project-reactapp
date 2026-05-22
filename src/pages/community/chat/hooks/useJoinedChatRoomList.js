@@ -1,19 +1,31 @@
 import { useState, useEffect, useRef } from "react";
-import { getChatRooms } from "../../communityApi/chatApi";
+import { getJoinedChatRooms } from "../../communityApi/chatApi";
 
-// const toDisplayRoom = (room) => ({
-//   id, chatRoomName, chatRoomDetail,
-// });
-// const toDisplayRoom = (room) => ({
-//   id: room.id,
-//   name: room.chatRoomName,
-//   detail: room.chatRoomDetail,
-//   count: room.chatRoomUsers ?? 0,
-//   isLive: true,
-//   thumbnail: room.chatRoomProfile ?? null,
-// });
+const formatLastTime = (dateStr) => {
+  if (!dateStr) return "";
+  const date = new Date(dateStr.replace(" ", "T"));
+  const now = new Date();
+  const isToday = date.toDateString() === now.toDateString();
+  if (isToday) {
+    return date.toLocaleTimeString("ko-KR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  }
+  return `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+};
 
-const useChatRoomList = () => {
+const toDisplayRoom = (room) => ({
+  id: room.id,
+  chatRoomName: room.chatRoomName,
+  chatRoomUsers: room.chatRoomUsers ?? 0,
+  time: formatLastTime(room.chatLastReadAt),
+  chatRoomDetail: room.chatRoomDetail ?? "",
+  chatRoomProfile: room.chatRoomProfile ?? null,
+});
+
+const useJoinedChatRoomList = () => {
   const [rooms, setRooms] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -24,24 +36,15 @@ const useChatRoomList = () => {
     let cancelled = false;
     setIsLoading(true);
 
-    getChatRooms(page)
+    getJoinedChatRooms(page)
       .then((data) => {
         if (cancelled) return;
-        const newRooms = (data.rooms ?? []).map(
-          ({ id, chatRoomName, chatRoomDetail, chatRoomUsers, chatRoomProfile }) => ({
-            id,
-            chatRoomName,
-            chatRoomDetail,
-            chatRoomUsers: chatRoomUsers ?? 0,
-            isLive: true,
-            chatRoomProfile: chatRoomProfile ?? null,
-          })
-        );
+        const newRooms = (data.rooms ?? []).map(toDisplayRoom);
         setRooms((prev) => (page === 1 ? newRooms : [...prev, ...newRooms]));
         setHasMore(page < (data.totalPages ?? 1));
       })
       .catch((err) => {
-        if (!cancelled) console.error("채팅방 목록 불러오기 실패:", err);
+        if (!cancelled) console.error("참여중인 채팅방 목록 불러오기 실패:", err);
       })
       .finally(() => {
         if (!cancelled) setIsLoading(false);
@@ -70,4 +73,4 @@ const useChatRoomList = () => {
   return { rooms, isLoading, hasMore, loaderRef };
 };
 
-export default useChatRoomList;
+export default useJoinedChatRoomList;
