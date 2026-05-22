@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { colors, fonts, radius } from "../../constants";
-import chatDefaultProfile from "../../assets/chat/chat_default_profile.svg";
-import { ThumbnailBox } from "./chatComponentStyle";
-import { useChatContext } from "../../context/ChatContext";
-import { SIDE_TABS } from "./sideChatTabs";
+import { colors, fonts, radius } from "../../../constants";
+import chatDefaultProfile from "../../../assets/chat/chat_default_profile.svg";
+import { ThumbnailBox } from "../../chatComponents/chatComponentStyle";
+import { useChatContext } from "../../../context/ChatContext";
+import { SIDE_TABS } from "../../chatComponents/sideChatTabs";
 
 // ─── Body ────────────────────────────────────────────────────────────────────
 

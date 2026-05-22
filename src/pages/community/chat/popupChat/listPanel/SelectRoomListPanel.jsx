@@ -22,10 +22,10 @@ import {
   SelectUserNameText,
   FilterTabsRow,
   FilterTab,
-} from "../ChatStyle";
-import { useChatContext, LIST_FILTER } from "../../context/ChatContext";
-import useChatRoomList from "../hooks/useChatRoomList";
-import chatDefaultProfile from "../../assets/chat/chat_default_profile.svg";
+} from "../../ChatStyle";
+import { useChatContext, LIST_FILTER } from "../../../context/ChatContext";
+import useChatRoomList from "../../hooks/useChatRoomList";
+import chatDefaultProfile from "../../../assets/chat/chat_default_profile.svg";
 
 const S = {
   SelectLeftPanel,

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { colors, fonts, radius } from "../../constants";
-import ChatMessage from "./ChatMessage";
-import useChatRoom from "../hooks/useChatRoom";
+import { colors, fonts, radius } from "../../../constants";
+import ChatMessage from "../../chatComponents/ChatMessage";
+import useChatRoom from "../../hooks/useChatRoom";
 
 // ─── Body ────────────────────────────────────────────────────────────────────
 
