@@ -128,6 +128,12 @@ export const Label = styled.label`
   color: #555;
   margin-bottom: 4px;
   display: block;
+
+  span {
+    color: #e74c3c;
+    font-weight: 700;
+    margin-left: 2px;
+  }
 `;
 
 export const Input = styled.input`

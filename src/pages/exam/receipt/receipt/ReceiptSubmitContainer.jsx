@@ -128,7 +128,7 @@ const ReceiptSubmitContainer = () => {
 
       <S.FormWrap>
         <div>
-          <S.Label>시험 회차 *</S.Label>
+          <S.Label>시험 회차 <span>*</span></S.Label>
           <S.Select value={selectedTestId} onChange={e => { setSelectedTestId(e.target.value); setSubmitMsg(""); }}>
             <option value="">시험 회차를 선택하세요</option>
             {tests.map(t => (
@@ -149,7 +149,7 @@ const ReceiptSubmitContainer = () => {
 
         <S.Grid>
           <div>
-            <S.Label>이름 *</S.Label>
+            <S.Label>이름 <span>*</span></S.Label>
             <S.Input
               placeholder="홍길동"
               value={name}
@@ -157,7 +157,7 @@ const ReceiptSubmitContainer = () => {
             />
           </div>
           <div>
-            <S.Label>생년월일 *</S.Label>
+            <S.Label>생년월일 <span>*</span></S.Label>
             <S.Input
               placeholder="YYYY-MM-DD"
               value={birth}
@@ -166,7 +166,7 @@ const ReceiptSubmitContainer = () => {
             />
           </div>
           <div>
-            <S.Label>연락처 *</S.Label>
+            <S.Label>연락처 <span>*</span></S.Label>
             <S.Input
               placeholder="010-0000-0000"
               value={phone}
@@ -175,7 +175,7 @@ const ReceiptSubmitContainer = () => {
             />
           </div>
           <div>
-            <S.Label>이메일 *</S.Label>
+            <S.Label>이메일 <span>*</span></S.Label>
             <S.Input
               placeholder="example@email.com"
               value={email}
@@ -185,7 +185,7 @@ const ReceiptSubmitContainer = () => {
         </S.Grid>
 
         <div>
-          <S.Label>증빙서류 첨부 *</S.Label>
+          <S.Label>증빙서류 첨부 <span>*</span></S.Label>
           <input
             type="file"
             multiple

@@ -215,7 +215,7 @@ export default function JoinComponent() {
 
               {/* 이름 */}
               <S.AnimatedField>
-                <S.Label>이름 *</S.Label>
+                <S.Label>이름 <span>*</span></S.Label>
                 <S.Input
                   name="userName"
                   placeholder="이름을 입력하세요"
@@ -230,7 +230,7 @@ export default function JoinComponent() {
               {/* 생년월일 */}
               {formStep >= 1 && (
                 <S.AnimatedField>
-                  <S.Label>생년월일 *</S.Label>
+                  <S.Label>생년월일 <span>*</span></S.Label>
                   <S.Input
                     placeholder="YYYY-MM-DD"
                     style={{ letterSpacing: "1px" }}
@@ -247,7 +247,7 @@ export default function JoinComponent() {
               {/* 이메일 */}
               {formStep >= 2 && (
                 <S.AnimatedField>
-                  <S.Label>아이디 (이메일) *</S.Label>
+                  <S.Label>아이디 (이메일) <span>*</span></S.Label>
                   <S.Input
                     name="userEmail"
                     placeholder="example@email.com"
@@ -263,7 +263,7 @@ export default function JoinComponent() {
               {/* 비밀번호 */}
               {formStep >= 3 && (
                 <S.AnimatedField>
-                  <S.Label>비밀번호 *</S.Label>
+                  <S.Label>비밀번호 <span>*</span></S.Label>
                   <S.Input
                     type="password"
                     name="userPassword"
@@ -280,7 +280,7 @@ export default function JoinComponent() {
               {/* 비밀번호 확인 */}
               {formStep >= 4 && (
                 <S.AnimatedField>
-                  <S.Label>비밀번호 확인 *</S.Label>
+                  <S.Label>비밀번호 확인 <span>*</span></S.Label>
                   <S.Input
                     type="password"
                     name="confirmPassword"
@@ -302,7 +302,7 @@ export default function JoinComponent() {
               {/* 핸드폰 인증 */}
               {formStep >= 5 && (
                 <S.AnimatedField>
-                  <S.Label>핸드폰 번호 *</S.Label>
+                  <S.Label>핸드폰 번호 <span>*</span></S.Label>
                   <S.InlineRow>
                     <S.Input
                       placeholder="010-0000-0000"
@@ -317,7 +317,7 @@ export default function JoinComponent() {
                   </S.InlineRow>
                   {codeSent && !codeVerified && (
                     <div style={{ marginTop: 8 }}>
-                      <S.Label>인증번호 *</S.Label>
+                      <S.Label>인증번호 <span>*</span></S.Label>
                       <S.InlineRow>
                         <S.Input
                           placeholder="인증번호를 입력하세요"
