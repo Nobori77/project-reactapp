@@ -14,6 +14,7 @@ const Container = styled.div`
   background-color: ${theme.PALETTE.white};
   position: relative;
   overflow: hidden;
+  /* height: 600px; */
 `;
 
 const BlobGreen = styled.div`
@@ -296,12 +297,12 @@ const CommunityHeaderA = () => {
             </EventItem>
           </RightSection>
 
-          <VectorImage className="vector1">
+          {/* <VectorImage className="vector1">
             <img alt="" src={imgVector} />
           </VectorImage>
           <VectorImage className="vector2">
             <img alt="" src={imgVector1} />
-          </VectorImage>
+          </VectorImage> */}
         </MainSection>
       </Inner>
     </Container>
