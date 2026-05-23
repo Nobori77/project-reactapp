@@ -15,6 +15,7 @@ import {
 } from "./communityPostContainerStyle";
 import LiveChatCardCandidate1 from "../chat/chatComponents/chatCardCandidate/LiveChatCardCandidate1.jsx";
 import { getChatRooms } from "../communityApi/chatApi.js";
+import LiveChatCardCandidate1Skeleton from "../chat/skeleton/LiveChatCardCandidate1Skeleton.jsx";
 
 const S = {
   ColumnBlock,
@@ -70,7 +71,12 @@ const CommunityPostContainer = () => {
         </S.HeaderBlock>
         {/* 채팅방 */}
         {isLoading ? (
-          <div>로딩중</div>
+          // <div>로딩중</div>
+          <S.LiveChatRow>
+            <LiveChatCardCandidate1Skeleton />
+            <LiveChatCardCandidate1Skeleton />
+            <LiveChatCardCandidate1Skeleton />
+          </S.LiveChatRow>
         ) : (
           <S.LiveChatRow>
             {rooms.map(({ id, ...roomData }) => (

@@ -3,7 +3,7 @@ import PostListCard from "./PostListCard.jsx";
 import PageCount from "./PageCount";
 import { fetchPosts } from "../../communityApi/postApi";
 import { ColumnBlock } from "../../communityStyle";
-import { height } from "@fortawesome/free-solid-svg-icons/fa0";
+import PostListCardSkeleton from "../skeleton/PostListCardSkeleton.jsx";
 
 const S = {
   ColumnBlock,
@@ -42,7 +42,15 @@ const PostListSection = ({ postTag = "" }) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading)
+    return (
+      <S.ColumnBlock>
+        <PostListCardSkeleton />
+        <PostListCardSkeleton />
+        <PostListCardSkeleton />
+        <PostListCardSkeleton />
+      </S.ColumnBlock>
+    );
 
   return (
     <S.ColumnBlock marginBottom="42px">
