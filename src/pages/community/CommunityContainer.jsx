@@ -3,9 +3,6 @@ import { Outlet } from "react-router-dom";
 import { Page, ContentArea } from "./communityStyle";
 import MainRightSide from "./common/MainRightSide";
 import { ChatProvider } from "./context/ChatContext";
-import CommunityHeader from "./common/CommunityHeader";
-import CommunityHeaderA from "./common/CommunityHeaderA";
-import CommunityHeaderB from "./common/CommunityHeaderB";
 import CommunityHeaderC from "./common/CommunityHeaderC";
 
 const S = {

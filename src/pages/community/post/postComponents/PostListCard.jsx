@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import formatRelativeTime from "../../functions/formatRelativeTime";
 import {
   Avatar,
   AvatarAndAuthorRow,
@@ -71,7 +72,7 @@ const PostListCard = ({
       {/* 태그 및 작성 시각 */}
       <S.TagAndTimeRow>
         <S.Tag>{postTag}</S.Tag>
-        <S.TimeText>{postCreateAt}</S.TimeText>
+        <S.TimeText>{formatRelativeTime(postCreateAt)}</S.TimeText>
       </S.TagAndTimeRow>
 
       {/* 게시글 컨텐츠 (제목, 내용) 및 썸네일 row */}
