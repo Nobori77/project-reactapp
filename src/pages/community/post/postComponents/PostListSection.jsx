@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import PostListCard from "./PostListCard.jsx";
 import PageCount from "./PageCount";
@@ -28,6 +28,7 @@ const PostListSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const listTopRef = useRef(null);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -54,12 +55,12 @@ const PostListSection = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    listTopRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <>
-      <S.PostHeader>
+      <S.PostHeader ref={listTopRef}>
         <T.H7Bold>게시글</T.H7Bold>
       </S.PostHeader>
       <S.PostCategoryHeader>
