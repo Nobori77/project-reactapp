@@ -26,6 +26,7 @@ import {
 } from "../postDetailStyle";
 import DummyContent from "./dummyContent/DummyContent";
 import { DEFAULT_IMAGES } from "../../../constants";
+import PostContentSkeleton from "./PostContentSkeleton";
 
 const { PALETTE } = theme;
 
@@ -80,21 +81,26 @@ const PostContent = ({ postId }) => {
   // const tags = ["dd"];
 
   // 아직 post 데이터가 없을 때
-  if (!post) return <div>로딩 중...</div>;
+  if (!post)
+    return (
+      <div>
+        <PostContentSkeleton />
+      </div>
+    );
 
   // 게시글 데이터 분리 (post 데이터 생기고 난 뒤)
   const {
-    id,
+    // id,
     postTitle,
-    postContent,
+    // postContent,
     postReadCount,
     postCreateAt,
-    postTag,
+    // postTag,
     userNickname,
     userProfile,
-    commentCount,
-    isLiked,
-    isOwner,
+    // commentCount,
+    // isLiked,
+    // isOwner,
   } = post;
 
   return (
