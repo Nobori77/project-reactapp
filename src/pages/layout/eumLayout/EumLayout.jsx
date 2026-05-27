@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import * as S from "./style.js";
 import NotificationDropdown from "../notificationDropDown";
@@ -94,7 +94,11 @@ const EumLayout = ({
         </S.RightNav>
       </S.Header>
 
-      <ScrollRestoration />
+      <ScrollRestoration
+        getKey={(location) =>
+          location.pathname.startsWith("/exam") ? location.pathname : location.key
+        }
+      />
       <S.Main>
         <Outlet />
       </S.Main>
