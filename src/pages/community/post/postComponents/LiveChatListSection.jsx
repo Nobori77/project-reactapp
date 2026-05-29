@@ -8,6 +8,7 @@ import { LiveChatRow, AllChatButton } from "../communityPostContainerStyle";
 import { RowBlock } from "../../communityStyle";
 import { useSearchParams } from "react-router-dom";
 import PageCount from "./PageCount";
+import NoResult from "../../common/NoResult";
 
 const LiveChatListSection = () => {
   const { openChatRoom } = useChatContext();
@@ -56,6 +57,11 @@ const LiveChatListSection = () => {
               <LiveChatCardCandidate1Skeleton />
               <LiveChatCardCandidate1Skeleton />
             </>
+          ) : rooms.length === 0 ? (
+            <NoResult
+              message="검색 결과가 없습니다"
+              subMessage={`'${keyword}'에 해당하는 채팅방이 없습니다`}
+            />
           ) : (
             rooms.map(({ id, ...roomData }) => (
               <LiveChatCardCandidate1
