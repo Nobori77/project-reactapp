@@ -4,17 +4,34 @@ import LiveChatCardCandidate1Skeleton from "../../chat/skeleton/LiveChatCardCand
 import { getChatRooms } from "../../communityApi/chatApi.js";
 import { useChatContext } from "../../context/ChatContext";
 import { LiveChatRow } from "../communityPostContainerStyle";
+import { useSearchParams } from "react-router-dom";
 
 const LiveChatListSection = () => {
   const { openChatRoom } = useChatContext();
   const [rooms, setRooms] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword") ?? "";
+
+  let size = 3;
+  if (keyword !== "" && keyword != null) {
+    size = 6;
+  }
+
+  // 테스트
+  console.log("입력 키워드: ", keyword);
+
+  // 페이지 조절
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [keyword]);
 
   useEffect(() => {
     const load = async () => {
       setIsLoading(true);
       try {
-        const data = await getChatRooms(1, 3);
+        const data = await getChatRooms(currentPage, size, keyword);
         setRooms(data.rooms);
       } catch (err) {
         console.error(err);
@@ -23,7 +40,7 @@ const LiveChatListSection = () => {
       }
     };
     load();
-  }, []);
+  }, [size, currentPage, keyword]);
 
   if (isLoading)
     return (
@@ -33,6 +50,8 @@ const LiveChatListSection = () => {
         <LiveChatCardCandidate1Skeleton />
       </LiveChatRow>
     );
+
+  // 검색을 한 경우
 
   return (
     <LiveChatRow>
