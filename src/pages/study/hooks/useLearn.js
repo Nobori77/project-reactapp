@@ -1,4 +1,4 @@
-// 학습 상태 훅: 로드맵과 퀘스트 화면 데이터 관리
+// 학습 상태 훅 담당: 로드맵과 진행도 데이터를 관리
 import { useEffect, useState } from "react";
 import { fetchLearnCompletedWordCount, fetchLearnList, fetchLearnTotalWordCount } from "../apis/LearnApi";
 import { learnHomeMock } from "../learn/data/learnMock";
@@ -11,7 +11,7 @@ export const useLearn = () => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(learnHomeMock);
 
-  // 학습목록조회함수: 백엔드 학습 목록을 로드맵 반영, 실패 시 임시데이터 -> 유지
+  // 학습 목록 조회: 백엔드 학습 목록과 완료 개수를 로드맵에 반영
   useEffect(() => {
     let ignore = false;
 
@@ -36,20 +36,18 @@ export const useLearn = () => {
           })
         );
 
-        if (ignore)
-          return;
+        if (ignore) return;
 
         setData(mergeLearnListToHome(learnHomeMock, learnList, progressList));
       } catch {
-        if (ignore)
-          return;
+        if (ignore) return;
 
         setData(learnHomeMock);
-        setError("학습 서버 연결이 어려워 임시데이터를 보여주고 있어요.");
+        setError("학습 서버 연결이 어려워 임시 데이터를 보여주고 있어요.");
       } finally {
-
-        if (!ignore)
+        if (!ignore) {
           setLoading(false);
+        }
       }
     };
 

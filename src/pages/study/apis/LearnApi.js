@@ -1,19 +1,25 @@
-// 학습 API: 학습 목록, 단어, 학습 완료 요청
+// 학습 API 담당: 학습 목록, 단어, 영상, 완료 상태 요청
 const BASE_URL = "http://localhost:10000";
 
-// 학습 목록
-export const fetchLearnList = async () => {
+const requestJson = async (url, options = {}, errorMessage = "요청에 실패했습니다.") => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 4000);
 
   try {
-    const response = await fetch(`${BASE_URL}/api/edus`, { signal: controller.signal });
-    if (!response.ok)
-      throw new Error("학습 목록 조회 실패");
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(errorMessage);
+    }
 
     const result = await response.json();
-    if (!result.success)
+
+    if (!result.success) {
       throw new Error(result.message);
+    }
 
     return result.data;
   } finally {
@@ -21,99 +27,34 @@ export const fetchLearnList = async () => {
   }
 };
 
-// 학습 단어조회
-export const fetchWordsByLearnId = async (learnId) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
+// 학습 목록 조회
+export const fetchLearnList = async () =>
+  requestJson(`${BASE_URL}/api/edus`, {}, "학습 목록 조회 실패");
 
-  try {
-    const response = await fetch(`${BASE_URL}/api/words/edu/${learnId}`, { signal: controller.signal });
-    if (!response.ok)
-      throw new Error("학습 단어 조회 실패");
-
-    const result = await response.json();
-    if (!result.success)
-      throw new Error(result.message);
-
-    return result.data;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-};
+// 학습별 단어 목록 조회
+export const fetchWordsByLearnId = async (learnId) =>
+  requestJson(`${BASE_URL}/api/words/edu/${learnId}`, {}, "학습 단어 조회 실패");
 
 // 학습 영상 조회
-export const fetchEduVideoById = async (eduVideoId) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
-
-  try {
-    const response = await fetch(`${BASE_URL}/api/edu-videos/${eduVideoId}`, { signal: controller.signal });
-    if (!response.ok)
-      throw new Error("학습 영상 조회 실패");
-
-    const result = await response.json();
-    if (!result.success)
-      throw new Error(result.message);
-
-    return result.data;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-};
+export const fetchEduVideoById = async (eduVideoId) =>
+  requestJson(`${BASE_URL}/api/edu-videos/${eduVideoId}`, {}, "학습 영상 조회 실패");
 
 // 학습 전체 단어 개수 조회
-export const fetchLearnTotalWordCount = async (learnId) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
-
-  try {
-    const response = await fetch(`${BASE_URL}/api/word-studies/edus/${learnId}/total-count`, { signal: controller.signal });
-    if (!response.ok)
-      throw new Error("학습 전체 단어 개수 조회 실패");
-
-    const result = await response.json();
-    if (!result.success)
-      throw new Error(result.message);
-
-    return result.data;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-};
+export const fetchLearnTotalWordCount = async (learnId) =>
+  requestJson(`${BASE_URL}/api/word-studies/edus/${learnId}/total-count`, {}, "학습 전체 단어 개수 조회 실패");
 
 // 학습 완료 단어 개수 조회
-export const fetchLearnCompletedWordCount = async ({ userId, learnId }) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
+export const fetchLearnCompletedWordCount = async ({ userId, learnId }) =>
+  requestJson(`${BASE_URL}/api/word-studies/users/${userId}/edus/${learnId}/completed-count`, {}, "학습 완료 단어 개수 조회 실패");
 
-  try {
-    const response = await fetch(`${BASE_URL}/api/word-studies/users/${userId}/edus/${learnId}/completed-count`, { signal: controller.signal });
-    if (!response.ok)
-      throw new Error("학습 완료 단어 개수 조회 실패");
-
-    const result = await response.json();
-    if (!result.success)
-      throw new Error(result.message);
-
-    return result.data;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-};
-
-// 학습 완료
-export const finishLearnWord = async ({ userId, eduWordMapId }) => {
-  const response = await fetch(`${BASE_URL}/api/word-studies`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, eduWordMapId }),
-  });
-  if (!response.ok)
-    throw new Error("단어 학습 완료 실패");
-
-  const result = await response.json();
-  if (!result.success)
-    throw new Error(result.message);
-
-  return result.data;
-};
+// 학습 단어 완료 저장
+export const finishLearnWord = async ({ userId, eduWordMapId }) =>
+  requestJson(
+    `${BASE_URL}/api/word-studies`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, eduWordMapId }),
+    },
+    "단어 학습 완료 저장 실패"
+  );

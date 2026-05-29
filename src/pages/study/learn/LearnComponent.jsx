@@ -60,7 +60,7 @@ const LearnComponent = () => {
     }
 
     if (activeType === "sign" && Number.isFinite(Number(lesson.id))) {
-      navigate("/study/learn/quiz/greeting/questions/1", {
+      navigate(`/study/learn/quiz/greeting/questions/1?eduId=${lesson.id}`, {
         state: {
           eduId: lesson.id,
           lessonTitle: lesson.title,
