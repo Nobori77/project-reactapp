@@ -58,3 +58,11 @@ export const getPostById = async (id) => {
   if (!res.ok) throw new Error("게시글 로딩 실패");
   return res.json();
 };
+
+// 게시글 삭제
+export const deletePost = async (postId) => {
+  const res = await fetch(`${ROOT_URL}/posts/${postId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("게시글 삭제 실패");
+};
