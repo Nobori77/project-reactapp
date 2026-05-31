@@ -1,6 +1,11 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { DEFAULT_IMAGES } from "../constants";
+import {
+  requestCommentLike,
+  cancelCommentLike,
+} from "../communityApi/commentApi";
 import {
   CommentItemWrapper,
   LeftArea,
@@ -43,13 +48,32 @@ const CommentItem = ({
   userNickname = "사용자",
   commentId = null,
   commentContent = "",
+  commentIsLiked = false,
   commentLikeCount = 0,
   commentReplyCount = 0,
   commentCreateAt = "방금 전",
   showAccessibility = true,
 }) => {
+  const [liked, setLiked] = useState(commentIsLiked);
+  const [likeCount, setLikeCount] = useState(commentLikeCount);
+
   const isReply = commentId !== null;
   const displayLines = commentContent ? commentContent.split("\n") : [];
+
+  const clickCommentLike = async () => {
+    const prevLiked = liked;
+    const prevCount = likeCount;
+
+    setLiked(!prevLiked);
+    setLikeCount(prevLiked ? prevCount - 1 : prevCount + 1);
+
+    try {
+      prevLiked ? await cancelCommentLike(id) : await requestCommentLike(id);
+    } catch (e) {
+      setLiked(prevLiked);
+      setLikeCount(prevCount);
+    }
+  };
 
   return (
     <S.CommentItemWrapper isReply={isReply}>
@@ -71,9 +95,15 @@ const CommentItem = ({
             ))}
           </S.CommentText>
           <S.ReactionsRow>
-            <S.ReactionItem>
-              <FontAwesomeIcon icon={faHeart} />
-              <span>{commentLikeCount}</span>
+            <S.ReactionItem
+              onClick={clickCommentLike}
+              style={{ cursor: "pointer" }}
+            >
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{ color: liked ? "red" : "inherit" }}
+              />
+              <span>{likeCount}</span>
             </S.ReactionItem>
             <S.ReactionItem>
               <FontAwesomeIcon icon={faCommentDots} />
