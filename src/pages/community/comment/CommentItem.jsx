@@ -38,6 +38,7 @@ const S = {
 };
 
 const CommentItem = ({
+  id,
   userProfile = "default.jpg",
   userNickname = "사용자",
   commentId = null,
