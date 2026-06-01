@@ -5,6 +5,9 @@
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
 import ToolBar from "./postWriteComponent/ToolBar";
 import CommunityRule from "./postWriteComponent/CommunityRule";
 import PostingGuide from "./postWriteComponent/PostingGuide";
@@ -39,6 +42,7 @@ import {
   TagHint,
   TagInputField,
   TextArea,
+  TiptapWrapper,
   UploadIcon,
   WriteCard,
 } from "./postWriteStyle";
@@ -62,6 +66,11 @@ const CATEGORIES = [
 const PostWrite = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("전체");
+
+  const editor = useEditor({
+    extensions: [StarterKit, Underline],
+    content: "",
+  });
 
   const S = {
     ActionBtn,
@@ -95,6 +104,7 @@ const PostWrite = () => {
     TagHint,
     TagInputField,
     TextArea,
+    TiptapWrapper,
     UploadIcon,
     WriteCard,
   };
@@ -161,8 +171,10 @@ const PostWrite = () => {
                   <S.RequiredMark>*</S.RequiredMark>
                 </S.FieldLabel>
                 <S.BodyCol>
-                  <ToolBar />
-                  <S.TextArea placeholder="내용을 입력해 주세요" />
+                  <ToolBar editor={editor} />
+                  <S.TiptapWrapper>
+                    <EditorContent editor={editor} />
+                  </S.TiptapWrapper>
                 </S.BodyCol>
               </S.FieldRow>
 
