@@ -238,6 +238,22 @@ export const TiptapWrapper = styled.div`
       margin: 0;
     }
 
+    strong {
+      font-weight: bold;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    u {
+      text-decoration: underline;
+    }
+
+    s {
+      text-decoration: line-through;
+    }
+
     &.ProseMirror-focused {
       border-color: ${theme.PALETTE.primary.main};
     }

@@ -76,6 +76,8 @@ const VoiceBtn = styled.button`
   }
 `;
 
+const prevent = (e) => e.preventDefault();
+
 const ToolBar = ({ editor }) => {
   return (
     <div>
@@ -83,24 +85,28 @@ const ToolBar = ({ editor }) => {
         <Toolbar>
           <ToolbarIcon
             $active={editor?.isActive("bold")}
+            onMouseDown={prevent}
             onClick={() => editor?.chain().focus().toggleBold().run()}
           >
             <img src={boldSolidFull} alt="굵게" />
           </ToolbarIcon>
           <ToolbarIcon
             $active={editor?.isActive("italic")}
+            onMouseDown={prevent}
             onClick={() => editor?.chain().focus().toggleItalic().run()}
           >
             <img src={italicSolidFull} alt="기울임" />
           </ToolbarIcon>
           <ToolbarIcon
             $active={editor?.isActive("underline")}
+            onMouseDown={prevent}
             onClick={() => editor?.chain().focus().toggleUnderline().run()}
           >
             <img src={underlineSolidFull} alt="밑줄" />
           </ToolbarIcon>
           <ToolbarIcon
             $active={editor?.isActive("strike")}
+            onMouseDown={prevent}
             onClick={() => editor?.chain().focus().toggleStrike().run()}
           >
             <img src={strikethroughSolidFull} alt="취소선" />
