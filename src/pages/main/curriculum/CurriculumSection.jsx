@@ -18,6 +18,10 @@ const CurriculumSection = () => {
       {showModal && <CurriculumInfoBox onClose={() => setShowModal(false)} />}
 
       <S.SectionTitle>💎 커리큘럼</S.SectionTitle>
+      <S.InfoSub>
+          <S.ClickIcon src="/assets/image/main/clickIcon.svg" alt="clickIcon" />
+          단계를 눌러서 자세한 커리큘럼을 확인하세요
+      </S.InfoSub>
 
       <S.StepRow>
         {CURRICULUM.map((c, i) => (

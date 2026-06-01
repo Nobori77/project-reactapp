@@ -272,3 +272,9 @@ export const SubmitBtn = styled.button`
   cursor: pointer;
   &:hover { background: #4a58a8; }
 `;
+
+export const ErrorMsg = styled.p`
+  font-size: 13px;
+  color: #e53e3e;
+  margin: 0;
+`;

@@ -88,7 +88,9 @@ export const InfoSubTitle = styled.span`
 export const InfoSub = styled.span`
   font-size: ${theme.FONT_SIZE.h10};
   font-weight: ${theme.FONT_WEIGHT.medium};
-  margin-bottom: 14px;
+  margin-bottom: 10px;
+  align-self: flex-start;
+  padding-left: 512px;
   display: flex;
   align-items: center;
   gap : 6px;
@@ -388,3 +390,4 @@ export const ItemNum = styled.span`
   color: ${({ theme }) => theme.PALETTE.primary.main};
   min-width: 20px;
 `;
+

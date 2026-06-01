@@ -70,6 +70,7 @@ import StudyLearnAlphabetContainer from "../pages/study/learn/LearnAlphabetConta
 import StudyLearnQuizContainer from "../pages/study/learn/LearnQuizContainer";
 import StudyLearnQuizComponent from "../pages/study/learn/LearnQuizComponent";
 import FindAccountContainer from "../pages/auth/find-account/FindAccountContainer";
+import ReviewAllPage from "../pages/main/reviewSection/ReviewAllpage";
 
 const router = createBrowserRouter([
   {
@@ -78,8 +79,9 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <EumMainContainer />
+        element: <EumMainContainer />,
       },
+      { path: "reviews", element: <ReviewAllPage /> },
       { path: "exam",
         element: <ExamContainer />,
         children: [

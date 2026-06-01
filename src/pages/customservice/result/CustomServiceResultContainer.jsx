@@ -6,7 +6,7 @@ import useAuthCheck from "../useAuthCheck";
 import { STATS_LABELS } from "./constants";
 
 const CustomServiceResultContainer = () => {
-  const isAuth                      = useAuthCheck();
+  // const isAuth                      = useAuthCheck();
   const [results, setResults]       = useState([]);
   const [isLoading, setIsLoading]   = useState(false);
   const [error, setError]           = useState(null);
@@ -74,7 +74,7 @@ const CustomServiceResultContainer = () => {
     { label: STATS_LABELS[2], count: pendingCount },
   ];
 
-  if (!isAuth) return null;
+  // if (!isAuth) return null;
 
   return (
     <>

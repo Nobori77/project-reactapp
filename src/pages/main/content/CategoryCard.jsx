@@ -10,7 +10,7 @@ const CategoryCard = ({ card }) => {
       type="button"
       $large={card.large}
       $tone={card.tone}
-      onClick={() => { navigate(card.path); window.scrollTo(0, 0); }}
+      onClick={() => { navigate(card.path);}}
     >
       <span className="badge">{card.label}</span>
       <strong>{card.title}</strong>

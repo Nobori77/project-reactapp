@@ -9,10 +9,6 @@ const CurriculumInfoBox = ({ curriculum, activeStep, onStart, onShowModal }) => 
     <S.InfoBox>
       <S.InfoHeader>
         <S.InfoSubTitle>이음 커리큘럼 소개</S.InfoSubTitle>
-        <S.InfoSub>
-          <S.ClickIcon src="/assets/image/main/clickIcon.svg" alt="clickIcon" />
-          단계를 눌러보세요
-        </S.InfoSub>
       </S.InfoHeader>
       {current ? (
         <>
