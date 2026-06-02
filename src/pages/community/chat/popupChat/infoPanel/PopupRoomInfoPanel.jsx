@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { colors } from "../../../constants";
 import { useChatContext } from "../../../context/ChatContext";
+import { deleteChatRoom } from "../../../communityApi/chatApi";
 import OutlineButton from "../../../common/OutlineButton";
 import ToggleSwitch from "../../../common/ToggleSwitch";
 import T from "../../../communityTextStyle";
@@ -46,6 +47,7 @@ const liveVectorUrl =
   "https://www.figma.com/api/mcp/asset/79378b34-81dd-4aef-bc8a-2e9814e941b7";
 
 const PopupRoomInfoPanel = ({
+  id: chatRoomId,
   chatRoomProfile,
   chatRoomName,
   chatRoomUsers,
@@ -53,9 +55,14 @@ const PopupRoomInfoPanel = ({
   isOwner,
   tags,
 }) => {
-  const { leaveRoom } = useChatContext();
+  const { leaveRoom, deleteRoom } = useChatContext();
   const [signToggle, setSignToggle] = useState(false);
   const [readToggle, setReadToggle] = useState(false);
+
+  const handleDeleteRoom = async () => {
+    await deleteChatRoom(chatRoomId);
+    deleteRoom();
+  };
 
   return (
     <S.RightPanelScroll>
@@ -140,7 +147,11 @@ const PopupRoomInfoPanel = ({
           <OutlineButton borderColor={colors.border} textColor={colors.textSub}>
             채팅방 수정
           </OutlineButton>
-          <OutlineButton borderColor={colors.danger} textColor={colors.danger}>
+          <OutlineButton
+            borderColor={colors.danger}
+            textColor={colors.danger}
+            onClick={handleDeleteRoom}
+          >
             채팅방 삭제
           </OutlineButton>
         </S.PanelSection>
