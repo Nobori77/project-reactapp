@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import theme from "../../../styles/theme";
 
 const STATUS_STYLE = {
   답변완료: { color: "#fff", background: "#4f6ef7" },
@@ -57,7 +58,7 @@ export const AccordionArrow = styled.span`
 `;
 
 export const AccordionBody = styled.div`
-  max-height: ${({ $height }) => $height}px;
+  max-height: ${({ $height }) => ($height ? "2000px" : "0px")};  // ← 고정값으로 변경
   overflow: hidden;
   transition: max-height 0.35s ease;
 `;
@@ -129,9 +130,9 @@ export const AnswerBtnRow = styled.div`
 export const CancelBtn = styled.button`
   padding: 8px 20px;
   border-radius: 10px;
-  border: 1.5px solid #e0e0ea;
+  border: 1.5px solid ${theme.PALETTE.red};
   background: #fff;
-  color: #555;
+  color: ${theme.PALETTE.red};
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -230,4 +231,64 @@ export const StatCount = styled.div`
 export const StatLabel = styled.div`
   font-size: 13px;
   color: #888;
+`;
+
+/* ── File Upload ── */
+
+export const FileDropZone = styled.div`
+  border: 1.5px dashed #c0c8f8;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: #4f6ef7;
+  cursor: pointer;
+  background: #f7f8fd;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #eef0fd;
+  }
+`;
+
+export const FileItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  background: #fafafa;
+`;
+
+export const FileInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const FileThumb = styled.img`
+  width: 80px;       // ← 기존 36px에서 크게
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+`;
+
+export const FileName = styled.span`
+  font-size: 13px;
+  color: #444;
+`;
+
+export const FileRemoveBtn = styled.button`
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 4px;
+
+  &:hover {
+    color: ${theme.PALETTE.red};
+  }
 `;

@@ -64,6 +64,36 @@ const CustomServiceResultContainer = () => {
     }
   };
 
+  const handleEdit = async (id, title, content) => {
+    try {
+      const res = await fetch(`http://localhost:10000/api/inquire/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ inquireTitle: title, inquireContent: content }),
+      });
+      if (!res.ok) throw new Error("수정 실패");
+      alert("문의가 수정되었습니다.");
+      loadResults();
+    } catch {
+      alert("문의 수정에 실패했습니다.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:10000/api/inquire/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("삭제 실패");
+      alert("문의가 삭제되었습니다.");
+      loadResults();
+    } catch {
+      alert("문의 삭제에 실패했습니다.");
+    }
+  };
+
   const totalCount   = results.length;
   const doneCount    = results.filter((r) => r.inquireStatus === "답변완료").length;
   const pendingCount = results.filter((r) => r.inquireStatus === "답변대기").length;
@@ -100,6 +130,8 @@ const CustomServiceResultContainer = () => {
         error={error}
         isAdmin={isAdmin}
         onAnswer={handleAnswer}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
       />
     </>
   );

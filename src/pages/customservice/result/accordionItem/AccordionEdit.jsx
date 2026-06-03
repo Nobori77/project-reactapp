@@ -1,0 +1,97 @@
+import React, { useState, useRef } from "react";
+import * as S from "../style";
+
+const AccordionEdit = ({ result, showEditInput, setShowEditInput, onEdit, onDelete }) => {
+  const [editContent, setEditContent]         = useState(result.inquireContent);
+  const [editFile, setEditFile]               = useState(null);
+  const [editFilePreview, setEditFilePreview] = useState(null);
+  const fileInputRef                          = useRef(null);
+
+  const handleSubmit = async () => {
+    if (!editContent.trim()) return alert("내용을 입력해주세요.");
+    if (editContent.trim().length < 10) return alert("내용을 최소 10자 이상 입력해주세요.");
+    await onEdit(result.id, result.inquireTitle, editContent, editFile);
+    setShowEditInput(false);
+    setEditFile(null);
+    setEditFilePreview(null);
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("문의를 삭제하시겠습니까?")) return;
+    await onDelete(result.id);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setEditFile(file);
+    if (file.type.startsWith("image/")) {
+      setEditFilePreview(URL.createObjectURL(file));
+    } else {
+      setEditFilePreview(null);
+    }
+  };
+
+  const handleFileRemove = () => {
+    if (editFilePreview) URL.revokeObjectURL(editFilePreview);
+    setEditFile(null);
+    setEditFilePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  return (
+    <S.AnswerBtnWrap>
+      {!showEditInput ? (
+        <S.AnswerBtnRow>
+          <S.AnswerBtn onClick={(e) => { e.stopPropagation(); setShowEditInput(true); }}>
+            수정하기
+          </S.AnswerBtn>
+          <S.CancelBtn onClick={(e) => { e.stopPropagation(); handleDelete(); }}>
+            삭제하기
+          </S.CancelBtn>
+        </S.AnswerBtnRow>
+      ) : (
+        <S.AnswerInputWrap>
+          <S.AnswerTextarea
+            placeholder="내용을 입력해주세요. (최소 10자)"
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          <S.FileDropZone onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+              onClick={(e) => e.stopPropagation()}
+            />
+            + 파일 첨부 (클릭해서 선택)
+          </S.FileDropZone>
+
+          {editFile && (
+            <S.FileItem onClick={(e) => e.stopPropagation()}>
+              <S.FileInfo>
+                {editFilePreview && <S.FileThumb src={editFilePreview} alt={editFile.name} />}
+                <S.FileName>{editFile.name}</S.FileName>
+              </S.FileInfo>
+              <S.FileRemoveBtn onClick={(e) => { e.stopPropagation(); handleFileRemove(); }}>✕</S.FileRemoveBtn>
+            </S.FileItem>
+          )}
+
+          <S.AnswerBtnRow>
+            <S.CancelBtn onClick={(e) => { e.stopPropagation(); setShowEditInput(false); handleFileRemove(); }}>
+              취소
+            </S.CancelBtn>
+            <S.ConfirmBtn onClick={(e) => { e.stopPropagation(); handleSubmit(); }}>
+              수정완료
+            </S.ConfirmBtn>
+          </S.AnswerBtnRow>
+        </S.AnswerInputWrap>
+      )}
+    </S.AnswerBtnWrap>
+  );
+};
+
+export default AccordionEdit;

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomServiceInquireComponent from "./CustomServiceInquireComponent";
 import PageHeroCard from "../common/pageHeroCard";
@@ -11,6 +11,21 @@ const CustomServiceInquireContainer = ({ onSubmit }) => {
   const [files, setFiles]                   = useState([]);
   const previewUrls                         = useRef({});
   const navigate                            = useNavigate();
+
+  useEffect(() => {
+  const fetchMe = async () => {
+    try {
+      const res = await fetch("http://localhost:10000/api/auth/me", { credentials: "include" });
+      if (res.ok) {
+        const user = await res.json();
+        setEmail(user.userEmail ?? "");  // ← 유저 이메일 자동 입력
+      }
+    } catch {
+      // 비로그인 상태면 그냥 빈 값 유지
+    }
+  };
+  fetchMe();
+}, []);
 
   const getKey = (file) => file.name + file.lastModified;
 
@@ -45,16 +60,21 @@ const CustomServiceInquireContainer = ({ onSubmit }) => {
   if (content.trim().length < 10) return alert("내용을 최소 10자 이상 입력해주세요.");
 
   try {
+    const formData = new FormData();
+    formData.append("inquireType",    activeCategory);
+    formData.append("inquireEmail",   email);
+    formData.append("inquireTitle",   title);
+    formData.append("inquireContent", content);
+
+    // 파일 추가
+    if (files.length > 0) {
+      formData.append("file", files[0]); // 파일 1개
+    }
+
     await fetch("http://localhost:10000/api/inquire", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({
-        inquireType:    activeCategory,
-        inquireEmail:   email,
-        inquireTitle:   title,
-        inquireContent: content,
-      }),
+      body: formData, // Content-Type 헤더 제거! FormData가 자동 설정
     });
   } catch (err) {
     console.error(err);
@@ -66,7 +86,7 @@ const CustomServiceInquireContainer = ({ onSubmit }) => {
   setContent("");
   setFiles([]);
   navigate("/customservice/result");
-  };
+};
 
   return (
     <>
