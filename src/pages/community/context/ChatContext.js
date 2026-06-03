@@ -24,6 +24,7 @@ export const SCREEN = {
   ROOM: "room",
   LIST: "list",
   CREATE: "create",
+  UPDATE: "update",
 };
 
 // LIST 화면 안에서 어떤 필터(목록 종류)가 활성인지
