@@ -46,6 +46,7 @@ export const mapAttendanceSummary = (summary = {}, fallback = {}, periodData = {
     checkedToday: summary.checkedToday ?? summary.attendedToday ?? false,
     currentDate,
     todayLabel: summary.todayLabel || summary.todayRewardLabel || "",
+    todayRewardExp: summary.todayRewardExp ?? fallback.todayRewardExp ?? 0,
     streakDays: summary.streakDays ?? summary.continuousAttendanceDays ?? 0,
     monthlyDays: summary.monthlyDays ?? summary.monthlyAttendanceDays ?? monthlyAttendanceDates.length,
     totalAttendanceDays: summary.totalAttendanceDays ?? 0,
