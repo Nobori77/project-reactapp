@@ -3,13 +3,8 @@ import { Outlet, ScrollRestoration } from "react-router-dom";
 import * as S from "./communityStyle";
 import MainRightSide from "./common/MainRightSide";
 import { ChatProvider } from "./context/ChatContext";
-import CommunityHeaderC from "./common/CommunityHeaderC";
+import CommunityHeader from "./common/CommunityHeader";
 import SearchBoxComponent from "./common/SearchBoxComponent";
-
-// const S = {
-//   Page,
-//   ContentArea,
-// };
 
 // 커뮤니티 가장 메인 영역
 const CommunityContainer = () => {
@@ -19,7 +14,7 @@ const CommunityContainer = () => {
         <ScrollRestoration getKey={(location) => location.pathname} />
         <div>
           {/* 헤더 */}
-          <CommunityHeaderC />
+          <CommunityHeader />
           <S.Page>
             <S.SearchBoxRow>
               <S.LeftSearchBlock>

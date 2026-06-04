@@ -10,6 +10,13 @@ const navLinks = [
   { label: "고객지원", to: "/customservice/notice" },
 ];
 
+const DEFAULT_PROFILE_IMAGE =
+  "https://gi.esmplus.com/cjfals1015/eum/userProfile/thumbnail/default1.png";
+
+const S3_PROFILE_BASE_URL =
+  "https://testapp-gyuhoroh213589.s3.ap-northeast-2.amazonaws.com";
+
+// 기본 프로필 여부 확인
 const isDefaultProfile = (profileImage) => {
   return (
     !profileImage ||
@@ -18,16 +25,25 @@ const isDefaultProfile = (profileImage) => {
   );
 };
 
+// 프로필 이미지 경로 처리
 const getProfileImageSrc = (profileImage) => {
   if (isDefaultProfile(profileImage)) {
-    return null;
+    return DEFAULT_PROFILE_IMAGE;
   }
 
   if (profileImage.startsWith("http") || profileImage.startsWith("blob:")) {
     return profileImage;
   }
 
-  return `http://localhost:10000/private/api/files/${encodeURIComponent(profileImage)}`;
+  const filePath = profileImage.startsWith("/") ? profileImage : `/${profileImage}`;
+
+  return `${S3_PROFILE_BASE_URL}${filePath}`;
+};
+
+// 이미지 조회 실패 시 기본 이미지로 대체
+const handleProfileImageError = (e) => {
+  e.currentTarget.onerror = null;
+  e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
 };
 
 const EumLayout = ({
@@ -120,16 +136,13 @@ const EumLayout = ({
               <S.StyledLink to="/mypage">
                 <S.UserChip>
                   <S.UserAvatar>
-                    {layoutProfileImageSrc && (
-                      <img
-                        src={layoutProfileImageSrc}
-                        alt=""
-                        draggable={false}
-                        onError={(e) => {
-                          e.currentTarget.remove();
-                        }}
-                      />
-                    )}
+                    <img
+                      key={layoutProfileImageSrc}
+                      src={layoutProfileImageSrc}
+                      alt=""
+                      draggable={false}
+                      onError={handleProfileImageError}
+                    />
                   </S.UserAvatar>
 
                   <S.UserName>
@@ -160,7 +173,7 @@ const EumLayout = ({
         </S.RightNav>
       </S.Header>
 
-<ScrollRestoration />
+      <ScrollRestoration />
 
       <S.Main>
         <Outlet />

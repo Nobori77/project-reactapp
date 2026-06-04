@@ -11,7 +11,7 @@ import PageCount from "./PageCount";
 import NoResult from "../../common/NoResult";
 
 const LiveChatListSection = () => {
-  const { openChatRoom } = useChatContext();
+  const { openChatRoom, roomListRefreshKey } = useChatContext();
   const [rooms, setRooms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -40,7 +40,7 @@ const LiveChatListSection = () => {
       }
     };
     load();
-  }, [size, currentPage, keyword]);
+  }, [size, currentPage, keyword, roomListRefreshKey]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);

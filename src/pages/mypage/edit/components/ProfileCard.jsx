@@ -3,6 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 import S from "../style";
 
+const DEFAULT_PROFILE_IMAGE =
+  "https://gi.esmplus.com/cjfals1015/eum/userProfile/thumbnail/default1.png";
+
+const S3_PROFILE_BASE_URL =
+  "https://testapp-gyuhoroh213589.s3.ap-northeast-2.amazonaws.com";
+
+// 기본 프로필 여부 확인
 const isDefaultProfile = (profileImage) => {
   return (
     !profileImage ||
@@ -11,16 +18,25 @@ const isDefaultProfile = (profileImage) => {
   );
 };
 
+// 프로필 이미지 경로 처리
 const getProfileImageSrc = (profileImage) => {
   if (isDefaultProfile(profileImage)) {
-    return null;
+    return DEFAULT_PROFILE_IMAGE;
   }
 
   if (profileImage.startsWith("http") || profileImage.startsWith("blob:")) {
     return profileImage;
   }
 
-  return `http://localhost:10000/private/api/files/${encodeURIComponent(profileImage)}`;
+  const filePath = profileImage.startsWith("/") ? profileImage : `/${profileImage}`;
+
+  return `${S3_PROFILE_BASE_URL}${filePath}`;
+};
+
+// 이미지 조회 실패 시 기본 이미지로 대체
+const handleProfileImageError = (e) => {
+  e.currentTarget.onerror = null;
+  e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
 };
 
 const ProfileCard = ({
@@ -57,6 +73,32 @@ const ProfileCard = ({
     setPreviewInfo(nextInfo);
   };
 
+  const getLatestUserInfo = async () => {
+    const response = await fetch("http://localhost:10000/private/api/mypage/edit", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message);
+    }
+
+    return result.data;
+  };
+
+  const updateHeaderProfile = (nextNickname, nextProfile) => {
+    window.dispatchEvent(
+      new CustomEvent("userProfileUpdated", {
+        detail: {
+          userNickname: nextNickname,
+          userProfile: nextProfile,
+        },
+      })
+    );
+  };
+
   const handleImageChangeClick = () => {
     fileInputRef.current.click();
   };
@@ -70,6 +112,7 @@ const ProfileCard = ({
 
     if (selectedFile.size > 5 * 1024 * 1024) {
       alert("프로필 사진은 5MB 이하만 가능합니다.");
+      e.target.value = "";
       return;
     }
 
@@ -80,14 +123,7 @@ const ProfileCard = ({
     setPreviewImage(objectUrl);
     syncPreview({ userProfile: objectUrl });
 
-    window.dispatchEvent(
-      new CustomEvent("userProfileUpdated", {
-        detail: {
-          userNickname,
-          userProfile: objectUrl,
-        },
-      })
-    );
+    e.target.value = "";
   };
 
   const handleDeleteProfileImage = () => {
@@ -102,15 +138,6 @@ const ProfileCard = ({
 
     setUserInfo(updatedUser);
     setPreviewInfo(updatedUser);
-
-    window.dispatchEvent(
-      new CustomEvent("userProfileUpdated", {
-        detail: {
-          userNickname: updatedUser.userNickname,
-          userProfile: "default.jpg",
-        },
-      })
-    );
   };
 
   const handleNicknameCheck = async () => {
@@ -185,8 +212,6 @@ const ProfileCard = ({
         return;
       }
 
-      let nextProfileImage = userInfo.userProfile;
-
       if (isProfileDeleted) {
         const deleteResponse = await fetch("http://localhost:10000/private/api/mypage/edit/profile", {
           method: "DELETE",
@@ -199,8 +224,6 @@ const ProfileCard = ({
           alert(deleteResult.message);
           return;
         }
-
-        nextProfileImage = "default.jpg";
       }
 
       if (uploadFile) {
@@ -219,33 +242,17 @@ const ProfileCard = ({
           alert(profileResult.message);
           return;
         }
-
-        nextProfileImage =
-          profileResult.data?.userProfile ||
-          profileResult.data?.uploadedUrl ||
-          previewImage;
       }
 
-      const updatedUser = {
-        ...userInfo,
-        userNickname,
-        userIntro,
-        userJob: finalJob,
-        userAddress: finalAddress,
-        userProfile: nextProfileImage,
-      };
+      // 저장 후 DB에 반영된 최신 프로필 경로를 다시 조회
+      const latestUserInfo = await getLatestUserInfo();
 
-      setUserInfo(updatedUser);
-      setPreviewInfo(updatedUser);
+      setUserInfo(latestUserInfo);
+      setPreviewInfo(latestUserInfo);
+      setPreviewImage("");
 
-      window.dispatchEvent(
-        new CustomEvent("userProfileUpdated", {
-          detail: {
-            userNickname,
-            userProfile: nextProfileImage,
-          },
-        })
-      );
+      // 저장 성공 후에만 이음 레이아웃 헤더 반영
+      updateHeaderProfile(latestUserInfo.userNickname, latestUserInfo.userProfile);
 
       alert("프로필 정보가 저장되었습니다.");
       navigate("/mypage", { replace: true });
@@ -271,16 +278,13 @@ const ProfileCard = ({
       <S.ProfileEditCard>
         <S.ProfileTop>
           <S.ProfileImageBox>
-            {imageSrc && (
-              <img
-                src={imageSrc}
-                alt=""
-                draggable={false}
-                onError={(e) => {
-                  e.currentTarget.remove();
-                }}
-              />
-            )}
+            <img
+              key={imageSrc}
+              src={imageSrc}
+              alt=""
+              draggable={false}
+              onError={handleProfileImageError}
+            />
           </S.ProfileImageBox>
 
           <S.ProfileImageInfo>
@@ -294,7 +298,7 @@ const ProfileCard = ({
 
             <S.ImageButtonArea>
               <S.ImageChangeButton type="button" onClick={handleImageChangeClick}>
-                📷 사진 변경
+                사진 변경
               </S.ImageChangeButton>
 
               <S.ImageDeleteButton type="button" onClick={handleDeleteProfileImage}>
@@ -336,15 +340,6 @@ const ProfileCard = ({
                     setUserNickname(e.target.value);
                     setIsNicknameChecked(false);
                     syncPreview({ userNickname: e.target.value });
-
-                    window.dispatchEvent(
-                      new CustomEvent("userProfileUpdated", {
-                        detail: {
-                          userNickname: e.target.value,
-                          userProfile: previewImage || userInfo.userProfile,
-                        },
-                      })
-                    );
                   }}
                   placeholder="닉네임을 입력해 주세요"
                 />

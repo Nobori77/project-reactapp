@@ -24,6 +24,7 @@ export const SCREEN = {
   ROOM: "room",
   LIST: "list",
   CREATE: "create",
+  UPDATE: "update",
 };
 
 // LIST 화면 안에서 어떤 필터(목록 종류)가 활성인지
@@ -79,6 +80,7 @@ export const ChatProvider = ({ children }) => {
     // 반환되는 채팅방 id 를 통해서 채팅방 정보 불러오기
     setChatRoomDTO(chatRoomDTO);
     setScreen(SCREEN.ROOM);
+    setRoomListRefreshKey((k) => k + 1);
   }, []);
 
   // ── 화면 전환 ──────────────────────────────────────────────────────────
@@ -129,9 +131,27 @@ export const ChatProvider = ({ children }) => {
     setView(VIEW.POPUP);
   }, []);
 
+  const [roomListRefreshKey, setRoomListRefreshKey] = useState(0);
+  const [chatRoomInfoRefreshKey, setChatRoomInfoRefreshKey] = useState(0);
+
   const deleteRoom = useCallback(() => {
     setChatRoomDTO(null);
     setView(null);
+    setRoomListRefreshKey((k) => k + 1);
+  }, []);
+
+  const openUpdateChatRoom = useCallback(() => {
+    setScreen(SCREEN.UPDATE);
+  }, []);
+
+  const closeUpdateRoomPopup = useCallback(() => {
+    setScreen(SCREEN.ROOM);
+  }, []);
+
+  const updateRoom = useCallback(() => {
+    setScreen(SCREEN.ROOM);
+    setChatRoomInfoRefreshKey((k) => k + 1);
+    setRoomListRefreshKey((k) => k + 1);
   }, []);
 
   return (
@@ -156,6 +176,11 @@ export const ChatProvider = ({ children }) => {
         closeCreateRoomPopup,
         reopenChat,
         deleteRoom,
+        openUpdateChatRoom,
+        closeUpdateRoomPopup,
+        updateRoom,
+        roomListRefreshKey,
+        chatRoomInfoRefreshKey,
       }}
     >
       {children}

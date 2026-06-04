@@ -1,24 +1,35 @@
 import { useState, useEffect, useRef } from "react";
 import { getChatRooms } from "../../communityApi/chatApi";
 
-// const toDisplayRoom = (room) => ({
-//   id, chatRoomName, chatRoomDetail,
-// });
-// const toDisplayRoom = (room) => ({
-//   id: room.id,
-//   name: room.chatRoomName,
-//   detail: room.chatRoomDetail,
-//   count: room.chatRoomUsers ?? 0,
-//   isLive: true,
-//   thumbnail: room.chatRoomProfile ?? null,
-// });
-
-const useChatRoomList = () => {
+const useChatRoomList = (externalRefreshKey = 0) => {
   const [rooms, setRooms] = useState([]);
   const [page, setPage] = useState(1);
+  const [fetchKey, setFetchKey] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const loaderRef = useRef(null);
+
+  const pageRef = useRef(1);
+  const prevExternalKeyRef = useRef(externalRefreshKey);
+
+  // page 바뀔 때 ref 동기화
+  useEffect(() => {
+    pageRef.current = page;
+  }, [page]);
+
+  // 외부 refreshKey 변경 감지 → 조건부 트리거
+  useEffect(() => {
+    if (prevExternalKeyRef.current === externalRefreshKey) return;
+    prevExternalKeyRef.current = externalRefreshKey;
+
+    setRooms([]);
+
+    if (pageRef.current !== 1) {
+      setPage(1); // page 변경 → fetch effect 트리거
+    } else {
+      setFetchKey((k) => k + 1); // page 이미 1 → fetchKey 변경으로 트리거
+    }
+  }, [externalRefreshKey]);
 
   useEffect(() => {
     let cancelled = false;
@@ -50,7 +61,7 @@ const useChatRoomList = () => {
     return () => {
       cancelled = true;
     };
-  }, [page]);
+  }, [page, fetchKey]);
 
   useEffect(() => {
     if (isLoading || !hasMore) return;

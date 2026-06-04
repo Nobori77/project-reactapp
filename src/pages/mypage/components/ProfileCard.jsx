@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 import S from "./style";
 
+const DEFAULT_PROFILE_IMAGE =
+  "https://gi.esmplus.com/cjfals1015/eum/userProfile/thumbnail/default1.png";
+
+const S3_PROFILE_BASE_URL =
+  "https://testapp-gyuhoroh213589.s3.ap-northeast-2.amazonaws.com";
+
 /*
   프로필 정보는 마이페이지 메인 API 연동
 */
@@ -21,14 +27,22 @@ const ProfileCard = ({ profile, onLevelClick }) => {
   // 프로필 이미지 경로 처리
   const getProfileImageSrc = (profileImage) => {
     if (isDefaultProfile(profileImage)) {
-      return null;
+      return DEFAULT_PROFILE_IMAGE;
     }
 
     if (profileImage.startsWith("http") || profileImage.startsWith("blob:")) {
       return profileImage;
     }
 
-    return `http://localhost:10000/private/api/files/${encodeURIComponent(profileImage)}`;
+    const filePath = profileImage.startsWith("/") ? profileImage : `/${profileImage}`;
+
+    return `${S3_PROFILE_BASE_URL}${filePath}`;
+  };
+
+  // 이미지 조회 실패 시 기본 이미지로 대체
+  const handleProfileImageError = (e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
   };
 
   // 정보수정 페이지 이동
@@ -59,16 +73,13 @@ const ProfileCard = ({ profile, onLevelClick }) => {
     <S.ProfileWrapper>
       {/* 프로필 이미지 */}
       <S.ProfileImage>
-        {profileImageSrc && (
-          <img
-            src={profileImageSrc}
-            alt=""
-            draggable={false}
-            onError={(e) => {
-              e.currentTarget.remove();
-            }}
-          />
-        )}
+        <img
+          key={profileImageSrc}
+          src={profileImageSrc}
+          alt=""
+          draggable={false}
+          onError={handleProfileImageError}
+        />
       </S.ProfileImage>
 
       <S.ProfileContent>
