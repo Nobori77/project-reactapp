@@ -1,6 +1,7 @@
 import { useState } from "react";
 import * as S from "./style";
 import useLoginCheck from "../../../../hooks/useLoginCheck";
+import LoginGuard from "../../../../components/common/LoginGuard";
 import useTossPayment from "../../../../hooks/useTossPayment";
 
 const DUMMY_CERTS = [
@@ -176,11 +177,19 @@ const ReissueModal = ({ user, cert, onClose }) => {
 
 // ── 메인 컴포넌트 ──────────────────────────────────────────
 const CertificateReissueComponent = () => {
-  const { user } = useLoginCheck();
+  const { isLoggedIn, user } = useLoginCheck();
   const [selectedId, setSelectedId] = useState("");
   const [showModal, setShowModal]   = useState(false);
 
   const selectedCert = DUMMY_CERTS.find(c => String(c.id) === selectedId);
+
+  if (isLoggedIn === null) return null;
+  if (!isLoggedIn) return (
+    <S.Wrapper>
+      <S.SectionTitle style={{ marginBottom: 6 }}>수료증 재발급 신청</S.SectionTitle>
+      <LoginGuard message="재발급 신청은 로그인 후 이용 가능합니다." />
+    </S.Wrapper>
+  );
 
   return (
     <S.Wrapper>

@@ -110,12 +110,12 @@ export default function FindAccountComponent() {
         method: "GET",
         credentials: "include",
       });
-      const data = await res.json();
-      if (data.success) {
+      const { success, data, message } = await res.json();
+      if (success) {
         setEmailResult(data.userEmail);
         setEmailStep(2);
       } else {
-        setEmailMsg(data.message || "일치하는 계정을 찾을 수 없습니다.");
+        setEmailMsg(message || "일치하는 계정을 찾을 수 없습니다.");
       }
     } catch {
       setEmailMsg("서버 오류가 발생했습니다.");
