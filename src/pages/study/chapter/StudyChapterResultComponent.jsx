@@ -11,6 +11,7 @@ const StudyChapterResultComponent = () => {
   const { state } = useContext(StudyQuizContext);
   const [isBadgeOpen, setIsBadgeOpen] = useState(true);
   const chapter = chapterQuizMock.find((item) => item.id === quiz);
+  const resultMeta = chapter?.result || {};
 
   const hasAnswers = state.answers.length > 0;
 
@@ -72,12 +73,12 @@ const StudyChapterResultComponent = () => {
           <div>
             <span>⚡</span>
             <small>EXP</small>
-            <strong>+40</strong>
+            <strong>+{resultMeta.rewardExp || chapter.exp}</strong>
           </div>
           <div>
             <span>⏱️</span>
             <small>시간</small>
-            <strong>2분 48초</strong>
+            <strong>{resultMeta.spentTime || "-"}</strong>
           </div>
         </S.ResultStatGrid>
 
@@ -101,20 +102,23 @@ const StudyChapterResultComponent = () => {
         <S.BadgeModalOverlay>
           <FireworkCanvas />
           <S.BadgeModal>
-            <S.BadgeIcon>🎯</S.BadgeIcon>
+            <S.BadgeIcon>{resultMeta.badgeIcon || "🎯"}</S.BadgeIcon>
             <S.BadgeLabel>NEW BADGE</S.BadgeLabel>
-            <h2>첫 번째 뱃지 획득!</h2>
-            <p className="badgeName">수어 입문자</p>
+            <h2>{resultMeta.badgeTitle || "뱃지 획득!"}</h2>
+            <p className="badgeName">{resultMeta.badgeName || chapter.title}</p>
             <p className="badgeDesc">
-              기본 인사 문법 퀴즈를 완료해
-              <br />
-              첫 번째 뱃지를 획득했어요!
+              {(resultMeta.badgeDesc || "퀴즈를 완료해 뱃지를 획득했어요!").split("\n").map((line) => (
+                <span key={line}>
+                  {line}
+                  <br />
+                </span>
+              ))}
             </p>
 
             <S.BadgeModalStats>
               <div>
-                <strong>+40</strong>
-                <span>XP 획득</span>
+                <strong>+{resultMeta.rewardExp || chapter.exp}</strong>
+                <span>EXP 획득</span>
               </div>
               <div>
                 <strong>{result.accuracy}%</strong>
@@ -125,12 +129,12 @@ const StudyChapterResultComponent = () => {
             <S.NextBadgeBox>
               <div>
                 <span>다음 뱃지까지</span>
-                <strong>수어 초급자</strong>
+                <strong>{resultMeta.nextBadgeName || "다음 뱃지"}</strong>
               </div>
               <S.NextBadgeProgress>
                 <span />
               </S.NextBadgeProgress>
-              <em>1/3</em>
+              <em>{resultMeta.nextBadgeProgress || "1/3"}</em>
             </S.NextBadgeBox>
 
             <S.BadgeModalActions>

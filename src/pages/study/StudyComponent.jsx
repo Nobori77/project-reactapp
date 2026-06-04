@@ -60,7 +60,7 @@ const featureCards = [
     desc: "위험을 알리는 방법",
     image: "/assets/image/learn/emergency.png",
     tone: "red",
-    to: "/study/learn/quiz/sos/questions/1",
+    to: "/study/chapter/sos",
     requiresLogin: true,
   },
   {
