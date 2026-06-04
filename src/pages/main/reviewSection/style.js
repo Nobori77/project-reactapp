@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { styles } from "../style";
+import theme from "../../../styles/theme";
 
 export const ReviewCard = styled.div`
   width: 380px;
@@ -12,6 +14,20 @@ export const ReviewCard = styled.div`
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   text-align: left;
   flex-shrink: 0;
+  overflow: hidden;
+`;
+
+export const ReviewCardGrid = styled.div`
+  width: 100%;
+  min-height: 220px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  text-align: left;
   overflow: hidden;
 `;
 
@@ -85,85 +101,40 @@ export const TitleWrap = styled.div`
 `;
 
 export const Title = styled.h2`
-  font-size: 28px;
+  font-size: 40px;
   font-weight: 800;
   color: #111;
   margin: 0;
 `;
 
 export const SubTitle = styled.p`
-  font-size: 14px;
+  font-size: 16px;
   color: #888;
   margin: 0;
 `;
 
-export const SliderWrap = styled.div`
+export const CardRow = styled.div`
   display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
-export const CardViewport = styled.div`
-  width: calc(380px * 3 + 24px * 2);
-  overflow: hidden;
-`;
-
-export const CardTrack = styled.div`
-  display: flex;
-  gap: 24px;
-  transform: translateX(-${({ $offset }) => $offset}px);
-  transition: ${({ $animated }) =>
-    $animated ? "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)" : "none"};
-`;
-
-export const ArrowBtn = styled.button`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1.5px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  transition: opacity 0.2s;
-
-  &:disabled {
-    opacity: 0.3;
-    cursor: default;
-  }
-
-  &:hover:not(:disabled) {
-    background: #f5f5f5;
-  }
+  gap: 20px;
+  margin-top: 40px;
 `;
 
-export const MoreButton = styled.button`
-  display: block;
-  margin: 32px auto 0;
-  padding: 14px 36px;
-  background: #fff;
-  border: 2px solid #7c6fcd;
-  border-radius: 999px;
-  color: #7c6fcd;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
+/* ── Review Card ── */
 
-  &:hover {
-    background: #7c6fcd;
-    color: #fff;
-  }
-`;
 
 export const PageWrap = styled.div`
+  width: 100%;
+  background-color: #f0eff5;
+  min-height: 100vh;
+`;
+
+export const PageInner = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 24px;
+  padding: 60px 24px;
 `;
+
 
 export const PageHeader = styled.div`
   display: flex;
@@ -200,5 +171,65 @@ export const ReviewGrid = styled.div`
   }
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
+  }
+`;
+
+export const SliderWrap = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+export const CardViewport = styled.div`
+  width: calc(380px * 3 + 24px * 2);
+  overflow: hidden;
+`;
+
+export const CardTrack = styled.div`
+  display: flex;
+  gap: 24px;
+  transform: translateX(-${({ $offset }) => $offset}px);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+`;
+
+export const ArrowBtn = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  &:hover:not(:disabled) {
+    background: #f5f5f5;
+  }
+`;
+
+export const MoreButton = styled.button`
+  margin-top: 32px;
+  padding: 12px 32px;
+  border-radius: 24px;
+  border: 1.5px solid #7b5ea7;
+  background: #fff;
+  color: #7b5ea7;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #7b5ea7;
+    color: #fff;
   }
 `;

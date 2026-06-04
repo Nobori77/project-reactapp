@@ -2,7 +2,7 @@ import React from "react";
 import * as S from "./style";
 import AccordionItem from "./AccordionItem";
 
-const CustomServiceResultComponent = ({ results = [], isLoading, error, isAdmin, onAnswer }) => {
+const CustomServiceResultComponent = ({ results = [], isLoading, error, isAdmin, onAnswer, onEdit, onDelete}) => {
   if (isLoading) return <S.StatusMessage>불러오는 중...</S.StatusMessage>;
   if (error)     return <S.StatusMessage $error>{error}</S.StatusMessage>;
   if (results.length === 0) return (
@@ -18,7 +18,7 @@ const CustomServiceResultComponent = ({ results = [], isLoading, error, isAdmin,
       <S.ResultListTitle>내 문의 목록</S.ResultListTitle>
       <S.ResultList>
         {results.map((result) => (
-          <AccordionItem key={result.id} result={result} isAdmin={isAdmin} onAnswer={onAnswer} />
+          <AccordionItem key={result.id} result={result} isAdmin={isAdmin} onAnswer={onAnswer} onEdit={onEdit} onDelete={onDelete} />
         ))}
       </S.ResultList>
     </S.ResultWrap>

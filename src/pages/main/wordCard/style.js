@@ -4,21 +4,42 @@ import theme from "../../../styles/theme";
 const textGray = "#888888";
 const dailyBorderGray = "#EEEFFE";
 
+// style.js - JS state 대신 CSS :hover로 처리
 export const CardWrap = styled.div`
-  width: ${({ $hovered }) => ($hovered ? "360px" : "280px")};
+  width: 280px;
   height: 200px;
-  background-color: ${({ $hovered }) => ($hovered ? theme.PALETTE.fourth.main : theme.PALETTE.white)};
+  background-color: ${theme.PALETTE.white};
   border-radius: 20px;
-  border: ${({ $hovered }) => ($hovered ? "none" : `1px solid ${theme.GRAYSCALE[2]}`)};
+  border: 1px solid ${theme.GRAYSCALE[2]};
   padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   transition: all 0.3s ease;
-  transform: scale(1.05);
   cursor: pointer;
   flex-shrink: 0;
+  overflow: hidden;
+
+  &:hover {
+    width: 360px;
+    background-color: ${theme.PALETTE.fourth.main};
+    border: none;
+    transform: scale(1.05);
+  }
+
+  &:hover ${() => CardTitle} { color: ${theme.PALETTE.white}; }
+  &:hover ${() => CardSub} { color: ${theme.PALETTE.white}; }
+  &:hover ${() => TagBadge} { display: none; }
+  &:hover ${() => HoverContent} { display: flex; }
 `;
+
+export const HoverContent = styled.div`
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+`;
+
 
 export const Emoji = styled.span`
   font-size: 32px;
@@ -28,6 +49,7 @@ export const CardTitle = styled.span`
   font-size: ${theme.FONT_SIZE.h7};
   font-weight: ${theme.FONT_WEIGHT.bold};
   color: ${({ $hovered }) => ($hovered ? theme.PALETTE.white : theme.PALETTE.black)};
+  /* line-clamp 제거 - formatTitle 함수로 처리 */
 `;
 
 export const CardSub = styled.span`
@@ -49,12 +71,21 @@ export const TagBadge = styled.span`
 
 export const CardDesc = styled.span`
   font-size: ${theme.FONT_SIZE.h11};
-  color: ${theme.PALETTE.white};
   line-height: 1.6;
+  flex-shrink: 0;               /* flex: 1 제거, 고정 크기 */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;        /* 1줄만 표시 후 ... */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;          /* 줄바꿈 방지 */
+  max-width: 100%;
+  color: ${theme.PALETTE.white};
 `;
 
 export const VideoBtn = styled.button`
   margin-top: auto;
+  flex-shrink: 0;
   border: solid 1px ${theme.PALETTE.white};
   border-radius: 20px;
   padding: 6px 14px;

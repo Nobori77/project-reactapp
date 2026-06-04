@@ -11,12 +11,14 @@ const DUMMY_PROFILES = [
   "/assets/image/main/dummyUserProfileImg7.svg",
 ];
 
-const ReviewCard = ({ review, index }) => {
+const ReviewCard = ({ review, index, variant }) => {
   const profileImg =
     review.img || DUMMY_PROFILES[index % DUMMY_PROFILES.length];
 
+  const Card = variant === "grid" ? S.ReviewCardGrid : S.ReviewCard;
+
   return (
-    <S.ReviewCard>
+    <Card>
       <S.StarRow>
         {[...Array(review.reviewRating || 5)].map((_, j) => (
           <img key={j} src="/assets/image/main/starIcon.svg" alt="star" />
@@ -30,7 +32,7 @@ const ReviewCard = ({ review, index }) => {
           <S.ProfileSub>{review.userJob || review.sub}</S.ProfileSub>
         </S.ProfileInfo>
       </S.ProfileRow>
-    </S.ReviewCard>
+    </Card>
   );
 };
 

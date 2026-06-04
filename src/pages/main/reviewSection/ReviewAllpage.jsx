@@ -20,18 +20,20 @@ const ReviewAllPage = () => {
   }, []);
 
   return (
-    <S.PageWrap>
+  <S.PageWrap>
+    <S.PageInner>
       <S.PageHeader>
         <S.BackButton onClick={() => navigate(-1)}>◀</S.BackButton>
         <S.PageTitle>이음 후기 모음</S.PageTitle>
       </S.PageHeader>
       <S.ReviewGrid>
         {reviews.map((review, i) => (
-          <ReviewCardComponent key={i} review={review} index={i} />
+          <ReviewCardComponent key={i} review={review} index={i} variant="grid" />
         ))}
       </S.ReviewGrid>
-    </S.PageWrap>
-  );
+    </S.PageInner>
+  </S.PageWrap>
+);
 };
 
 export default ReviewAllPage;

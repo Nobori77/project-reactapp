@@ -61,6 +61,11 @@ export const Input = styled.input`
   &::placeholder {
     color: #bbb;
   }
+
+  &[readOnly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
 `;
 
 export const Textarea = styled.textarea`
@@ -84,6 +89,7 @@ export const Textarea = styled.textarea`
   &::placeholder {
     color: #bbb;
   }
+  
 `;
 
 export const CharCount = styled.div`
