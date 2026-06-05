@@ -27,6 +27,8 @@ const CATEGORIES = [
   "취업·진로",
 ];
 
+// const searchParams = searchParams()
+
 const TITLE_MAX = 255;
 const CONTENT_MAX = 4000;
 
