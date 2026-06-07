@@ -18,7 +18,7 @@ const fadeIn = keyframes`
 
 const Wrapper = styled.div`
   position: fixed;
-  bottom: 32px;
+  bottom: 100px;
   right: 32px;
   z-index: 100;
   transform-origin: bottom right;
