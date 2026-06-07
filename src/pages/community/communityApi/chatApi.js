@@ -96,3 +96,16 @@ export const deleteChatRoom = async (chatRoomId) => {
   });
   if (!response.ok) throw new Error("채팅방 삭제에 실패했습니다");
 };
+
+// 채팅 이미지 업로드
+export const uploadChatImage = async (chatRoomId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await fetch(
+    `${PRIVATE_ROOT_URL}/chats/${chatRoomId}/upload`,
+    { method: "POST", credentials: "include", body: formData },
+  );
+  if (!response.ok) throw new Error("이미지 업로드에 실패했습니다");
+  const { data } = await response.json();
+  return data;
+};
