@@ -680,6 +680,17 @@ S.StudyStatusList = styled.div`
   gap: 11px;
 `;
 
+/* 학습 현황 빈 목록 문구 */
+S.StudyStatusEmptyText = styled.p`
+  margin: auto 0;
+
+  font-size: 13px;
+  font-weight: ${FONT_WEIGHT.regular};
+  color: #9ca3af;
+  text-align: center;
+`;
+
+
 /* 리스트 아이템 */
 S.StudyStatusItem = styled.div``;
 
