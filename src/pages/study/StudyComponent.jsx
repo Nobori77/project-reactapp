@@ -29,7 +29,7 @@ const featureCards = [
     type: "large",
     label: "출석체크",
     title: "출석체크",
-    desc: "매일매일 출석해요!",
+    desc: "출석하고 오늘의 보상을 챙겨요!",
     image: "/assets/image/learn/attendCheck.png",
     tone: "green",
     action: "popup",

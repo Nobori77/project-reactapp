@@ -97,6 +97,7 @@ const LearnQuizComponent = () => {
   const [sessionLoading, setSessionLoading] = useState(false);
   const [sessionError, setSessionError] = useState(null);
   const [sessionSeed, setSessionSeed] = useState(Math.random);
+  const [resultSummary, setResultSummary] = useState(null);
   const baseQuiz = useMemo(() => getLearnQuiz(type), [type]);
 
   // OpenAPI 단어만 사용: eduId로 들어온 학습 퀴즈에서는 기존 더미 단어를 섞지 않음
@@ -299,9 +300,43 @@ const LearnQuizComponent = () => {
     }
   };
 
-  // 퀴즈 완료: 결과 저장을 시도하고 학습 메인으로 돌아감
+  // 학습 완료: 결과 저장을 시도하고 결과 팝업을 표시
+  const createLearnResultSummary = (submitted = false, data = null) => {
+    const answers = state.answers || [];
+    const totalCount = quiz.questions.length || answers.length || totalQuestions;
+    const correctCount = answers.filter((answer) => answer.correct === true || answer.isCorrect === true).length;
+    const accuracy = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+    const wrongItems = quiz.questions
+      .map((item) => {
+        const answer = answers.find((savedAnswer) => String(savedAnswer.questionId) === String(item.id));
+        const selectedOption = item.options?.find((option) => String(option.id) === String(answer?.answerId || answer?.selectedId));
+        const correctOption = item.options?.find((option) => option.correct);
+
+        return {
+          question: item.title,
+          selectedText: selectedOption?.label || "\uC120\uD0DD\uD55C \uB2F5\uC774 \uC5C6\uC5B4\uC694",
+          correctText: correctOption?.label || item.targetWord || "\uC815\uB2F5 \uC815\uBCF4\uAC00 \uC5C6\uC5B4\uC694",
+          isCorrect: answer?.correct === true || answer?.isCorrect === true,
+        };
+      })
+      .filter((item) => !item.isCorrect);
+    const randomWrongItem = wrongItems[Math.floor(Math.random() * wrongItems.length)] || null;
+
+    return {
+      submitted,
+      data,
+      totalCount,
+      correctCount,
+      accuracy,
+      exp: correctCount * 20,
+      spentTime: "2\uBD84 20\uCD08",
+      wrongItem: randomWrongItem,
+    };
+  };
   const handleFinish = async () => {
     if (isGuest || !userId || !canSubmitQuizAnswers(quiz.id, state.answers)) {
+      const summary = createLearnResultSummary(false);
+
       setResult({
         quizId: quiz.id,
         completed: true,
@@ -309,8 +344,7 @@ const LearnQuizComponent = () => {
         reason: isGuest || !userId ? "guest" : "mock",
         finishedAt: new Date().toISOString(),
       });
-
-      navigate("/study/learn");
+      setResultSummary(summary);
 
       return;
     }
@@ -323,6 +357,7 @@ const LearnQuizComponent = () => {
         userId,
         answers,
       });
+      const summary = createLearnResultSummary(true, result);
 
       setResult({
         quizId: quiz.id,
@@ -331,18 +366,19 @@ const LearnQuizComponent = () => {
         data: result,
         finishedAt: new Date().toISOString(),
       });
+      setResultSummary(summary);
     } catch {
+      const summary = createLearnResultSummary(false);
+
       setResult({
         quizId: quiz.id,
         completed: true,
         submitted: false,
         finishedAt: new Date().toISOString(),
       });
+      setResultSummary(summary);
     }
-
-    navigate("/study/learn");
   };
-
   // 다음 문제: 다음 문제로 이동하거나 마지막 문제에서 복습 화면으로 전환
   const handleNext = () => {
     if (isLastQuestion) {
@@ -372,6 +408,65 @@ const LearnQuizComponent = () => {
     handleFinish();
   };
 
+  const handleResultReplay = () => {
+    setResultSummary(null);
+    setStatus("solving");
+    setSelectedOptionId(null);
+    setReviewIndex(0);
+    const firstQuery = routeEduId ? "?eduId=" + routeEduId : "";
+    navigate("/study/learn/quiz/" + type + "/questions/1" + firstQuery);
+  };
+
+  const resultPopup = resultSummary && (
+    <S.LearnResultOverlay>
+      <S.LearnResultModal>
+        <S.LearnResultCelebrate>🎉</S.LearnResultCelebrate>
+        <S.LearnResultTitle>학습 완료!</S.LearnResultTitle>
+        <S.LearnResultAccuracy>{resultSummary.accuracy}%</S.LearnResultAccuracy>
+        <S.LearnResultSubText>
+          {resultSummary.totalCount}문제 중 {resultSummary.correctCount}개 정답
+        </S.LearnResultSubText>
+
+        <S.LearnResultStatGrid>
+          <div>
+            <span>🎯</span>
+            <small>정답</small>
+            <strong>{resultSummary.correctCount}개</strong>
+          </div>
+          <div>
+            <span>⚡</span>
+            <small>EXP</small>
+            <strong>+{resultSummary.exp}</strong>
+          </div>
+          <div>
+            <span>⏱️</span>
+            <small>시간</small>
+            <strong>{resultSummary.spentTime}</strong>
+          </div>
+        </S.LearnResultStatGrid>
+
+        <S.LearnResultWrongBox>
+          <strong>복습 추천 문제</strong>
+          {resultSummary.wrongItem ? (
+            <S.LearnResultWrongItem>
+              <p>Q. {resultSummary.wrongItem.question}</p>
+              <span>내 답: {resultSummary.wrongItem.selectedText}</span>
+              <em>정답: {resultSummary.wrongItem.correctText}</em>
+            </S.LearnResultWrongItem>
+          ) : (
+            <p>틀린 문제가 없어요.</p>
+          )}
+        </S.LearnResultWrongBox>
+
+        <S.LearnResultLine />
+        <S.LearnResultActions>
+          <button type="button" onClick={() => navigate("/study/learn")}>목록으로</button>
+          <button type="button" onClick={handleResultReplay}>다시풀기</button>
+        </S.LearnResultActions>
+      </S.LearnResultModal>
+    </S.LearnResultOverlay>
+  );
+
   if (!hasQuestion) {
     const emptyMessage = sessionLoading
       ? "학습 단어를 불러오는 중이에요."
@@ -400,6 +495,7 @@ const LearnQuizComponent = () => {
             </S.LearnQuizSkip>
           </S.LearnQuizBottom>
         </S.LearnQuizShell>
+        {resultPopup}
       </S.LearnQuizWrap>
     );
   }
@@ -422,6 +518,7 @@ const LearnQuizComponent = () => {
             onRemember={handleReviewNext}
           />
         </S.LearnQuizShell>
+        {resultPopup}
       </S.LearnQuizWrap>
     );
   }
@@ -492,6 +589,7 @@ const LearnQuizComponent = () => {
           />
         )}
       </S.LearnQuizShell>
+      {resultPopup}
     </S.LearnQuizWrap>
   );
 };

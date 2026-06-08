@@ -1,4 +1,3 @@
-// 학습 메인 컴포넌트: 메뉴, 로드맵, 퀘스트, 진행도를 화면에 표시
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { startLearn } from "../apis/LearnApi";
@@ -64,12 +63,10 @@ const LearnComponent = () => {
     [activeType, data.menus]
   );
 
-  // 레슨 선택: 단계 버튼을 다시 누르면 말풍선만 닫기
   const handleSelectLesson = (lesson) => {
     setSelectedLessonId((currentId) => (currentId === lesson.id ? null : lesson.id));
   };
 
-  // 레슨 시작: 선택한 학습 경로로 이동
   const handleStartLesson = async (lesson) => {
     if (lesson.status === "locked" || lesson.status === "reward") {
       alert(SERVICE_READY_MESSAGE);
@@ -81,7 +78,7 @@ const LearnComponent = () => {
       try {
         await startLearn(lesson.id);
       } catch {
-        // 시작 기록 저장 실패가 학습 진입을 막지 않도록 둠
+        // 시작 기록 저장 실패가 학습 진입을 막지 않도록 둔다
       }
 
       navigate(`/study/learn/quiz/greeting/questions/1?eduId=${lesson.id}`, {
@@ -103,7 +100,6 @@ const LearnComponent = () => {
     navigate(lesson.to);
   };
 
-  // 사이드 메뉴: 학습 종류를 바꾸거나 연결된 경로로 이동
   const handleMenu = (menu) => {
     if (menu.type) {
       setActiveType(menu.type);
@@ -121,7 +117,6 @@ const LearnComponent = () => {
     navigate(menu.to);
   };
 
-  // 학습 종류 선택: hover 또는 focus 때 보여줄 학습 과정을 변경
   const handleSelectLearningType = (menu) => {
     if (!menu.type) return;
 
@@ -136,14 +131,16 @@ const LearnComponent = () => {
 
         <S.MainArea>
           <S.TopBar>
-            <S.StreakBadge>{"🔥"} {data.streak}</S.StreakBadge>
-            <S.GuideButton type="button">{roadmap.chapter.guideLabel}</S.GuideButton>
+            <S.StreakBadge>{"◆"} {data.streak}</S.StreakBadge>
+            <S.GuideButton type="button" onClick={() => alert(SERVICE_READY_MESSAGE)}>
+              {roadmap.chapter.guideLabel}
+            </S.GuideButton>
           </S.TopBar>
 
           <S.ChapterPanel>
             <S.ChapterHead>
               <S.Title>{roadmap.chapter.title}</S.Title>
-              <S.GuidePill type="button">{"📖"} {roadmap.chapter.guideLabel}</S.GuidePill>
+              <S.GuidePill type="button" onClick={() => alert(SERVICE_READY_MESSAGE)}>{"📘"} {roadmap.chapter.guideLabel}</S.GuidePill>
             </S.ChapterHead>
 
             {statusMessage && <S.StatusText>{statusMessage}</S.StatusText>}
@@ -195,7 +192,7 @@ const LearnComponent = () => {
             <S.ProgressTitle>{roadmap.chapter.progressTitle}</S.ProgressTitle>
             <S.ProgressDesc>{roadmap.chapter.progressDesc}</S.ProgressDesc>
           </S.ProgressText>
-          <S.ProgressBar $progress={roadmap.chapter.percent} aria-label="오늘의 학습 진행률">
+          <S.ProgressBar $progress={roadmap.chapter.percent} aria-label="학습 진행률">
             <span />
           </S.ProgressBar>
           <S.Percent>{roadmap.chapter.percent}%</S.Percent>

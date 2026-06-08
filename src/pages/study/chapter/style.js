@@ -267,10 +267,10 @@ export const ChapterQuestionHeader = styled.header`
   width: 720px;
   max-width: 100%;
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 44px 1fr;
   align-items: center;
   column-gap: 18px;
-  margin: 0 auto 28px;
+  margin: 0 auto 24px;
 
   button {
     color: #666;
@@ -289,21 +289,22 @@ export const ChapterQuestionHeader = styled.header`
     font-size: ${({ theme }) => theme.FONT_SIZE.h9};
     font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
   }
-
-  strong {
-    color: #22c55e;
-    font-size: ${({ theme }) => theme.FONT_SIZE.h11};
-    font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
-  }
-
-  em {
-    color: ${({ theme }) => theme.PALETTE.primary.main};
-    font-size: ${({ theme }) => theme.FONT_SIZE.h11};
-    font-style: normal;
-    font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
-  }
 `;
 
+export const ChapterProgressLine = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+`;
+
+export const ChapterProgressCount = styled.strong`
+  min-width: 50px;
+  color: ${({ theme }) => theme.PALETTE.primary.main};
+  font-size: ${({ theme }) => theme.FONT_SIZE.h11};
+  font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
+  text-align: right;
+`;
 export const ChapterQuestionCard = styled.article`
   width: 720px;
   max-width: 100%;
