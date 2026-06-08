@@ -28,7 +28,7 @@ const StudyStatusCard = ({ studyStatusList = [] }) => {
         {/* 학습 데이터가 있을 때만 목록을 보여줍니다. 100% 항목도 그대로 표시합니다. */}
         {visibleStudyStatusList.length > 0 &&
           visibleStudyStatusList.map((item) => (
-            <S.StudyStatusItem key={item.id}>
+            <S.StudyStatusItem key={item.id || item.eduId}>
               <S.StudyStatusRow>
                 <S.StudyStatusLabel>{item.eduTitle}</S.StudyStatusLabel>
                 <S.StudyStatusPercent>{item.progress}%</S.StudyStatusPercent>
@@ -41,7 +41,9 @@ const StudyStatusCard = ({ studyStatusList = [] }) => {
           ))}
 
         {studyStatusList.length === 0 && (
-          <S.EmptyText>진행 중인 학습이 없습니다.</S.EmptyText>
+          <S.StudyStatusEmptyText>
+            진행 중인 학습이 없습니다.
+          </S.StudyStatusEmptyText>
         )}
       </S.StudyStatusList>
 

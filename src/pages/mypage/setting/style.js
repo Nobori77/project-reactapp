@@ -145,8 +145,8 @@ S.ItemTextBox = styled.div`
 S.ItemTitle = styled.p`
   margin: 0;
 
-  font-size: 12px;
-  font-weight: ${FONT_WEIGHT.regular};
+  font-size: 13px;
+  font-weight: ${FONT_WEIGHT.bold};
   color: #000000;
 `;
 
@@ -154,7 +154,7 @@ S.ItemTitle = styled.p`
 S.ItemDesc = styled.p`
   margin: 0;
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: ${FONT_WEIGHT.regular};
   color: #000000;
 `;
