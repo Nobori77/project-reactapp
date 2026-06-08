@@ -1,4 +1,3 @@
-// 검색화면컴포넌트: 검색창, 결과 목록, 상세 카드 전환 담당
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { fetchSignWords } from "../apis/SignWordApi";
@@ -7,6 +6,24 @@ import { mapSignWords } from "../mappers/signWordMapper";
 import SearchResultCard from "./parts/SearchResultCard";
 import SearchResultList from "./parts/SearchResultList";
 import * as S from "./style";
+
+const TEXT = {
+  all: "\uC804\uCCB4",
+  title: "\uD544\uC694\uD55C \uC218\uC5B4 \uD45C\uD604\uC744 \uBC14\uB85C \uCC3E\uC544\uBCF4\uC138\uC694",
+  placeholder: "\uC608: \uC548\uB155\uD558\uC138\uC694, \uBCD1\uC6D0, \uB3C4\uC640\uC8FC\uC138\uC694",
+  inputLabel: "\uC218\uC5B4 \uAC80\uC0C9\uC5B4",
+  submitLabel: "\uAC80\uC0C9",
+  categoryLabel: "\uC218\uC5B4 \uAC80\uC0C9 \uCE74\uD14C\uACE0\uB9AC",
+  serverError: "\uAC80\uC0C9 \uC11C\uBC84\uC5D0 \uC5F0\uACB0\uD558\uAE30 \uC5B4\uB824\uC6CC\uC694. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574\uC8FC\uC138\uC694.",
+  detailTitle: "\uC218\uC5B4 \uC0C1\uC138",
+  resultTitle: "\uAC80\uC0C9 \uACB0\uACFC",
+  searching: "\uAC80\uC0C9 \uC911",
+  countUnit: "\uAC1C",
+  loadingTitle: "\uAC80\uC0C9 \uACB0\uACFC\uB97C \uBD88\uB7EC\uC624\uB294 \uC911\uC774\uC5D0\uC694.",
+  loadingDesc: "\uC7A0\uC2DC\uB9CC \uAE30\uB2E4\uB824\uC8FC\uC138\uC694.",
+  emptyTitle: "\uAC80\uC0C9 \uACB0\uACFC\uAC00 \uC5C6\uC5B4\uC694.",
+  emptyDesc: "\uB2E4\uB978 \uB2E8\uC5B4\uB098 \uCE74\uD14C\uACE0\uB9AC\uB85C \uB2E4\uC2DC \uAC80\uC0C9\uD574\uBCF4\uC138\uC694.",
+};
 
 const StudySearchComponent = () => {
   const location = useLocation();
@@ -29,64 +46,57 @@ const StudySearchComponent = () => {
     error,
     setError,
   } = useSignWordSearch(initialKeyword);
-  const [selectedCategory, setSelectedCategory] = useState("전체");
+  const [selectedCategory, setSelectedCategory] = useState(TEXT.all);
 
-  // 검색카테고리: 실제 API 검색 결과에 포함된 분류만 필터로 보여줍니다.
   const categories = useMemo(
     () => [
-      "전체",
+      TEXT.all,
       ...new Set(
         results
           .map((item) => item.category)
-          .filter((category) => category && category !== "전체")
+          .filter((category) => category && category !== TEXT.all)
       ),
     ],
     [results]
   );
 
-  // 검색결과필터: API 결과를 카테고리 기준으로 한 번 더 골라냅니다.
   const filteredResults = useMemo(() => {
-    return results.filter((item) => selectedCategory === "전체" || item.category === selectedCategory);
+    return results.filter((item) => selectedCategory === TEXT.all || item.category === selectedCategory);
   }, [results, selectedCategory]);
 
   const selectedResult = selectedIndex !== null ? filteredResults[selectedIndex] : null;
 
-  // 검색실행함수: 백엔드 검색 API 결과만 화면에 보여줍니다.
   const searchSignWords = async (searchKeyword = keyword) => {
     setLoading(true);
     setError(null);
     setSelectedIndex(null);
-    setSelectedCategory("전체");
+    setSelectedCategory(TEXT.all);
 
     try {
       const data = await fetchSignWords(searchKeyword);
       setResults(mapSignWords(data));
     } catch {
       setResults([]);
-      setError("검색 서버에 연결하기 어려워요. 잠시 후 다시 시도해주세요.");
+      setError(TEXT.serverError);
     } finally {
       setLoading(false);
     }
   };
 
-  // 첫검색실행: 검색 페이지에 처음 들어오면 기본 검색 결과를 준비합니다.
   useEffect(() => {
     searchSignWords(initialKeyword);
-    // 최초 진입 시에만 실행하기 위해 의존성을 고정합니다.
+    // Run once on first entry so the initial keyword can prepare results.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 검색실행이벤트: 입력한 검색어로 결과 목록을 다시 보여줍니다.
   const handleSubmit = (event) => {
     event.preventDefault();
     searchSignWords(keyword);
   };
 
-  // 카테고리선택함수: 선택한 분류 기준으로 결과를 다시 필터링합니다.
   const handleCategory = (category) => {
     setSelectedCategory(category);
     setSelectedIndex(null);
-
   };
 
   const handleCategoryMouseDown = (event) => {
@@ -114,17 +124,21 @@ const StudySearchComponent = () => {
     categoryDragRef.current.active = false;
   };
 
-  // 상세이동함수: 목록에서 선택한 결과를 상세 카드로 전환합니다.
+  const handleCategoryArrow = (direction) => {
+    const list = categoryScrollRef.current;
+    if (!list) return;
+
+    list.scrollBy({ left: direction * 260, behavior: "smooth" });
+  };
+
   const handleSelect = (index) => {
     setSelectedIndex(index);
   };
 
-  // 이전결과함수: 상세 카드에서 이전 검색결과로 이동합니다.
   const handlePrev = () => {
     setSelectedIndex((prev) => Math.max((prev ?? 0) - 1, 0));
   };
 
-  // 다음결과함수: 상세 카드에서 다음 검색결과로 이동합니다.
   const handleNext = () => {
     setSelectedIndex((prev) => Math.min((prev ?? 0) + 1, filteredResults.length - 1));
   };
@@ -132,7 +146,7 @@ const StudySearchComponent = () => {
   return (
     <S.SearchWrap>
       <S.SearchHero>
-        <S.Title>필요한 수어 표현을 바로 찾아보세요</S.Title>
+        <S.Title>{TEXT.title}</S.Title>
 
         <S.SearchForm onSubmit={handleSubmit}>
           <S.SearchIcon aria-hidden="true" viewBox="0 0 24 24">
@@ -143,47 +157,55 @@ const StudySearchComponent = () => {
             type="search"
             value={keyword}
             onChange={(event) => setKeyword(event.target.value)}
-            placeholder="예: 안녕하세요, 병원, 도와주세요"
-            aria-label="수어 검색어"
+            placeholder={TEXT.placeholder}
+            aria-label={TEXT.inputLabel}
           />
-          <S.SearchButton type="submit" aria-label="검색">
-            →
+          <S.SearchButton type="submit" aria-label={TEXT.submitLabel}>
+            <span aria-hidden="true">&gt;</span>
           </S.SearchButton>
         </S.SearchForm>
       </S.SearchHero>
 
-      <S.CategoryList
-        ref={categoryScrollRef}
-        aria-label="수어 검색 카테고리"
-        onMouseDown={handleCategoryMouseDown}
-        onMouseMove={handleCategoryMouseMove}
-        onMouseUp={handleCategoryMouseEnd}
-        onMouseLeave={handleCategoryMouseEnd}
-      >
-        {categories.map((category) => (
-          <S.CategoryButton
-            type="button"
-            key={category}
-            $active={selectedCategory === category}
-            onClick={() => handleCategory(category)}
-          >
-            {category}
-          </S.CategoryButton>
-        ))}
-      </S.CategoryList>
+      <S.CategoryShell>
+        <S.CategoryArrowButton type="button" aria-label="previous categories" onClick={() => handleCategoryArrow(-1)}>
+          &lt;
+        </S.CategoryArrowButton>
+        <S.CategoryList
+          ref={categoryScrollRef}
+          aria-label={TEXT.categoryLabel}
+          onMouseDown={handleCategoryMouseDown}
+          onMouseMove={handleCategoryMouseMove}
+          onMouseUp={handleCategoryMouseEnd}
+          onMouseLeave={handleCategoryMouseEnd}
+        >
+          {categories.map((category) => (
+            <S.CategoryButton
+              type="button"
+              key={category}
+              $active={selectedCategory === category}
+              onClick={() => handleCategory(category)}
+            >
+              {category}
+            </S.CategoryButton>
+          ))}
+        </S.CategoryList>
+        <S.CategoryArrowButton type="button" aria-label="next categories" onClick={() => handleCategoryArrow(1)}>
+          &gt;
+        </S.CategoryArrowButton>
+      </S.CategoryShell>
 
       <S.SearchContent>
         <S.ContentHead>
-          <S.ContentTitle>{selectedResult ? "수어 상세" : "검색 결과"}</S.ContentTitle>
-          <S.ResultCount>{loading ? "검색 중" : `${filteredResults.length}개`}</S.ResultCount>
+          <S.ContentTitle>{selectedResult ? TEXT.detailTitle : TEXT.resultTitle}</S.ContentTitle>
+          <S.ResultCount>{loading ? TEXT.searching : filteredResults.length + TEXT.countUnit}</S.ResultCount>
         </S.ContentHead>
 
         {error && <S.SearchNotice>{error}</S.SearchNotice>}
 
         {loading ? (
           <S.EmptyBox>
-            <strong>검색 결과를 불러오는 중이에요.</strong>
-            <span>잠시만 기다려주세요.</span>
+            <strong>{TEXT.loadingTitle}</strong>
+            <span>{TEXT.loadingDesc}</span>
           </S.EmptyBox>
         ) : selectedResult ? (
           <SearchResultCard
@@ -198,8 +220,8 @@ const StudySearchComponent = () => {
           <SearchResultList results={filteredResults} onSelect={handleSelect} />
         ) : (
           <S.EmptyBox>
-            <strong>검색 결과가 없어요.</strong>
-            <span>다른 단어나 카테고리로 다시 검색해보세요.</span>
+            <strong>{TEXT.emptyTitle}</strong>
+            <span>{TEXT.emptyDesc}</span>
           </S.EmptyBox>
         )}
       </S.SearchContent>

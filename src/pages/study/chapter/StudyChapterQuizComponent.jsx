@@ -1,4 +1,3 @@
-// 오!퀴즈 문제 컴포넌트: 로그인 퀴즈 문제 풀이와 정답/오답 상태
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import QuizFeedback from "../components/QuizFeedback";
@@ -40,9 +39,9 @@ const StudyChapterQuizComponent = () => {
   const backendQuizId = chapter?.backendQuizId;
   const currentIndex = Math.max(Number(id || 1) - 1, 0);
   const currentQuestion = questions[currentIndex];
+  const correctOption = currentQuestion?.options.find((option) => option.correct);
   const isQuestionMode = Boolean(id);
 
-  // 백엔드 퀴즈 문제와 보기 목록 조회
   useEffect(() => {
     if (!backendQuizId) return;
 
@@ -77,7 +76,6 @@ const StudyChapterQuizComponent = () => {
     };
   }, [backendQuizId, chapter?.explanations]);
 
-  // 현재 정규 퀴즈 데이터 -> context
   useEffect(() => {
     if (!chapter || questions.length === 0) return;
 
@@ -89,18 +87,15 @@ const StudyChapterQuizComponent = () => {
     });
   }, [actions, backendQuizId, chapter, questions]);
 
-  // 문제 번호가 바뀔 때 선택된 보기 초기화
   useEffect(() => {
     setSelectedOption(null);
   }, [id, quiz]);
 
-  // 현재 문제가 마지막 문제인지 계산하는 값
   const isLastQuestion = useMemo(
     () => currentIndex >= (questions.length || 1) - 1,
     [currentIndex, questions.length]
   );
 
-  // 첫 번째 정규 퀴즈 문제로 이동
   const handleStartQuiz = () => {
     if (questionLoading) return;
 
@@ -113,9 +108,7 @@ const StudyChapterQuizComponent = () => {
     navigate(`/study/chapter/${quiz}/questions/1`);
   };
 
-  // 보기를 선택했을 때 답안을 저장
   const handleSelectOption = (option) => {
-
     if (selectedOption || !currentQuestion) return;
 
     setSelectedOption(option);
@@ -127,12 +120,10 @@ const StudyChapterQuizComponent = () => {
     });
   };
 
-  // 퀴즈 제출: 마지막 문제 이후 백엔드에 답안을 저장
   const submitChapterQuiz = async () => {
     if (!chapter || !backendQuizId) return;
 
     if (isGuest || !userId || !canSubmitQuizAnswers(backendQuizId, state.answers, questions.length)) {
-
       actions.setResult({
         quizId: backendQuizId,
         completed: true,
@@ -176,7 +167,6 @@ const StudyChapterQuizComponent = () => {
     }
   };
 
-  // 다음 문제 또는 결과 화면으로 이동
   const handleNextQuestion = async () => {
     if (isLastQuestion) {
       await submitChapterQuiz();
@@ -187,7 +177,6 @@ const StudyChapterQuizComponent = () => {
     navigate(`/study/chapter/${quiz}/questions/${currentIndex + 2}`);
   };
 
-  // 선택 없이 확인했을 때 안내
   const handleConfirm = () => {
     if (!selectedOption) {
       alert("답을 먼저 선택해주세요.");
@@ -233,15 +222,16 @@ const StudyChapterQuizComponent = () => {
           </button>
           <div>
             <span>{chapter.title}</span>
-            <strong>
-              {currentIndex + 1} / {questions.length}
-            </strong>
           </div>
-          <em>+{chapter.exp} EXP</em>
         </S.ChapterQuestionHeader>
 
         <S.ChapterQuestionCard>
-          <QuizProgress current={currentIndex + 1} total={questions.length} />
+          <S.ChapterProgressLine>
+            <QuizProgress current={currentIndex + 1} total={questions.length} />
+            <S.ChapterProgressCount>
+              {currentIndex + 1} / {questions.length}
+            </S.ChapterProgressCount>
+          </S.ChapterProgressLine>
 
           <S.ChapterQuestionInfo>
             <span>{chapter.label} 퀴즈</span>
@@ -265,21 +255,24 @@ const StudyChapterQuizComponent = () => {
           {selectedOption && (
             <QuizFeedback
               status={selectedOption.correct ? "correct" : "wrong"}
-              title={selectedOption.correct ? "정답이에요!" : "오답이에요"}
+              title={selectedOption.correct ? "정답이에요!" : "아쉬워요!"}
+              answer={!selectedOption.correct ? `정답은 "${correctOption?.text || "정답"}"이에요.` : undefined}
               desc={currentQuestion.explanation}
               onNext={handleNextQuestion}
               buttonText={isLastQuestion ? "결과 보기" : "다음 문제"}
             />
           )}
 
-          <S.ChapterBottomBar>
-            <button type="button" onClick={handleNextQuestion}>
-              건너뛰기
-            </button>
-            <button type="button" onClick={handleConfirm}>
-              {isLastQuestion ? "결과 보기" : "확인"}
-            </button>
-          </S.ChapterBottomBar>
+          {!selectedOption && (
+            <S.ChapterBottomBar>
+              <button type="button" onClick={handleNextQuestion}>
+                건너뛰기
+              </button>
+              <button type="button" onClick={handleConfirm}>
+                {isLastQuestion ? "결과 보기" : "확인"}
+              </button>
+            </S.ChapterBottomBar>
+          )}
         </S.ChapterQuestionCard>
       </QuizShell>
     );

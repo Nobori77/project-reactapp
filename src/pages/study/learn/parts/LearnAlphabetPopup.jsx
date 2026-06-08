@@ -11,11 +11,6 @@ const LearnAlphabetPopup = ({ letter, onClose, onPrev, onNext }) => {
         <S.AlphaPopupLetter>{letter.letter}</S.AlphaPopupLetter>
         <S.AlphaPopupName>{letter.name}</S.AlphaPopupName>
         <S.AlphaPopupSound>{letter.sound}</S.AlphaPopupSound>
-        <S.AlphaPopupDots>
-          <span />
-          <span />
-          <span />
-        </S.AlphaPopupDots>
         <S.AlphaHandBox>
           <img src={letter.imageUrl} alt={`${letter.name} 손 모양`} />
         </S.AlphaHandBox>

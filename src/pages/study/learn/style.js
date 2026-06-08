@@ -922,8 +922,8 @@ export const AlphaPopupDim = styled.div`
 export const AlphaPopupCard = styled.aside`
   position: relative;
   width: 360px;
-  min-height: 560px;
-  padding: 40px 28px 30px;
+  min-height: 536px;
+  padding: 38px 28px 28px;
   border-radius: 18px;
   background: #fff;
   text-align: center;
@@ -956,28 +956,10 @@ export const AlphaPopupName = styled.h2`
 `;
 
 export const AlphaPopupSound = styled.p`
-  margin: 0 0 14px;
+  margin: 0 0 22px;
   color: #999;
   font-size: 16px;
   font-weight: 700;
-`;
-
-export const AlphaPopupDots = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 20px;
-
-  span {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #d8defe;
-  }
-
-  span:first-child {
-    background: #4359fc;
-  }
 `;
 
 export const AlphaHandBox = styled.div`
@@ -985,7 +967,7 @@ export const AlphaHandBox = styled.div`
   place-items: center;
   width: 284px;
   height: 148px;
-  margin: 0 auto 16px;
+  margin: 0 auto 14px;
   border-radius: 10px;
   background: #eef1ff;
 
@@ -1004,7 +986,7 @@ export const AlphaPopupCaption = styled.p`
 
 export const AlphaPopupInfo = styled.div`
   width: 284px;
-  margin: 0 auto 26px;
+  margin: 0 auto 24px;
   padding: 13px 14px;
   border: 1px solid #4359fc;
   border-radius: 6px;
@@ -1614,4 +1596,163 @@ export const LearnReviewSkip = styled.button`
   font-size: 16px;
   font-weight: 900;
   cursor: pointer;
+`;
+
+export const LearnResultOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+`;
+
+export const LearnResultModal = styled.section`
+  width: min(560px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 46px 40px 34px;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 26px 70px rgba(38, 48, 104, 0.18);
+`;
+
+export const LearnResultCelebrate = styled.p`
+  margin: 0 0 12px;
+  font-size: 48px;
+  line-height: 1;
+`;
+
+export const LearnResultTitle = styled.h1`
+  margin: 0 0 34px;
+  color: #111;
+  font-size: 24px;
+  font-weight: 900;
+`;
+
+export const LearnResultAccuracy = styled.strong`
+  display: block;
+  margin-bottom: 12px;
+  color: #4359fc;
+  font-size: 58px;
+  line-height: 1;
+  font-weight: 900;
+`;
+
+export const LearnResultSubText = styled.p`
+  margin: 0 0 38px;
+  color: #555;
+  font-size: 15px;
+`;
+
+export const LearnResultStatGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: min(430px, 100%);
+  margin: 0 auto 52px;
+
+  div {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+  }
+
+  span {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  small {
+    color: #999;
+    font-size: 12px;
+  }
+
+  strong {
+    color: #111;
+    font-size: 25px;
+    font-weight: 900;
+  }
+`;
+
+export const LearnResultWrongBox = styled.article`
+  width: min(520px, 100%);
+  min-height: 88px;
+  margin: 0 auto 44px;
+  padding: 18px 20px;
+  border: 1px solid #fca5a5;
+  border-radius: 10px;
+  text-align: left;
+
+  > strong {
+    display: block;
+    margin-bottom: 12px;
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  > p {
+    margin: 0;
+    color: #888;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+`;
+
+export const LearnResultWrongItem = styled.div`
+  p {
+    margin: 0 0 8px;
+    color: #555;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  span,
+  em {
+    display: block;
+    font-size: 12px;
+    line-height: 18px;
+    font-style: normal;
+  }
+
+  span {
+    color: #ef4444;
+  }
+
+  em {
+    color: #22c55e;
+    font-weight: 800;
+  }
+`;
+
+export const LearnResultLine = styled.div`
+  width: min(520px, 100%);
+  height: 1px;
+  margin: 0 auto 28px;
+  background: #e6e6e6;
+`;
+
+export const LearnResultActions = styled.div`
+  width: min(520px, 100%);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 0 auto;
+
+  button {
+    border: 0;
+    background: transparent;
+    color: #666;
+    font-size: 15px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  button:hover {
+    color: #4359fc;
+  }
 `;

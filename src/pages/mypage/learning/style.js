@@ -71,7 +71,7 @@ S.LearningCardBox = styled.div`
 /* 학습현황 헤더 */
 S.LearningHeader = styled.div`
   display: grid;
-  grid-template-columns: 1fr 120px 130px;
+  grid-template-columns: 1fr 120px 90px 130px;
   align-items: center;
 
   padding-bottom: 8px;
@@ -81,7 +81,7 @@ S.LearningHeader = styled.div`
 /* 학습결과 헤더 */
 S.LearningResultHeader = styled.div`
   display: grid;
-  grid-template-columns: 1fr 100px 110px 90px;
+  grid-template-columns: 1fr 120px 100px 110px 90px;
   align-items: center;
 
   padding-bottom: 8px;
@@ -104,7 +104,7 @@ S.LearningHeaderText = styled.span`
 /* 학습현황 행 */
 S.LearningRow = styled.div`
   display: grid;
-  grid-template-columns: 1fr 120px 130px;
+  grid-template-columns: 1fr 120px 90px 130px;
   align-items: center;
 
   min-height: 31px;
@@ -114,7 +114,7 @@ S.LearningRow = styled.div`
 /* 학습결과 행 */
 S.LearningResultRow = styled.div`
   display: grid;
-  grid-template-columns: 1fr 100px 110px 90px;
+  grid-template-columns: 1fr 120px 100px 110px 90px;
   align-items: center;
 
   min-height: 31px;

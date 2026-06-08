@@ -123,12 +123,46 @@ export const SearchButton = styled.button`
   }
 `;
 
+export const CategoryShell = styled.div`
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 8px;
+  width: min(940px, 100%);
+  margin: 24px auto 0;
+`;
+
+export const CategoryArrowButton = styled.button`
+  width: 18px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #4359fc;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #3545f5;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(67, 89, 252, 0.22);
+    outline-offset: 2px;
+  }
+`;
+
 export const CategoryList = styled.div`
   display: flex;
   justify-content: flex-start;
   gap: 38px;
-  width: min(900px, 100%);
-  margin: 24px auto 0;
+  min-width: 0;
   padding: 0 2px 5px;
   overflow-x: auto;
   overscroll-behavior-x: contain;

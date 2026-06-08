@@ -101,6 +101,14 @@ const formatRecentTime = (date) => {
 };
 
 // 최신 학습한 항목이 위로 오도록 정렬합니다.
+const formatDate = (date) => {
+  if (!date) {
+    return "-";
+  }
+
+  return String(date).includes("T") ? String(date).split("T")[0] : String(date).split(" ")[0];
+};
+
 const sortStatusListByRecent = (list) => {
   return [...list].sort((a, b) => {
     const aTime = new Date(a.recentStudyAt || 0).getTime();
@@ -248,6 +256,7 @@ const MyPageLearningComponent = () => {
             <S.LearningCardBox>
               <S.LearningHeader>
                 <S.LearningHeaderText>제목</S.LearningHeaderText>
+                <S.LearningHeaderText>학습일</S.LearningHeaderText>
                 <S.LearningHeaderText>진행도</S.LearningHeaderText>
                 <S.LearningHeaderText>최근 학습 시간</S.LearningHeaderText>
               </S.LearningHeader>
@@ -261,6 +270,7 @@ const MyPageLearningComponent = () => {
                     {learning.eduTitle}
                   </S.LearningTitleButton>
 
+                  <S.LearningText>{formatDate(learning.recentStudyAt)}</S.LearningText>
                   <S.LearningText>{formatPercent(learning.progress)}</S.LearningText>
                   <S.LearningText>{formatRecentTime(learning.recentStudyAt)}</S.LearningText>
                 </S.LearningRow>
@@ -304,14 +314,16 @@ const MyPageLearningComponent = () => {
             <S.LearningCardBox>
               <S.LearningResultHeader>
                 <S.LearningHeaderText>제목</S.LearningHeaderText>
-                <S.LearningHeaderText>정답 수</S.LearningHeaderText>
-                <S.LearningHeaderText>소요시간</S.LearningHeaderText>
-                <S.LearningHeaderText>정답률</S.LearningHeaderText>
+                <S.LearningHeaderText>완료일</S.LearningHeaderText>
+                <S.LearningHeaderText>완료 단어</S.LearningHeaderText>
+                <S.LearningHeaderText>학습 시간</S.LearningHeaderText>
+                <S.LearningHeaderText>완료율</S.LearningHeaderText>
               </S.LearningResultHeader>
 
               {visibleResultList.map((result) => (
                 <S.LearningResultRow key={result.quizAttemptId}>
                   <S.LearningText>{result.quizTitle}</S.LearningText>
+                  <S.LearningText>{formatDate(result.completedAt || result.quizAttemptCreateAt || result.createdAt)}</S.LearningText>
                   <S.LearningText>{formatScore(result.correctCount, result.totalCount)}</S.LearningText>
                   <S.LearningText>{formatTime(result.spentTime)}</S.LearningText>
                   <S.LearningText>{formatPercent(result.accuracy)}</S.LearningText>

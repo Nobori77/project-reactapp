@@ -1,16 +1,27 @@
-// 퀴즈 피드백 공통 컴포넌트: 정답/오답 안내, 해설 표시
 import * as S from "./style";
 
-const QuizFeedback = ({ status, title, desc, onNext, buttonText = "계속하기" }) => {
+const QuizFeedback = ({ status, title, answer, desc, onNext, buttonText = "계속하기" }) => {
+  const isCorrect = status === "correct";
 
   return (
     <S.QuizFeedbackBox data-status={status}>
-      <strong>{title}</strong>
-      {desc && <p>{desc}</p>}
+      <S.QuizFeedbackIcon data-status={status}>{isCorrect ? "🎉" : "💔"}</S.QuizFeedbackIcon>
+      <S.QuizFeedbackText data-status={status}>
+        <strong>{title}</strong>
+        {answer && <p>{answer}</p>}
+        {desc && (
+          <div className="descriptionWrap">
+            {!isCorrect && <span className="descriptionLabel">설명</span>}
+            <p className="description">{desc}</p>
+          </div>
+        )}
+      </S.QuizFeedbackText>
       {onNext && (
-        <button type="button" onClick={onNext}>
-          {buttonText}
-        </button>
+        <S.QuizFeedbackActions data-status={status}>
+          <button type="button" onClick={onNext}>
+            {buttonText}
+          </button>
+        </S.QuizFeedbackActions>
       )}
     </S.QuizFeedbackBox>
   );

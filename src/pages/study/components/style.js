@@ -76,11 +76,7 @@ export const QuizOptionButton = styled.button`
   background: ${({ theme }) => theme.PALETTE.white};
   color: #1a1a1a;
   text-align: left;
-
-  &[data-selected="true"] {
-    border-color: ${({ theme }) => theme.PALETTE.primary.main};
-    background: #f0f5ff;
-  }
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 
   strong {
     width: 34px;
@@ -88,10 +84,13 @@ export const QuizOptionButton = styled.button`
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 34px;
     border-radius: 50%;
     background: ${({ theme }) => theme.GRAYSCALE[1]};
+    color: #1a1a1a;
     font-size: ${({ theme }) => theme.FONT_SIZE.h10};
     font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
+    transition: background 0.2s ease, color 0.2s ease;
   }
 
   span {
@@ -99,34 +98,111 @@ export const QuizOptionButton = styled.button`
     font-size: ${({ theme }) => theme.FONT_SIZE.h10};
     line-height: ${({ theme }) => theme.FONT_LINE.h10};
   }
+
+  &[data-selected="true"] {
+    border-color: ${({ theme }) => theme.PALETTE.primary.main};
+    background: #f0f5ff;
+  }
+
+  &[data-selected="true"] strong {
+    background: ${({ theme }) => theme.PALETTE.primary.main};
+    color: ${({ theme }) => theme.PALETTE.white};
+  }
+
+  &[data-status="correct"] {
+    border-color: #58cc02;
+    background: #ecffd9;
+  }
+
+  &[data-status="correct"] strong {
+    background: #58cc02;
+    color: ${({ theme }) => theme.PALETTE.white};
+  }
+
+  &[data-status="wrong"] {
+    border-color: #f14141;
+    background: #ffe8e8;
+  }
+
+  &[data-status="wrong"] strong {
+    background: #f14141;
+    color: ${({ theme }) => theme.PALETTE.white};
+  }
 `;
 
 export const QuizFeedbackBox = styled.aside`
-  padding: 24px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 28px 32px;
   border-radius: 18px;
-  background: ${({ "data-status": status }) => (status === "correct" ? "#effaf0" : "#fff2f2")};
+  background: ${({ "data-status": status }) => (status === "correct" ? "#dcffd0" : "#ffe3e3")};
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+`;
+
+export const QuizFeedbackIcon = styled.div`
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 30px;
+`;
+
+export const QuizFeedbackText = styled.div`
+  min-width: 0;
 
   strong {
     display: block;
-    margin-bottom: 8px;
-    color: #1a1a1a;
+    margin-bottom: 10px;
+    color: ${({ "data-status": status }) => (status === "correct" ? "#22a900" : "#f14141")};
     font-size: ${({ theme }) => theme.FONT_SIZE.h8};
     font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
   }
 
   p {
-    margin: 0 0 18px;
-    color: #555;
+    margin: 0;
+    color: #4a4a4a;
     font-size: ${({ theme }) => theme.FONT_SIZE.h10};
     line-height: ${({ theme }) => theme.FONT_LINE.h10};
   }
 
+  .descriptionWrap {
+    margin-top: 12px;
+  }
+
+  .descriptionLabel {
+    display: block;
+    margin-bottom: 6px;
+    color: #f14141;
+    font-size: ${({ theme }) => theme.FONT_SIZE.h11};
+    font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
+  }
+
+  .description {
+    color: #5f5f5f;
+  }
+`;
+
+export const QuizFeedbackActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+
   button {
-    height: 44px;
-    padding: 0 20px;
+    min-width: 132px;
+    height: 46px;
+    padding: 0 22px;
     border-radius: 12px;
-    background: ${({ theme }) => theme.PALETTE.primary.main};
+    background: ${({ "data-status": status, theme }) =>
+      status === "correct" ? "#58cc02" : theme.PALETTE.primary.main};
     color: ${({ theme }) => theme.PALETTE.white};
+    font-size: ${({ theme }) => theme.FONT_SIZE.h10};
     font-weight: ${({ theme }) => theme.FONT_WEIGHT.bold};
   }
 `;
