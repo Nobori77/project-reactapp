@@ -15,7 +15,13 @@ const MOCK_USER = {
 const CommunityProfile = ({ userNickname, userProfile, userIntro }) => {
   return (
     <S.ProfileBar>
-      <S.AvatarImg src={userProfile} alt={userNickname} />
+      <S.AvatarImg
+        src={userProfile}
+        alt={userNickname}
+        onError={(e) => {
+          e.currentTarget.src = DEFAULT_PROFILE;
+        }}
+      />
       <S.UserInfoRow>
         <S.TextBlock>
           <S.Nickname>{userNickname}</S.Nickname>

@@ -80,3 +80,11 @@ export const TimeText = styled.p`
   white-space: nowrap;
   line-height: 1;
 `;
+
+export const ChatImg = styled.img`
+  max-width: 188px;
+  max-height: 200px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  display: block;
+`;

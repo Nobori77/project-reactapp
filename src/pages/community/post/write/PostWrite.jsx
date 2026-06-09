@@ -19,7 +19,6 @@ import postFileUpload from "../../assets/postWrite/post-file-upload.svg";
 import postTempSaveInfo from "../../assets/postWrite/post-temp-save-info.svg";
 
 const CATEGORIES = [
-  "전체",
   "자유게시판",
   "학습 질문",
   "학습 인증",
@@ -39,7 +38,7 @@ const PostWrite = () => {
   const editState = location.state?.mode === "edit" ? location.state : null;
 
   const [activeCategory, setActiveCategory] = useState(
-    editState?.postTag ?? "전체",
+    editState?.postTag ?? "자유게시판",
   );
   const [title, setTitle] = useState(editState?.postTitle ?? "");
   const [errors, setErrors] = useState({});
@@ -83,14 +82,15 @@ const PostWrite = () => {
           postContent: editor.getHTML(),
           postTag: activeCategory,
         });
+        navigate(`/community/post/${editState.postId}`, { replace: true });
       } else {
-        await createPost({
+        const { data } = await createPost({
           postTitle: title,
           postContent: editor.getHTML(),
           postTag: activeCategory,
         });
+        navigate(`/community/post/${data}`, { replace: true });
       }
-      navigate(-1);
     } catch {
       setErrors({
         submit: editState

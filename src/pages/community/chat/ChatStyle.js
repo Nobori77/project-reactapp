@@ -327,6 +327,7 @@ const MsgAvatar = styled.img`
   width: 26px;
   height: 26px;
   flex-shrink: 0;
+  border-radius: 100%;
 `;
 
 const MsgContentCol = styled.div`

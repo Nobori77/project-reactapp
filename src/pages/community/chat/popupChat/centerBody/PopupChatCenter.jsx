@@ -1,58 +1,13 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import {
-  CenterPanel,
-  MessagesArea,
-  OtherMsgWrap,
-  MsgAvatar,
-  MsgContentCol,
-  SenderName,
-  MsgTimeRow,
-  OtherBubble,
-  OtherBubbleText,
-  MsgTime,
-  MyMsgRow,
-  MyBubble,
-  MyBubbleText,
-  InputArea,
-  AttachRow,
-  AttachIcons,
-  AttachIcon,
-  AttachDivider,
-  InputRow,
-  TextInputBox,
-  SendBtn,
-} from "../../ChatStyle";
+import * as S from "../../ChatStyle";
 import chatImozi from "../../../assets/chat/chat_imozi.svg";
 import chatImageUpload from "../../../assets/chat/chat_image_upload.svg";
 import chatShare from "../../../assets/chat/chat_share.svg";
 import chatSueo from "../../../assets/chat/chat_sueo.svg";
 import useChatRoom from "../../hooks/useChatRoom";
 import { uploadChatImage } from "../../../communityApi/chatApi";
-
-const S = {
-  CenterPanel,
-  MessagesArea,
-  OtherMsgWrap,
-  MsgAvatar,
-  MsgContentCol,
-  SenderName,
-  MsgTimeRow,
-  OtherBubble,
-  OtherBubbleText,
-  MsgTime,
-  MyMsgRow,
-  MyBubble,
-  MyBubbleText,
-  InputArea,
-  AttachRow,
-  AttachIcons,
-  AttachIcon,
-  AttachDivider,
-  InputRow,
-  TextInputBox,
-  SendBtn,
-};
+import ChatMessage from "../../chatComponents/ChatMessage";
 
 const TextInput = styled.input`
   flex: 1;
@@ -65,15 +20,7 @@ const TextInput = styled.input`
   color: inherit;
 `;
 
-const ChatImg = styled.img`
-  max-width: 188px;
-  max-height: 200px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  display: block;
-`;
-
-const PopupChatCenter = ({ chatRoomId }) => {
+const PopupChatCenter = ({ chatRoomId, onProfileClick }) => {
   const [inputText, setInputText] = useState("");
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -117,41 +64,20 @@ const PopupChatCenter = ({ chatRoomId }) => {
     <S.CenterPanel>
       {/* 메세지 나열 되는곳 */}
       <S.MessagesArea>
-        {messages.map((msg) =>
-          !msg.isMine ? (
-            <S.OtherMsgWrap key={msg.id}>
-              <S.MsgAvatar src={msg.profileImage} alt={msg.username} />
-              <S.MsgContentCol>
-                <S.SenderName>{msg.username}</S.SenderName>
-                <S.MsgTimeRow>
-                  {msg.chatType === "IMAGE" ? (
-                    <ChatImg
-                      src={`http://localhost:10000${msg.content}`}
-                      alt="이미지"
-                    />
-                  ) : (
-                    <S.OtherBubble>
-                      <S.OtherBubbleText>{msg.content}</S.OtherBubbleText>
-                    </S.OtherBubble>
-                  )}
-                  <S.MsgTime>{msg.time}</S.MsgTime>
-                </S.MsgTimeRow>
-              </S.MsgContentCol>
-            </S.OtherMsgWrap>
-          ) : (
-            <S.MyMsgRow key={msg.id}>
-              <S.MsgTime>{msg.time}</S.MsgTime>
-              {msg.chatType === "IMAGE" ? (
-                <ChatImg
-                  src={`http://localhost:10000${msg.content}`}
-                  alt="이미지"
-                />
-              ) : (
-                <S.MyBubble>
-                  <S.MyBubbleText>{msg.content}</S.MyBubbleText>
-                </S.MyBubble>
-              )}
-            </S.MyMsgRow>
+        {messages.map(
+          ({ id, isMine, content, chatType, time, username, profileImage, userId, userExp }) => (
+            <ChatMessage
+              key={id}
+              isMine={isMine}
+              message={content}
+              chatType={chatType}
+              time={time}
+              username={username}
+              profileImage={profileImage}
+              userId={userId}
+              userExp={userExp}
+              onProfileClick={onProfileClick}
+            />
           ),
         )}
         <div ref={messagesEndRef} />
