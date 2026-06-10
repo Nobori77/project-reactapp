@@ -1,10 +1,10 @@
-// 학습퀴즈복습카드: 오답 후 핵심 설명 -> 다시 보여줌
+// 학습 퀴즈 복습 카드: 오답 또는 핵심 설명을 다시 보여주는 화면
 import * as S from "../style";
 
 const LearnQuizReview = ({
-  label = "📖 수어 배우기",
-  headline = "이 수어를 기억해봐요!",
-  mediaText = "수어 이미지/영상 슬롯",
+  label = "수어 배우기",
+  headline = "수어를 기억해볼까요?",
+  mediaText = "수어 이미지/영상 영역",
   wordLabel = "수어 표현",
   title,
   desc,

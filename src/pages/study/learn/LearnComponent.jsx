@@ -45,9 +45,9 @@ const LearnComponent = () => {
       return {
         id: `locked-${index + 1}`,
         title: `수어 학습 ${index + 1}`,
-        desc: "앞 단계를 완료하면 열려요.",
+        desc: "이전 단계를 완료하면 열려요",
         status: "locked",
-        badge: "★",
+        badge: "🔒",
         buttonText: "잠금",
         to: null,
       };
@@ -78,7 +78,7 @@ const LearnComponent = () => {
       try {
         await startLearn(lesson.id);
       } catch {
-        // 시작 기록 저장 실패가 학습 진입을 막지 않도록 둔다
+        // 시작 기록 저장 실패가 학습 진입을 막지 않도록 처리
       }
 
       navigate(`/study/learn/quiz/greeting/questions/1?eduId=${lesson.id}`, {
@@ -139,7 +139,9 @@ const LearnComponent = () => {
           <S.ChapterPanel>
             <S.ChapterHead>
               <S.Title>{roadmap.chapter.title}</S.Title>
-              <S.GuidePill type="button" onClick={() => alert(SERVICE_READY_MESSAGE)}>{"📘"} {roadmap.chapter.guideLabel}</S.GuidePill>
+              <S.GuidePill type="button" onClick={() => alert(SERVICE_READY_MESSAGE)}>
+                📘 {roadmap.chapter.guideLabel}
+              </S.GuidePill>
             </S.ChapterHead>
 
             {statusMessage && <S.StatusText>{statusMessage}</S.StatusText>}
@@ -176,7 +178,7 @@ const LearnComponent = () => {
             {shouldShowRoadmap && (
               <S.NextChapter type="button" onClick={() => alert(SERVICE_READY_MESSAGE)}>
                 <strong>{roadmap.chapter.nextTitle}</strong>
-                <span>{roadmap.chapter.nextDesc} {"→"}</span>
+                <span>{roadmap.chapter.nextDesc} →</span>
               </S.NextChapter>
             )}
           </S.ChapterPanel>
@@ -196,9 +198,9 @@ const LearnComponent = () => {
           </S.ProgressBar>
           <S.Percent>{roadmap.chapter.percent}%</S.Percent>
           <S.ExpBox>
-            <span>{"획득 EXP"}</span>
+            <span>획득 EXP</span>
             <strong>
-              <S.ExpIcon>{"⚡"}</S.ExpIcon>
+              <S.ExpIcon>⚡</S.ExpIcon>
               {roadmap.chapter.exp}
             </strong>
           </S.ExpBox>

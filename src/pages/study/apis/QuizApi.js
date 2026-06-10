@@ -42,6 +42,23 @@ export const fetchQuizChoices = async (questionId) => {
   return result.data;
 };
 
+export const startQuiz = async ({ quizId, userId }) => {
+  const response = await fetch(`${BASE_URL}/api/quizzes/${quizId}/start`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId }),
+  });
+
+  if (!response.ok)
+    throw new Error("퀴즈 시작 기록 등록 실패");
+
+  const result = await response.json();
+  if (!result.success)
+    throw new Error(result.message);
+
+  return result.data;
+};
+
 export const submitQuizAnswers = async ({ quizId, userId, answers }) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 4000);

@@ -1,10 +1,10 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import QuizFeedback from "../components/QuizFeedback";
 import QuizOptionCard from "../components/QuizOptionCard";
 import QuizProgress from "../components/QuizProgress";
 import QuizShell from "../components/QuizShell";
-import { fetchQuizQuestions, submitQuizAnswers } from "../apis/QuizApi";
+import { fetchQuizQuestions, startQuiz, submitQuizAnswers } from "../apis/QuizApi";
 import { StudyQuizContext } from "../../../context/StudyQuizContext";
 import { canSubmitQuizAnswers, mapQuizAnswersForSubmit } from "../mappers/quizMapper";
 import { useStudyUser } from "../hooks/useStudyUser";
@@ -35,6 +35,7 @@ const StudyChapterQuizComponent = () => {
   const [questions, setQuestions] = useState([]);
   const [questionLoading, setQuestionLoading] = useState(false);
   const [questionError, setQuestionError] = useState(null);
+  const startedQuizRef = useRef(null);
   const chapter = chapterQuizMeta.find((item) => item.id === quiz);
   const backendQuizId = chapter?.backendQuizId;
   const currentIndex = Math.max(Number(id || 1) - 1, 0);
@@ -75,6 +76,18 @@ const StudyChapterQuizComponent = () => {
       ignore = true;
     };
   }, [backendQuizId, chapter?.explanations]);
+
+  useEffect(() => {
+    if (!isQuestionMode || isGuest || !userId || !backendQuizId) return;
+
+    const startKey = `${userId}-${backendQuizId}`;
+    if (startedQuizRef.current === startKey) return;
+
+    startedQuizRef.current = startKey;
+    startQuiz({ quizId: backendQuizId, userId }).catch(() => {
+      startedQuizRef.current = null;
+    });
+  }, [backendQuizId, isGuest, isQuestionMode, userId]);
 
   useEffect(() => {
     if (!chapter || questions.length === 0) return;
@@ -205,7 +218,7 @@ const StudyChapterQuizComponent = () => {
       <QuizShell>
         <S.ChapterQuestionCard>
           <h1>{questionLoading ? "퀴즈 문제를 불러오는 중입니다." : questionError || "문제를 찾을 수 없습니다."}</h1>
-          <button type="button" onClick={() => navigate(`/study/chapter/${quiz}`)}>
+          <button type="button" onClick={() => navigate("/study/chapter")}>
             퀴즈 안내로 돌아가기
           </button>
         </S.ChapterQuestionCard>
@@ -217,7 +230,7 @@ const StudyChapterQuizComponent = () => {
     return (
       <QuizShell>
         <S.ChapterQuestionHeader>
-          <button type="button" onClick={() => navigate(`/study/chapter/${quiz}`)}>
+          <button type="button" onClick={() => navigate("/study/chapter")}>
             ←
           </button>
           <div>

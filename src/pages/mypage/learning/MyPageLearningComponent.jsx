@@ -224,8 +224,20 @@ const MyPageLearningComponent = () => {
   const visibleStatusList = getVisibleList(statusList, isStatusExpanded, statusPage);
   const visibleResultList = getVisibleList(resultList, isResultExpanded, resultPage);
 
+  const chapterQuestionPathMap = {
+  1: "/study/chapter/sign-history/questions/1",
+  2: "/study/chapter/sos/questions/1",
+  3: "/study/chapter/morse/questions/1",
+  };
+
   // 학습 제목 클릭 시 이어 학습 페이지로 이동합니다.
   const handleMoveLearning = (learning) => {
+    if (learning.learningType === "QUIZ") {
+      navigate(chapterQuestionPathMap[learning.eduId] || "/study/chapter");
+
+      return;
+    }
+
     navigate(`/study/learn/quiz/greeting/questions/1?eduId=${learning.eduId}`, {
       state: {
         eduId: learning.eduId,

@@ -34,7 +34,7 @@ export const learnQuizMockMap = {
         options: [
           { id: "a", label: "감사합니다", desc: "고마운 마음을 전해요", icon: "감사", correct: true },
           { id: "b", label: "안녕하세요", desc: "기본 인사 표현", icon: "인사" },
-          { id: "c", label: "죄송합니다", desc: "사과를 전하는 표현", icon: "사과" },
+          { id: "c", label: "미안합니다", desc: "사과를 전하는 표현", icon: "사과" },
         ],
         feedback: {
           correct: "정답이에요. 감사 표현은 일상 대화에서 자주 쓰여요.",
@@ -85,7 +85,7 @@ export const learnQuizMockMap = {
         ],
         feedback: {
           correct: "좋아요. 도움이 필요할 때 쓰는 수신호를 골랐어요.",
-          incorrect: "위험하거나 도움이 필요한 상황을 떠올려보세요.",
+          incorrect: "위험하거나 도움이 필요한 상황에 어울리는 신호를 찾아보세요.",
           reviewTitle: "도움 요청",
           reviewDesc: "도움이 필요하거나 위험을 알릴 때 사용하는 기본 수신호예요.",
           action: "손을 높게 들어\n천천히 흔들어요",

@@ -1,8 +1,7 @@
-// 학습퀴즈피드백: 정답/오답 결과와 다음 행동 버튼
+// 학습 퀴즈 피드백: 정답/오답 결과와 다음 행동 버튼
 import * as S from "../style";
 
 const LearnQuizFeedback = ({ status, exp, message, description, onNext }) => {
-
   const isCorrect = status === "correct";
 
   return (
