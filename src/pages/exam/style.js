@@ -200,7 +200,7 @@ export const SlidingBar = styled.div`
 `;
 
 export const SidebarCategory = styled.div`
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #aaa;
   padding: 12px 20px 6px;
@@ -215,7 +215,7 @@ export const SidebarItem = styled.button`
   border: none;
   border-left: 3px solid transparent;
   padding: 9px 20px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: ${({ $active }) => ($active ? 700 : 400)};
   color: ${({ $active }) => ($active ? PRIMARY : TEXT_BLACK)};
   cursor: pointer;
