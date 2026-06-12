@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import theme from "../../../styles/theme";
 import {
@@ -9,27 +11,49 @@ import {
 import { h10Bold } from "../../../styles/common";
 import { BORDER_STYLE } from "../constants";
 
-const MOCK_NOTICES = [
-  { id: 1, title: "2025 수어 챌린지 이벤트 안내", date: "3/8" },
-  { id: 2, title: "커뮤니티 이용 규칙 업데이트", date: "3/8" },
-  { id: 3, title: "학습 인증 게시판 신규 오픈", date: "3/8" },
-];
+const formatDate = (iso) => {
+  const d = new Date(iso);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+};
 
-export default function SideNotice({ notices = MOCK_NOTICES }) {
+export default function SideNotice() {
+  const navigate = useNavigate();
+  const [notices, setNotices] = useState([]);
+
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:10000/api/notice?offset=0&size=4",
+          { credentials: "include" },
+        );
+        const data = await res.json();
+        setNotices(data.notices || []);
+      } catch {}
+    };
+    fetchNotices();
+  }, []);
+
   return (
     <Card>
       <Title>공지사항</Title>
       <NoticeList>
-        {notices.map((notice) => (
-          <NoticeItem key={notice.id}>
+        {notices.map(({ id, noticeTitle, noticeCreateAt }) => (
+          <NoticeItem
+            key={id}
+            onClick={() => navigate(`/customservice/notice/${id}`)}
+          >
             <ItemLeft>
               <Tag>공</Tag>
-              <NoticeTitle>{notice.title}</NoticeTitle>
+              <NoticeTitle>{noticeTitle}</NoticeTitle>
             </ItemLeft>
-            <DateText>{notice.date}</DateText>
+            <DateText>{formatDate(noticeCreateAt)}</DateText>
           </NoticeItem>
         ))}
       </NoticeList>
+      <MoreLink onClick={() => navigate("/customservice/notice")}>
+        공지 더 보기
+      </MoreLink>
     </Card>
   );
 }
@@ -117,4 +141,16 @@ const DateText = styled.p`
   line-height: ${theme.FONT_LINE.h12};
   text-align: right;
   white-space: nowrap;
+`;
+
+const MoreLink = styled.p`
+  margin: 0;
+  text-align: center;
+  font-size: ${theme.FONT_SIZE.h12};
+  font-weight: ${theme.FONT_WEIGHT.regular};
+  color: ${theme.GRAYSCALE[7]};
+  cursor: pointer;
+  &:hover {
+    color: ${theme.TEXT_COLOR.basic};
+  }
 `;
