@@ -6,8 +6,10 @@ import {
   userFollow,
   cancelFollow,
 } from "../../../communityApi/communityProfileApi";
+import { useNavigate } from "react-router-dom";
 
 const PostSideUserProfile = ({ userId }) => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [isFollow, setIsFollow] = useState(false);
 
@@ -84,7 +86,9 @@ const PostSideUserProfile = ({ userId }) => {
         ) : (
           <S.OutlineButton onClick={handleFollow}>+ 팔로우</S.OutlineButton>
         ))}
-      <S.FilledButton>해당 회원과 1:1 채팅 시작</S.FilledButton>
+      <S.FilledButton onClick={() => navigate(`/community/profile/${userId}`)}>
+        해당 유저 프로필로 이동
+      </S.FilledButton>
     </S.AuthorCard>
   );
 };
