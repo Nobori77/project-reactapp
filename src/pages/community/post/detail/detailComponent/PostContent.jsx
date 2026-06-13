@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Image from "@tiptap/extension-image";
 import {
   deletePost,
   requestPostLike,
@@ -44,7 +45,11 @@ const PostContent = ({ post, postId }) => {
   };
 
   const contentEditor = useEditor({
-    extensions: [StarterKit, Underline],
+    extensions: [
+      StarterKit,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Image,
+    ],
     content: "",
     editable: false,
     immediatelyRender: false,

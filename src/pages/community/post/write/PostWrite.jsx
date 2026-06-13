@@ -7,7 +7,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Image from "@tiptap/extension-image";
 import ToolBar from "./postWriteComponent/ToolBar";
 import CommunityRule from "./postWriteComponent/CommunityRule";
 import PostingGuide from "./postWriteComponent/PostingGuide";
@@ -44,7 +45,11 @@ const PostWrite = () => {
   const [errors, setErrors] = useState({});
 
   const editor = useEditor({
-    extensions: [StarterKit, Underline],
+    extensions: [
+      StarterKit,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Image,
+    ],
     content: "",
   });
 

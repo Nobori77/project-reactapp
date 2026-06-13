@@ -100,6 +100,20 @@ export const createPost = async ({ postTitle, postContent, postTag }) => {
   return res.json();
 };
 
+// 게시글 이미지 업로드 → 정적 리소스 URL 반환
+export const uploadPostImage = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await fetch(`${PRIVATE_ROOT_URL}/chats/1/upload`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!res.ok) throw new Error("이미지 업로드 실패");
+  const { data } = await res.json();
+  return `http://localhost:10000${data}`;
+};
+
 // 게시글 수정
 export const updatePost = async (
   postId,

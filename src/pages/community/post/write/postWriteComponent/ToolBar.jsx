@@ -1,18 +1,19 @@
-import React from "react";
+import { useRef } from "react";
 import styled from "styled-components";
 import { flexCenterRow, h11Bold } from "../../../../../styles/common";
 import theme from "../../../../../styles/theme";
+import { uploadPostImage } from "../../../communityApi/postApi";
 
 import boldSolidFull from "../../../assets/postWrite/bold-solid-full.svg";
 import italicSolidFull from "../../../assets/postWrite/italic-solid-full.svg";
 import alignCenterSolidFull from "../../../assets/postWrite/align-center-solid-full.svg";
 import alignJustifySolidFull from "../../../assets/postWrite/align-justify-solid-full.svg";
 import alignRightSolidFull from "../../../assets/postWrite/align-right-solid-full.svg";
+import alignLeftSolidFull from "../../../assets/postWrite/align-left-solid-full.svg";
 import imageRegularFull from "../../../assets/postWrite/image-regular-full.svg";
 import strikethroughSolidFull from "../../../assets/postWrite/strikethrough-solid-full.svg";
 import underlineSolidFull from "../../../assets/postWrite/underline-solid-full.svg";
 
-// 툴바 스타일 정의
 const ToolbarRow = styled.div`
   ${flexCenterRow}
   gap: 30px;
@@ -59,7 +60,6 @@ const ToolbarDivider = styled.div`
   flex-shrink: 0;
 `;
 
-// 음성 입력 버튼
 const VoiceBtn = styled.button`
   ${h11Bold}
   padding: 5px 30px;
@@ -79,8 +79,29 @@ const VoiceBtn = styled.button`
 const prevent = (e) => e.preventDefault();
 
 const ToolBar = ({ editor }) => {
+  const fileInputRef = useRef(null);
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = "";
+    try {
+      const imageUrl = await uploadPostImage(file);
+      editor?.chain().focus().setImage({ src: imageUrl }).run();
+    } catch (err) {
+      console.error("이미지 업로드 실패:", err);
+    }
+  };
+
   return (
     <div>
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleImageChange}
+      />
       <ToolbarRow>
         <Toolbar>
           <ToolbarIcon
@@ -112,19 +133,40 @@ const ToolBar = ({ editor }) => {
             <img src={strikethroughSolidFull} alt="취소선" />
           </ToolbarIcon>
           <ToolbarDivider />
-          <ToolbarIcon style={{ transform: "scaleY(-1) rotate(180deg)" }}>
-            <img src={alignRightSolidFull} alt="왼쪽 정렬" />
+          <ToolbarIcon
+            $active={editor?.isActive({ textAlign: "left" })}
+            onMouseDown={prevent}
+            onClick={() => editor?.chain().focus().setTextAlign("left").run()}
+          >
+            <img src={alignLeftSolidFull} alt="왼쪽 정렬" />
           </ToolbarIcon>
-          <ToolbarIcon>
+          <ToolbarIcon
+            $active={editor?.isActive({ textAlign: "center" })}
+            onMouseDown={prevent}
+            onClick={() => editor?.chain().focus().setTextAlign("center").run()}
+          >
             <img src={alignCenterSolidFull} alt="가운데 정렬" />
           </ToolbarIcon>
-          <ToolbarIcon>
+          <ToolbarIcon
+            $active={editor?.isActive({ textAlign: "right" })}
+            onMouseDown={prevent}
+            onClick={() => editor?.chain().focus().setTextAlign("right").run()}
+          >
             <img src={alignRightSolidFull} alt="오른쪽 정렬" />
           </ToolbarIcon>
-          <ToolbarIcon>
+          <ToolbarIcon
+            $active={editor?.isActive({ textAlign: "justify" })}
+            onMouseDown={prevent}
+            onClick={() =>
+              editor?.chain().focus().setTextAlign("justify").run()
+            }
+          >
             <img src={alignJustifySolidFull} alt="양쪽 정렬" />
           </ToolbarIcon>
-          <ToolbarIcon>
+          <ToolbarIcon
+            onMouseDown={prevent}
+            onClick={() => fileInputRef.current?.click()}
+          >
             <img src={imageRegularFull} alt="이미지 삽입" />
           </ToolbarIcon>
         </Toolbar>
