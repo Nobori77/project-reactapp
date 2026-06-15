@@ -7,6 +7,33 @@ import UserReportButton from "../../../report/userreport/UserReportButton";
 import defaultProfile from "../../../assets/chat/chat_default_profile.svg";
 import { useChatContext } from "../../../context/ChatContext";
 
+// 유저 레벨 구하는 함수
+const calcLevel = (totalExp) => {
+  let level = 1;
+  let remaining = totalExp ?? 0;
+  while (level < 100) {
+    const required = 100 + (level - 1) * 20;
+    if (remaining < required) break;
+    remaining -= required;
+    level++;
+  }
+  return level;
+};
+
+const getLevelName = (level) => {
+  if (level >= 100) return "이음";
+  if (level >= 90) return "수어 마스터";
+  if (level >= 80) return "연결자";
+  if (level >= 70) return "숙련가";
+  if (level >= 60) return "공감가";
+  if (level >= 50) return "표현가";
+  if (level >= 40) return "소통가";
+  if (level >= 30) return "실천가";
+  if (level >= 20) return "학습자";
+  if (level >= 10) return "새싹 수어인";
+  return "입문자";
+};
+
 const UserInfoMiniPopup = ({
   id,
   userId,
@@ -22,6 +49,9 @@ const UserInfoMiniPopup = ({
     navigate(`/community/profile/${userId}`);
     closeView();
   };
+
+  const level = calcLevel(userExp);
+  const levelName = getLevelName(level);
 
   console.log("팝업 유저 프로필의 유저 아이디: ", id);
   console.log("팝업 유저 프로필의 또다른 아이디: ", userId);
@@ -40,7 +70,9 @@ const UserInfoMiniPopup = ({
           />
         </S.UserBigAvatarBox>
         <S.UserInfoName>{userNickname}</S.UserInfoName>
-        <S.LevelRoleBadge>Lv.{userExp} · 테스트</S.LevelRoleBadge>
+        <S.LevelRoleBadge>
+          Lv.{level} · {levelName}
+        </S.LevelRoleBadge>
         <S.Divider />
         <S.MiniPopupBtnGroup>
           <OutlineButton
