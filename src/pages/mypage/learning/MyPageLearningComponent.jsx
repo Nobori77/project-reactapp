@@ -14,6 +14,12 @@ import S from "./style";
 const COLLAPSED_COUNT = 4;
 const PAGE_SIZE = 8;
 
+const quizStudyPathMap = {
+  1: "/study/chapter/sign-history",
+  2: "/study/chapter/sos",
+  3: "/study/chapter/morse",
+};
+
 // 백엔드 학습현황이 비어 있을 때 확인용으로 보여주는 React 더미데이터입니다.
 const fallbackStatusList = [
   {
@@ -60,12 +66,6 @@ const fallbackResultList = [
     completedAt: "2026-05-31T10:00:00",
   },
 ];
-
-const chapterQuestionPathMap = {
-  1: "/study/chapter/sign-history/questions/1",
-  2: "/study/chapter/sos/questions/1",
-  3: "/study/chapter/morse/questions/1",
-};
 
 const formatPercent = (value) => `${value || 0}%`;
 
@@ -229,7 +229,10 @@ const MyPageLearningComponent = () => {
   // 학습현황 제목 클릭 시 이어서 학습할 수 있는 화면으로 이동합니다.
   const handleMoveLearning = (learning) => {
     if (learning.learningType === "QUIZ") {
-      navigate(chapterQuestionPathMap[learning.eduId] || "/study/chapter");
+      const questionNumber = Math.min(Number(learning.completedCount || 0) + 1, 5);
+      const basePath = learning.studyPath || quizStudyPathMap[Number(learning.eduId)];
+
+      navigate(basePath ? `${basePath}/questions/${questionNumber}` : "/study/chapter");
 
       return;
     }
@@ -240,7 +243,9 @@ const MyPageLearningComponent = () => {
       return;
     }
 
-    navigate(`/study/learn/quiz/greeting/questions/1?eduId=${learning.eduId}`, {
+    const questionNumber = Math.min(Number(learning.completedCount || 0) + 1, 5);
+
+    navigate(`/study/learn/quiz/greeting/questions/${questionNumber}?eduId=${learning.eduId}`, {
       state: {
         eduId: learning.eduId,
         lessonTitle: learning.eduTitle,
@@ -331,9 +336,9 @@ const MyPageLearningComponent = () => {
               <S.LearningResultHeader>
                 <S.LearningHeaderText>제목</S.LearningHeaderText>
                 <S.LearningHeaderText>완료일</S.LearningHeaderText>
-                <S.LearningHeaderText>완료 단어</S.LearningHeaderText>
+                <S.LearningHeaderText>정답 수</S.LearningHeaderText>
                 <S.LearningHeaderText>학습 시간</S.LearningHeaderText>
-                <S.LearningHeaderText>완료율</S.LearningHeaderText>
+                <S.LearningHeaderText>정답률</S.LearningHeaderText>
               </S.LearningResultHeader>
 
               {visibleResultList.map((result) => (
