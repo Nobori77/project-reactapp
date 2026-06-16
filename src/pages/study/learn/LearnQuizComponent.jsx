@@ -99,6 +99,7 @@ const LearnQuizComponent = () => {
   const [resultSummary, setResultSummary] = useState(null);
   const sessionStartedAtRef = useRef(Date.now());
   const sessionCompletedRef = useRef(false);
+  const completedSessionResultRef = useRef(null);
   const baseQuiz = useMemo(() => getLearnQuiz(type), [type]);
 
   const getElapsedSeconds = () => Math.max(1, Math.round((Date.now() - sessionStartedAtRef.current) / 1000));
@@ -192,6 +193,7 @@ const LearnQuizComponent = () => {
             await startLearn(routeEduId);
             sessionStartedAtRef.current = Date.now();
             sessionCompletedRef.current = false;
+            completedSessionResultRef.current = null;
           } catch {
             // ?쒖옉 湲곕줉 ?ㅽ뙣媛 臾몄젣 ????먮쫫??留됱????딆쓬
           }
@@ -331,11 +333,14 @@ const LearnQuizComponent = () => {
   };
 
   // ?숈뒿 ?꾨즺: 寃곌낵 ??μ쓣 ?쒕룄?섍퀬 寃곌낵 ?앹뾽 ?쒖떆
-  const createLearnResultSummary = (submitted = false, data = null) => {
+  const createLearnResultSummary = (submitted = false, data = null, completedSession = null) => {
+    const completedResult = completedSession || completedSessionResultRef.current;
     const answers = state.answers || [];
-    const totalCount = quiz.questions.length || answers.length || totalQuestions;
-    const correctCount = answers.filter((answer) => answer.correct === true || answer.isCorrect === true).length;
-    const accuracy = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+    const totalCount = Number(completedResult?.totalCount ?? (quiz.questions.length || answers.length || totalQuestions));
+    const correctCount = Number(
+      completedResult?.correctCount ?? answers.filter((answer) => answer.correct === true || answer.isCorrect === true).length
+    );
+    const accuracy = Number(completedResult?.accuracy ?? (totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0));
     const wrongItems = quiz.questions
       .map((item) => {
         const answer = answers.find((savedAnswer) => String(savedAnswer.questionId) === String(item.id));
@@ -358,8 +363,8 @@ const LearnQuizComponent = () => {
       totalCount,
       correctCount,
       accuracy,
-      exp: correctCount * 20,
-      spentTime: formatSeconds(getElapsedSeconds()),
+      exp: Number(completedResult?.exp ?? correctCount * 20),
+      spentTime: formatSeconds(Number(completedResult?.spentTime ?? getElapsedSeconds())),
       wrongItem: randomWrongItem,
     };
   };
@@ -389,11 +394,9 @@ const LearnQuizComponent = () => {
         answers,
       });
       
-      if (routeEduId) {
-        await completeLearnSession();
-      }
+      const completedSession = routeEduId ? await completeLearnSession() : null;
 
-      const summary = createLearnResultSummary(true, result);
+      const summary = createLearnResultSummary(true, result, completedSession);
 
       setResult({
         quizId: quiz.id,
@@ -404,11 +407,9 @@ const LearnQuizComponent = () => {
       });
       setResultSummary(summary);
     } catch {
-      if (routeEduId) {
-        await completeLearnSession();
-      }
+      const completedSession = routeEduId ? await completeLearnSession() : null;
       
-      const summary = createLearnResultSummary(false);
+      const summary = createLearnResultSummary(false, null, completedSession);
 
       setResult({
         quizId: quiz.id,
@@ -422,18 +423,23 @@ const LearnQuizComponent = () => {
 
   // ?ㅼ쓬 臾몄젣: ?ㅼ쓬 臾몄젣濡??대룞?섍굅??留덉?留?臾몄젣?먯꽌 蹂듭뒿 ?붾㈃?쇰줈 ?꾪솚
   const completeLearnSession = async () => {
-    if (isGuest || !userId || !routeEduId || sessionCompletedRef.current) {
-      return;
+    if (isGuest || !userId || !routeEduId) {
+      return completedSessionResultRef.current;
+    }
+
+    if (sessionCompletedRef.current) {
+      return completedSessionResultRef.current;
     }
 
     try {
-      await completeEduStart({ userId, eduId: routeEduId, eduStartTime: getElapsedSeconds() });
+      const completedSession = await completeEduStart({ userId, eduId: routeEduId, eduStartTime: getElapsedSeconds() });
+      completedSessionResultRef.current = completedSession;
       sessionCompletedRef.current = true;
+      return completedSession;
     } catch {
-      // ?꾨즺 湲곕줉 ?ㅽ뙣媛 ?붾㈃ 吏꾪뻾??留됱????딆쓬
+      return completedSessionResultRef.current;
     }
   };
-
   const handleNext = async () => {
     if (isLastQuestion) {
       if (status !== "solving") {
