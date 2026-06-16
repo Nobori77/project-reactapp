@@ -46,8 +46,14 @@ export const Td = styled.td`
 export const StatusBadge = styled.span`
   font-size: 13px;
   font-weight: 700;
-  color: ${({ $status }) => ($status === "취소" || $status === "cancelled" ? "#e74c3c" : "#27ae60")};
-  background: ${({ $status }) => ($status === "취소" || $status === "cancelled" ? "#fff0f0" : "#e8faf2")};
+  color: ${({ $status }) =>
+    $status === "취소" || $status === "cancelled" ? "#e74c3c" :
+    $status === "완료" ? "#888" :
+    "#27ae60"};
+  background: ${({ $status }) =>
+    $status === "취소" || $status === "cancelled" ? "#fff0f0" :
+    $status === "완료" ? "#f0f0f0" :
+    "#e8faf2"};
   border-radius: 20px;
   padding: 4px 12px;
 `;

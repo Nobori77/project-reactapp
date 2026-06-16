@@ -49,11 +49,18 @@ export const NumberTd = styled(Td)`
   color: #333;
 `;
 
+const STATUS_COLOR = {
+  processing: { color: "#4359fc", bg: "#eef0ff" },
+  completed:  { color: "#27ae60", bg: "#eafaf1" },
+  cancelled:  { color: "#e74c3c", bg: "#fff0f0" },
+  rejected:   { color: "#e67e22", bg: "#fff7ee" },
+};
+
 export const StatusBadge = styled.span`
   font-size: 13px;
   font-weight: 700;
-  color: ${({ $status }) => ($status === "processing" ? "#4359fc" : "#e74c3c")};
-  background: ${({ $status }) => ($status === "processing" ? "#eef0ff" : "#fff0f0")};
+  color: ${({ $status }) => (STATUS_COLOR[$status]?.color ?? "#888")};
+  background: ${({ $status }) => (STATUS_COLOR[$status]?.bg ?? "#f5f5f5")};
   border-radius: 20px;
   padding: 4px 12px;
 `;

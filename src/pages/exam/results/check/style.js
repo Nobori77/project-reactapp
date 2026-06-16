@@ -323,3 +323,34 @@ export const ModalNote = styled.div`
   padding: 10px 14px;
   margin-top: 14px;
 `;
+
+export const GoLicenseBtn = styled.button`
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px 0;
+  background: #4359fc;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover { background: #3448e0; }
+`;
+
+export const PassGoBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 10px 20px;
+  background: #4359fc;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover { background: #3448e0; }
+`;
