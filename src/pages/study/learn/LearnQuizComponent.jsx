@@ -1,7 +1,7 @@
-// 학습 퀴즈 컴포넌트: 단어 조회, 문제 생성, 정답 확인, 복습 흐름 담당
-import { useContext, useEffect, useMemo, useState } from "react";
+// 학습 퀴즈 컴포넌트: 단어 조회, 문제 생성, 정답 확인, 복습 흐름을 처리합니다.
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { fetchEduVideoById, fetchRandomWordsByLearnId, finishLearnWord, completeEduStart } from "../apis/LearnApi";
+import { fetchEduVideoById, fetchRandomWordsByLearnId, finishLearnWord, completeEduStart, startLearn, recordLearnProgress } from "../apis/LearnApi";
 import { submitQuizAnswers } from "../apis/QuizApi";
 import { StudyQuizContext } from "../../../context/StudyQuizContext";
 import { useStudyUser } from "../hooks/useStudyUser";
@@ -14,7 +14,7 @@ import * as S from "./style";
 
 const optionIcons = ["수어", "표현", "단어", "연습", "복습"];
 
-// 고정 순서 생성: 한 번 시작한 학습 세션에서는 같은 순서를 유지
+// 고정 순서 생성: 같은 세션에서는 같은 문제 순서를 유지
 const getOrderValue = (value) => {
   const hash = String(value).split("").reduce((sum, character) => ((sum * 31) + character.charCodeAt(0)) >>> 0, 0);
   const mixedHash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b);
@@ -34,13 +34,13 @@ const shuffleItems = (items, seed) =>
 const createWordOption = (word, index, correct = false, videoMode = false) => ({
   id: `${correct ? "correct" : "word"}-${word.id}`,
   label: word.wordsTitle,
-  desc: word.wordsDetail || "같은 학습에 포함된 수어 표현이에요.",
+  desc: word.wordsDetail || "같이 학습할 수어 표현이에요.",
   icon: videoMode ? word.wordsTitle : optionIcons[index % optionIcons.length],
   hideText: videoMode,
   correct,
 });
 
-// 오답 보기 생성: 같은 학습 단어를 우선 사용하고 부족하면 임시 보기로 채움
+// 오답 보기 생성: 같은 학습 단어를 우선 사용, 부족하면 임시 보기로 채운다
 const createWrongOptions = ({ word, words, baseQuiz, correctLabel, videoMode = false }) => {
   const wordOptions = words
     .filter((item) => item.id !== word.id && item.wordsTitle && item.wordsTitle !== correctLabel)
@@ -97,9 +97,21 @@ const LearnQuizComponent = () => {
   const [sessionError, setSessionError] = useState(null);
   const [sessionSeed, setSessionSeed] = useState(Math.random);
   const [resultSummary, setResultSummary] = useState(null);
+  const sessionStartedAtRef = useRef(Date.now());
+  const sessionCompletedRef = useRef(false);
+  const completedSessionResultRef = useRef(null);
   const baseQuiz = useMemo(() => getLearnQuiz(type), [type]);
 
-  // OpenAPI 단어만 사용: eduId로 들어온 학습 퀴즈에서는 기존 임시 단어를 섞지 않음
+  const getElapsedSeconds = () => Math.max(1, Math.round((Date.now() - sessionStartedAtRef.current) / 1000));
+
+  const formatSeconds = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const restSeconds = seconds % 60;
+
+    return minutes > 0 ? `${minutes}분 ${restSeconds}초` : `${restSeconds}초`;
+  };
+
+  // OpenAPI 단어만 사용: eduId로 들어온 학습 퀴즈에서는 기존 임시 단어를 섞지 않습니다.
   const quizWords = useMemo(() => {
     return sessionWords;
   }, [sessionWords]);
@@ -138,7 +150,7 @@ const LearnQuizComponent = () => {
         return {
           ...fallback,
           id: word.id,
-          title: video ? "이 수어는 어떤 뜻일까요?" : `다음 중 어느 수어가 "${correctLabel}"인가요?`,
+          title: video ? "이 수어는 어떤 뜻일까요?" : `다음 중 어느 수어가 "${correctLabel}"일까요?`,
           targetWord: correctLabel,
           hint: word.wordsDetail || fallback.hint,
           word,
@@ -165,7 +177,7 @@ const LearnQuizComponent = () => {
   const [reviewIndex, setReviewIndex] = useState(0);
   const [savedEduWordMapIds, setSavedEduWordMapIds] = useState([]);
 
-  // 세션 자료 조회: 학습 시작 시 단어와 영상을 불러와 문제 세션 구성
+  // 세션 자료 조회: 학습 시작 후 단어와 영상을 불러와 문제 세션 구성
   useEffect(() => {
     if (!routeEduId) return;
 
@@ -176,6 +188,17 @@ const LearnQuizComponent = () => {
       setSessionError(null);
 
       try {
+        if (!isGuest && userId && routeEduId) {
+          try {
+            await startLearn(routeEduId);
+            sessionStartedAtRef.current = Date.now();
+            sessionCompletedRef.current = false;
+            completedSessionResultRef.current = null;
+          } catch {
+            // 시작 기록 실패가 문제 풀이 흐름을 막지 않도록 처리
+          }
+        }
+
         const words = await fetchRandomWordsByLearnId(routeEduId, 5);
         if (ignore) return;
 
@@ -215,7 +238,7 @@ const LearnQuizComponent = () => {
     return () => {
       ignore = true;
     };
-  }, [routeEduId]);
+  }, [isGuest, routeEduId, userId]);
 
   // 퀴즈 초기화: URL이나 문제 목록이 바뀌면 컨텍스트 문제 목록 갱신
   useEffect(() => {
@@ -227,7 +250,7 @@ const LearnQuizComponent = () => {
     });
   }, [quiz, setQuiz, type]);
 
-  // 문제 변경 초기화: 다음 문제로 이동할 때 선택 상태 초기화
+  // 문제 변경 초기화: 다음 문제로 이동하면 선택 상태 초기화
   useEffect(() => {
     setSelectedOptionId(null);
     setStatus("solving");
@@ -235,7 +258,7 @@ const LearnQuizComponent = () => {
 
   useEffect(() => {
     setSavedEduWordMapIds([]);
-  }, [routeEduId]);
+  }, [isGuest, routeEduId, userId]);
 
   const selectedOption = question?.options.find((option) => option.id === selectedOptionId) || null;
   const progress = Math.round(((currentIndex + 1) / totalQuestions) * 100);
@@ -262,7 +285,7 @@ const LearnQuizComponent = () => {
     setSelectedOptionId(optionId);
   };
 
-  // 단어 완료 저장: 문제를 맞힌 단어만 학습 진행도로 기록
+  // 단어 완료 저장: 문제를 맞힌 단어만 학습 진행으로 기록
   const saveCurrentWord = async () => {
     const eduWordMapId = question?.word?.eduWordMapId;
 
@@ -274,13 +297,13 @@ const LearnQuizComponent = () => {
       await finishLearnWord({ userId, eduWordMapId });
       setSavedEduWordMapIds((prev) => [...prev, eduWordMapId]);
     } catch {
-      // 단어 저장 실패가 문제 풀이 흐름을 막지 않도록 처리
+      // 단어 저장 실패가 문제 풀이 흐름을 막지 않도록 처리합
     }
   };
 
-  // 정답 확인: 선택한 보기의 정답 여부 확인 및 컨텍스트 기록
+  // 정답 확인: 선택한 보기의 정답 여부 확인 및 세션 진행 기록
   const handleCheck = async () => {
-    if (!selectedOption) return;
+    if (status !== "solving" || !selectedOption) return;
 
     const isCorrect = Boolean(selectedOption.correct);
 
@@ -292,17 +315,33 @@ const LearnQuizComponent = () => {
 
     setStatus(isCorrect ? "correct" : "incorrect");
 
+    if (!isGuest && userId && routeEduId) {
+      try {
+        await recordLearnProgress({
+          userId,
+          eduId: routeEduId,
+          questionNumber: currentIndex + 1,
+          isCorrect: isCorrect ? 1 : 0,
+        });
+      } catch {
+        // 학습 세션 진행 기록 실패가 문제 풀이 흐름을 막지 않도록 처리
+      }
+    }
+
     if (isCorrect) {
       await saveCurrentWord();
     }
   };
 
   // 학습 완료: 결과 저장을 시도하고 결과 팝업 표시
-  const createLearnResultSummary = (submitted = false, data = null) => {
+  const createLearnResultSummary = (submitted = false, data = null, completedSession = null) => {
+    const completedResult = completedSession || completedSessionResultRef.current;
     const answers = state.answers || [];
-    const totalCount = quiz.questions.length || answers.length || totalQuestions;
-    const correctCount = answers.filter((answer) => answer.correct === true || answer.isCorrect === true).length;
-    const accuracy = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+    const totalCount = Number(completedResult?.totalCount ?? (quiz.questions.length || answers.length || totalQuestions));
+    const correctCount = Number(
+      completedResult?.correctCount ?? answers.filter((answer) => answer.correct === true || answer.isCorrect === true).length
+    );
+    const accuracy = Number(completedResult?.accuracy ?? (totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0));
     const wrongItems = quiz.questions
       .map((item) => {
         const answer = answers.find((savedAnswer) => String(savedAnswer.questionId) === String(item.id));
@@ -325,8 +364,8 @@ const LearnQuizComponent = () => {
       totalCount,
       correctCount,
       accuracy,
-      exp: correctCount * 20,
-      spentTime: "2분 20초",
+      exp: Number(completedResult?.exp ?? correctCount * 20),
+      spentTime: formatSeconds(Number(completedResult?.spentTime ?? getElapsedSeconds())),
       wrongItem: randomWrongItem,
     };
   };
@@ -356,11 +395,9 @@ const LearnQuizComponent = () => {
         answers,
       });
       
-      if (routeEduId) {
-        await completeEduStart({ userId, eduId: routeEduId});
-      }
+      const completedSession = routeEduId ? await completeLearnSession() : null;
 
-      const summary = createLearnResultSummary(true, result);
+      const summary = createLearnResultSummary(true, result, completedSession);
 
       setResult({
         quizId: quiz.id,
@@ -371,11 +408,9 @@ const LearnQuizComponent = () => {
       });
       setResultSummary(summary);
     } catch {
-      if (routeEduId) {
-        await completeEduStart({ userId, eduId: routeEduId });
-      }
+      const completedSession = routeEduId ? await completeLearnSession() : null;
       
-      const summary = createLearnResultSummary(false);
+      const summary = createLearnResultSummary(false, null, completedSession);
 
       setResult({
         quizId: quiz.id,
@@ -387,19 +422,25 @@ const LearnQuizComponent = () => {
     }
   };
 
-  // 다음 문제: 다음 문제로 이동하거나 마지막 문제에서 복습 화면으로 전환
+  // 다음 문제: 다음 문제로 이동하거나 마지막 문제에서 복습 화면으로 전환합니다.
   const completeLearnSession = async () => {
     if (isGuest || !userId || !routeEduId) {
-      return;
+      return completedSessionResultRef.current;
+    }
+
+    if (sessionCompletedRef.current) {
+      return completedSessionResultRef.current;
     }
 
     try {
-      await completeEduStart({ userId, eduId: routeEduId });
+      const completedSession = await completeEduStart({ userId, eduId: routeEduId, eduStartTime: getElapsedSeconds() });
+      completedSessionResultRef.current = completedSession;
+      sessionCompletedRef.current = true;
+      return completedSession;
     } catch {
-      // 완료 기록 실패가 화면 진행을 막지는 않음
+      return completedSessionResultRef.current;
     }
   };
-
   const handleNext = async () => {
     if (isLastQuestion) {
       if (status !== "solving") {
@@ -416,12 +457,12 @@ const LearnQuizComponent = () => {
     navigate(`/study/learn/quiz/${type}/questions/${currentIndex + 2}${nextQuery}`);
   };
 
-  // 닫기: 학습 메인 화면으로 이동
+  // 닫기: 학습 메인 화면으로 이동합니다.
   const handleClose = () => {
     navigate("/study/learn");
   };
 
-  // 복습 다음: 오답 복습을 순서대로 보여주고 마지막에 학습 종료
+  // 복습 다음: 오답 복습을 순서대로 보여주고 마지막에 학습을 종료합니다.
   const handleReviewNext = () => {
     if (reviewQuestions.length > 0 && reviewIndex < reviewQuestions.length - 1) {
       setReviewIndex((prev) => prev + 1);
@@ -463,7 +504,7 @@ const LearnQuizComponent = () => {
             <strong>+{resultSummary.exp}</strong>
           </div>
           <div>
-            <span>⏱</span>
+            <span>⏱️</span>
             <small>시간</small>
             <strong>{resultSummary.spentTime}</strong>
           </div>
@@ -618,3 +659,4 @@ const LearnQuizComponent = () => {
 };
 
 export default LearnQuizComponent;
+

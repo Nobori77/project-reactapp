@@ -8,6 +8,7 @@ import ExamContainer from "../pages/exam/ExamContainer";
 import LicenseNoticeContainer from "../pages/exam/info/notice/LicenseNoticeContainer";
 import ExamInfoContainer from "../pages/exam/info/ExamInfoContainer";
 import LicenseIntroContainer from "../pages/exam/info/intro/LicenseIntroContainer";
+import ExamScheduleContainer from "../pages/exam/info/schedule/ExamScheduleContainer";
 import ReceiptContainer from "../pages/exam/receipt/ReceiptContainer";
 import ReceiptConfirmContainer from "../pages/exam/receipt/confirm/ReceiptConfirmContainer";
 import ReceiptInfoContainer from "../pages/exam/receipt/info/ReceiptInfoContainer";
@@ -37,6 +38,7 @@ import CertificateCheckContainer from "../pages/exam/certificate/check/Certifica
 import CertificatePrintContainer from "../pages/exam/certificate/print/CertificatePrintContainer";
 import CertificateReissueContainer from "../pages/exam/certificate/reissue/CertificateReissueContainer";
 import MyPageLearningContainer from "../pages/mypage/learning/MyPageLearningContainer";
+import MyPageLearningAnalysisContainer from "../pages/mypage/learning/analysis/MyPageLearningAnalysisContainer";
 import MyPageSettingContainer from "../pages/mypage/setting/MyPageSettingContainer";
 import MyPageCertificateConfirmContainer from "../pages/mypage/certificate/confirm/MyPageCertificateConfirmContainer";
 import MyPageCertificateContainer from "../pages/mypage/certificate/MyPageCertificateContainer";
@@ -95,6 +97,11 @@ const router = createBrowserRouter([
             path: "info",
             element: <ExamInfoContainer />,
             children: [
+              { index: true, element: <Navigate to="intro" replace /> },
+              {
+                path: "schedule",
+                element: <ExamScheduleContainer />
+              },
               {
                 path: "intro",
                 element: <LicenseIntroContainer />
@@ -283,6 +290,10 @@ const router = createBrowserRouter([
           {
             path: "learning",
             element: <MyPageLearningContainer />
+          },
+          {
+            path: "learning/analysis",
+            element: <MyPageLearningAnalysisContainer />
           },
           {
             path: "certificate",
