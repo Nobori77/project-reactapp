@@ -1,7 +1,28 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import * as S from "./communityHeaderStyle";
 
 const CommunityHeader = () => {
-  console.log("헤더 빌드");
+  const navigate = useNavigate();
+  const [pinnedNotices, setPinnedNotices] = useState([]);
+
+  useEffect(() => {
+    const fetchPinnedNotices = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:10000/api/notice?offset=0&size=10",
+          { credentials: "include" },
+        );
+        const data = await res.json();
+        const pinned = (data.notices || [])
+          .filter((n) => n.noticePinned === 1)
+          .slice(0, 2);
+        setPinnedNotices(pinned);
+      } catch {}
+    };
+    fetchPinnedNotices();
+  }, []);
+
   return (
     <S.Container>
       <S.BlobGreen />
@@ -36,15 +57,15 @@ const CommunityHeader = () => {
           </S.LeftSection>
 
           <S.RightSection>
-            <S.EventItem>
-              <S.EventText>이달의 베스트 작성자 모집 중</S.EventText>
-            </S.EventItem>
-            <S.EventItem>
-              <S.EventText>수어 챌린지 이벤트</S.EventText>
-            </S.EventItem>
-            <S.EventItem>
-              <S.EventText>자격시험 응시료 한시적 할인 (최대 80%)</S.EventText>
-            </S.EventItem>
+            {pinnedNotices.map(({ id, noticeTitle }) => (
+              <S.EventItem
+                key={id}
+                onClick={() => navigate(`/customservice/notice/${id}`)}
+              >
+                <S.NoticeTag>중요</S.NoticeTag>
+                <S.EventText>{noticeTitle}</S.EventText>
+              </S.EventItem>
+            ))}
           </S.RightSection>
         </S.MainSection>
       </S.Inner>
