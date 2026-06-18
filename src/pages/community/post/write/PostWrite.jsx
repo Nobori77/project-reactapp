@@ -29,6 +29,8 @@ const CATEGORIES = [
   "학습 인증",
   "수어 영상",
   "취업·진로",
+  "수어 학습",
+  "학습 후기",
 ];
 
 // const searchParams = searchParams()

@@ -21,6 +21,7 @@ import LoginRequiredPopup from "../../../common/LoginRequiredPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import useAuthStore from "../../../../../store/authStore";
+import formatRelativeTime from "../../../functions/formatRelativeTime";
 
 const { PALETTE } = theme;
 
@@ -147,7 +148,7 @@ const PostContent = ({ post, postId }) => {
             <S.AuthorSubRow>
               <S.LevelBadge>{userLevel}</S.LevelBadge>
               <S.MetaText>
-                · {postCreateAt} · 조회 {postReadCount}
+                · {formatRelativeTime(postCreateAt)} · 조회 {postReadCount}
               </S.MetaText>
             </S.AuthorSubRow>
           </S.AuthorMeta>
@@ -214,7 +215,11 @@ const PostContent = ({ post, postId }) => {
                 </S.IconButton>
               </>
             ) : (
-              <S.IconButton danger aria-label="게시글 신고" onClick={handleReportClick}>
+              <S.IconButton
+                danger
+                aria-label="게시글 신고"
+                onClick={handleReportClick}
+              >
                 <img
                   src={DEFAULT_IMAGES.reportIcon}
                   alt="신고"

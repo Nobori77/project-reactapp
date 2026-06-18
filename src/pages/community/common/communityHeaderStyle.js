@@ -196,8 +196,27 @@ export const EventItem = styled.div`
   padding: 20px 24px;
   display: flex;
   align-items: center;
+  gap: 12px;
   backdrop-filter: blur(8px);
   box-shadow: 0 2px 12px rgba(67, 89, 252, 0.06);
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba(67, 89, 252, 0.15);
+    transform: translateY(-2px);
+  }
+`;
+
+export const NoticeTag = styled.span`
+  flex-shrink: 0;
+  background-color: ${theme.PALETTE.primary.main};
+  color: #fff;
+  font-family: "Pretendard", sans-serif;
+  font-size: 11px;
+  font-weight: ${theme.FONT_WEIGHT.bold};
+  border-radius: 6px;
+  padding: 2px 7px;
 `;
 
 export const EventText = styled.p`
