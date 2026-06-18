@@ -7,7 +7,7 @@ import {
   hoverStyle,
 } from "../../../communityStyle";
 import T from "../../../communityTextStyle";
-import { BORDER_STYLE } from "../../../constants";
+import { BORDER_STYLE, colors } from "../../../constants";
 import useAuthStore from "../../../../../store/authStore";
 import LoginRequiredPopup from "../../../common/LoginRequiredPopup";
 import defaultProfileImg from "../../../assets/chat/chat_default_profile.svg";
@@ -41,7 +41,8 @@ const TopRow = styled.div`
 const Avatar = styled.img`
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  border-radius: 16px;
+  background: ${colors.primaryLight};
   object-fit: cover;
   flex-shrink: 0;
 `;
