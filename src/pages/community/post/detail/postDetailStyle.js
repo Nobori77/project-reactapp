@@ -95,11 +95,19 @@ export const PostContentWrapper = styled.div`
 `;
 
 /* ── Title ── */
+export const TitleRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+`;
+
 export const PostTitle = styled.h1`
   ${h7Bold}
   color: ${TEXT_COLOR.basic};
   margin: 0;
   word-break: keep-all;
+  flex: 1;
 `;
 
 /* ── Author row ── */
@@ -245,45 +253,33 @@ export const Tag = styled.span`
   cursor: pointer;
 `;
 
-/* ── Accessibility Tools ── */
-export const AccessibilityBox = styled.div`
-  width: 100%;
-  border: 1px solid ${PALETTE.secondary.main};
-  border-radius: ${RADIUS.section};
-  background: ${ACCESSIBILITY.gradient};
-  height: 120px;
-  position: relative;
-  overflow: hidden;
+/* ── Accessibility Tools (ActionRow 왼쪽 인라인 배치) ── */
+export const AccessTools = styled.div`
   display: flex;
   align-items: center;
+  gap: 8px;
 `;
 
-export const AccessibilityLabel = styled(T.H8Bold)`
-  position: absolute;
-  left: 35px;
-  white-space: nowrap;
-  margin: 0;
-`;
-
-export const AccessBtn = styled.button`
-  position: absolute;
-  top: 36px;
-  left: ${({ pos }) => pos};
-  padding: 14px 80px;
-  border-radius: ${RADIUS.input};
-  ${h9Bold}
+export const AccessToolBtn = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: ${RADIUS.pill};
+  ${h11Bold}
   cursor: pointer;
   white-space: nowrap;
   background: ${({ variant }) =>
-    variant === "blue" ? PALETTE.primary.main : ACCESSIBILITY.readBg};
+    variant === "sign" ? PALETTE.primary.extraLight : ACCESSIBILITY.readBg};
   color: ${({ variant }) =>
-    variant === "blue" ? PALETTE.white : PALETTE.secondary.main};
-  border: ${({ variant }) =>
-    variant === "blue" ? "none" : `1px solid ${ACCESSIBILITY.readColor}`};
+    variant === "sign" ? PALETTE.primary.main : ACCESSIBILITY.readColor};
+  border: 1px solid
+    ${({ variant }) =>
+      variant === "sign" ? PALETTE.primary.light : ACCESSIBILITY.readColor};
   transition: opacity 0.2s;
 
   &:hover {
-    opacity: 0.85;
+    opacity: 0.8;
   }
 `;
 
