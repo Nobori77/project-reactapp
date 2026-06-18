@@ -499,9 +499,13 @@ S.DetailStatValue = styled.span`
 
 /* 정답 오답 그리드 */
 S.AnswerGridBox = styled.div`
+  width: min(100%, var(--answer-grid-width));
+
   display: grid;
-  grid-template-columns: repeat(var(--answer-column-count), 72px);
-  width: fit-content;
+  grid-template-columns: repeat(
+    var(--answer-column-count),
+    minmax(0, 1fr)
+  );
 
   border-top: 1px solid #dde1ef;
   border-left: 1px solid #dde1ef;
@@ -509,8 +513,10 @@ S.AnswerGridBox = styled.div`
 
 /* 정답 오답 그리드 칸 */
 S.AnswerCell = styled.div`
-  width: 72px;
+  width: 100%;
+  min-width: 0;
   height: 48px;
+  box-sizing: border-box;
 
   display: flex;
   flex-direction: column;

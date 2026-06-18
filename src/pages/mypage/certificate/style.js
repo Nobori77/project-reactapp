@@ -798,7 +798,7 @@ S.EduCertModalContent = styled.div`
 /* 내 수료증 원본 보기 닫기 */
 S.EduCertModalCloseButton = styled.button`
   position: absolute;
-  top: 12px;
+  top: 3px;
   right: 14px;
 
   border: none;
