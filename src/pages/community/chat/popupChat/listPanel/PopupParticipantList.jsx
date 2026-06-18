@@ -48,7 +48,7 @@ const PopupParticipantList = ({ users, selectedUserId, onUserClick }) => (
     <S.Divider />
     <S.UserList>
       {users.map((user) => {
-        const { id, userProfile, userNickname, userExp } = user;
+        const { id, userProfile, userNickname, userLevel } = user;
         return (
           <S.UserItem
             key={id}
@@ -71,7 +71,7 @@ const PopupParticipantList = ({ users, selectedUserId, onUserClick }) => (
                 {/* <S.UserRoleText>{user.role}</S.UserRoleText> */}
               </S.UserMeta>
             </S.UserProfileRow>
-            <S.LevelBadge>Lv.{userExp}</S.LevelBadge>
+            <S.LevelBadge>Lv.{userLevel}</S.LevelBadge>
           </S.UserItem>
         );
       })}

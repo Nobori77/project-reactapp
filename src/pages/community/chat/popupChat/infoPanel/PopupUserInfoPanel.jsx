@@ -4,81 +4,102 @@ import OutlineButton from "../../../common/OutlineButton";
 import * as S from "../../ChatStyle";
 import UserReportButton from "../../../report/userreport/UserReportButton";
 
+const getLevelName = (level) => {
+  if (level >= 100) return "이음";
+  if (level >= 90) return "수어 마스터";
+  if (level >= 80) return "연결자";
+  if (level >= 70) return "숙련가";
+  if (level >= 60) return "공감가";
+  if (level >= 50) return "표현가";
+  if (level >= 40) return "소통가";
+  if (level >= 30) return "실천가";
+  if (level >= 20) return "학습자";
+  if (level >= 10) return "새싹 수어인";
+  return "입문자";
+};
+
 const PopupUserInfoPanel = ({
   id,
   userProfile,
   userNickname,
   userExp,
+  userLevel: userLevelProp,
+  userLevelName: userLevelNameProp,
   onClose,
-}) => (
-  <S.RightPanelScroll>
-    <S.UserInfoTopSection>
-      <S.UserInfoSectionHeader>
-        <S.UserInfoSectionTitle>유저 정보</S.UserInfoSectionTitle>
-        <S.Divider />
-      </S.UserInfoSectionHeader>
-      <S.UserBigAvatarBox>
-        <img src={userProfile} alt={userNickname} />
-      </S.UserBigAvatarBox>
-      <S.UserInfoName>{userNickname}</S.UserInfoName>
-      <S.LevelRoleBadge>
-        Lv.{userExp} · {"테스트"}
-      </S.LevelRoleBadge>
-      <OutlineButton
-        borderColor={colors.primary}
-        textColor={colors.primary}
-        padding="10px 16px"
-      >
-        + 팔로우
-      </OutlineButton>
-      <OutlineButton
-        bgColor={colors.primary}
-        borderColor={colors.primary}
-        textColor={colors.textWhite}
-        padding="10px 16px"
-      >
-        1:1 채팅 시작
-      </OutlineButton>
-    </S.UserInfoTopSection>
+}) => {
+  const userLevel = userLevelProp;
+  const userLevelName = userLevelNameProp ?? getLevelName(userLevel);
 
-    <S.PanelSection>
-      <S.SectionLabel>유저 프로필 이동</S.SectionLabel>
-      <S.ActionDescText>해당 유저의 프로필로 이동합니다.</S.ActionDescText>
-      <OutlineButton borderColor={colors.live} textColor={colors.live}>
-        유저 프로필로 이동
-      </OutlineButton>
-    </S.PanelSection>
+  return (
+    <S.RightPanelScroll>
+      <S.UserInfoTopSection>
+        <S.UserInfoSectionHeader>
+          <S.UserInfoSectionTitle>유저 정보</S.UserInfoSectionTitle>
+          <S.Divider />
+        </S.UserInfoSectionHeader>
+        <S.UserBigAvatarBox>
+          <img src={userProfile} alt={userNickname} />
+        </S.UserBigAvatarBox>
+        <S.UserInfoName>{userNickname}</S.UserInfoName>
+        <S.LevelRoleBadge>
+          Lv.{userLevel} · {userLevelName}
+        </S.LevelRoleBadge>
+        <OutlineButton
+          borderColor={colors.primary}
+          textColor={colors.primary}
+          padding="10px 16px"
+        >
+          + 팔로우
+        </OutlineButton>
+        <OutlineButton
+          bgColor={colors.primary}
+          borderColor={colors.primary}
+          textColor={colors.textWhite}
+          padding="10px 16px"
+        >
+          1:1 채팅 시작
+        </OutlineButton>
+      </S.UserInfoTopSection>
 
-    <S.PanelSection>
-      <S.SectionLabel>채팅방 프로필로 되돌아가기</S.SectionLabel>
-      <S.ActionDescText>
-        해당 유저 정보 열람을 종료 후 다시 채팅방 프로필 내용으로 돌아갑니다
-      </S.ActionDescText>
-      <OutlineButton
-        borderColor={colors.danger}
-        textColor={colors.danger}
-        onClick={onClose}
-      >
-        유저 정보 열람 종료
-      </OutlineButton>
-    </S.PanelSection>
+      <S.PanelSection>
+        <S.SectionLabel>유저 프로필 이동</S.SectionLabel>
+        <S.ActionDescText>해당 유저의 프로필로 이동합니다.</S.ActionDescText>
+        <OutlineButton borderColor={colors.live} textColor={colors.live}>
+          유저 프로필로 이동
+        </OutlineButton>
+      </S.PanelSection>
 
-    <S.PanelSection $last>
-      <S.ReportCard>
-        <S.ReportCardTitle>⚠️ 신고 및 차단</S.ReportCardTitle>
-        <S.ReportCardDesc>
-          부적절한 활동이 확인되면 신고해 주세요. 운영팀이 검토합니다.
-        </S.ReportCardDesc>
-      </S.ReportCard>
-      {/* <OutlineButton borderColor={ORANGE} textColor={ORANGE}>
+      <S.PanelSection>
+        <S.SectionLabel>채팅방 프로필로 되돌아가기</S.SectionLabel>
+        <S.ActionDescText>
+          해당 유저 정보 열람을 종료 후 다시 채팅방 프로필 내용으로 돌아갑니다
+        </S.ActionDescText>
+        <OutlineButton
+          borderColor={colors.danger}
+          textColor={colors.danger}
+          onClick={onClose}
+        >
+          유저 정보 열람 종료
+        </OutlineButton>
+      </S.PanelSection>
+
+      <S.PanelSection $last>
+        <S.ReportCard>
+          <S.ReportCardTitle>⚠️ 신고 및 차단</S.ReportCardTitle>
+          <S.ReportCardDesc>
+            부적절한 활동이 확인되면 신고해 주세요. 운영팀이 검토합니다.
+          </S.ReportCardDesc>
+        </S.ReportCard>
+        {/* <OutlineButton borderColor={ORANGE} textColor={ORANGE}>
         이 유저 신고하기
       </OutlineButton> */}
-      <UserReportButton userId={id}>.</UserReportButton>
-      <OutlineButton borderColor={colors.border} textColor={colors.textSub}>
-        이 유저 차단하기
-      </OutlineButton>
-    </S.PanelSection>
-  </S.RightPanelScroll>
-);
+        <UserReportButton userId={id}>.</UserReportButton>
+        <OutlineButton borderColor={colors.border} textColor={colors.textSub}>
+          이 유저 차단하기
+        </OutlineButton>
+      </S.PanelSection>
+    </S.RightPanelScroll>
+  );
+};
 
 export default PopupUserInfoPanel;
