@@ -4,9 +4,9 @@
  * - 1분 이내        → "방금 전"
  * - 1분 ~ 1시간     → "N분 전"
  * - 당일 작성       → "HH시 MM분"
- * - 당일 이전 작성  → "YYYY년 M월 D일"
+ * - 당일 이전 작성  → "YYYY.M.D HH:MM" (withTime=true) / "YYYY.M.D" (기본)
  */
-const formatRelativeTime = (isoString) => {
+const formatRelativeTime = (isoString, withTime = false) => {
   const created = new Date(isoString);
   const now = new Date();
   const diffMs = now - created;
@@ -20,13 +20,15 @@ const formatRelativeTime = (isoString) => {
     created.getMonth() === now.getMonth() &&
     created.getDate() === now.getDate();
 
+  const h = String(created.getHours()).padStart(2, "0");
+  const m = String(created.getMinutes()).padStart(2, "0");
+
   if (isSameDay) {
-    const h = String(created.getHours()).padStart(2, "0");
-    const m = String(created.getMinutes()).padStart(2, "0");
     return `${h}시 ${m}분`;
   }
 
-  return `${created.getFullYear()}.${created.getMonth() + 1}.${created.getDate()}`;
+  const dateStr = `${created.getFullYear()}.${created.getMonth() + 1}.${created.getDate()}`;
+  return withTime ? `${dateStr} ${h}:${m}` : dateStr;
 };
 
 export default formatRelativeTime;

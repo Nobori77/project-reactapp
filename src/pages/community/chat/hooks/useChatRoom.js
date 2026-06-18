@@ -1,28 +1,21 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { getChatMessages } from "../../communityApi/chatApi";
 import useAuthStore from "../../../../store/authStore";
-import { chatFloatBus } from './useChatFloatStore';
+import { chatFloatBus } from "./useChatFloatStore";
+import formatRelativeTime from "../../functions/formatRelativeTime";
 
 const WS_BASE = "ws://localhost:10000/ws/chat";
 
 let wsSeq = 0;
 const makeWsMsgId = (msg) => `ws-${msg.userId}-${msg.chatCreateAt}-${++wsSeq}`;
 
-const formatTime = (dateStr) => {
-  const d = new Date(dateStr);
-  return d.toLocaleTimeString("ko-KR", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-};
-
 const toDisplayMessage = (msg, currentUserId) => ({
   id: msg.id ?? makeWsMsgId(msg),
-  isMine: msg.chatIsMe ?? (currentUserId != null && msg.userId === currentUserId),
+  isMine:
+    msg.chatIsMe ?? (currentUserId != null && msg.userId === currentUserId),
   content: msg.chatContent,
   chatType: msg.chatType ?? "텍스트",
-  time: formatTime(msg.chatCreateAt),
+  time: formatRelativeTime(msg.chatCreateAt, true),
   username: msg.userNickname ?? "사용자",
   profileImage: msg.userProfile ?? null,
   userId: msg.userId,
@@ -65,7 +58,11 @@ const useChatRoom = (chatRoomId) => {
             ...prev,
             toDisplayMessage(msg, currentUserId),
           ]);
-          if (msg.chatType !== 'ENTER' && msg.chatType !== 'LEAVE' && msg.userProfile) {
+          if (
+            msg.chatType !== "ENTER" &&
+            msg.chatType !== "LEAVE" &&
+            msg.userProfile
+          ) {
             chatFloatBus.dispatch(msg.userProfile, msg.userNickname);
           }
         } catch (e) {
@@ -87,48 +84,45 @@ const useChatRoom = (chatRoomId) => {
 
   const sendMessage = useCallback(
     (content, retryCount = 0) => {
-    const text = content.trim();
-    if (!text || !chatRoomId) return;
-    const ws = wsRef.current;
-
-    if (!ws || ws.readyState !== WebSocket.OPEN) {
-      if (retryCount < 20) {
-        setTimeout(() => sendMessage(content, retryCount + 1), 500);
-      } else {
-        console.warn("WebSocket 연결 실패로 메시지 전송 불가");
-      }
-      return;
-    }
-
-    ws.send(JSON.stringify({ chatContent: text, chatType: "텍스트" }));
-    }, [chatRoomId],
-  );
-
-  const sendImageMessage = useCallback(
-    (imageUrl) => {
+      const text = content.trim();
+      if (!text || !chatRoomId) return;
       const ws = wsRef.current;
+
       if (!ws || ws.readyState !== WebSocket.OPEN) {
-        console.warn("WebSocket이 아직 연결되지 않았습니다.");
+        if (retryCount < 20) {
+          setTimeout(() => sendMessage(content, retryCount + 1), 500);
+        } else {
+          console.warn("WebSocket 연결 실패로 메시지 전송 불가");
+        }
         return;
       }
-      ws.send(JSON.stringify({ chatContent: imageUrl, chatType: "IMAGE" }));
+
+      ws.send(JSON.stringify({ chatContent: text, chatType: "텍스트" }));
     },
-    [],
+    [chatRoomId],
   );
 
-  const sendSignMessage = useCallback(
-    (word) => {
-      const ws = wsRef.current;
-      if (!ws || ws.readyState !== WebSocket.OPEN) return;
-      ws.send(JSON.stringify({
-        chatContent: word,      // 단어 저장 (리로드 후 keypoints 재요청용)
+  const sendImageMessage = useCallback((imageUrl) => {
+    const ws = wsRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      console.warn("WebSocket이 아직 연결되지 않았습니다.");
+      return;
+    }
+    ws.send(JSON.stringify({ chatContent: imageUrl, chatType: "IMAGE" }));
+  }, []);
+
+  const sendSignMessage = useCallback((word) => {
+    const ws = wsRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+    ws.send(
+      JSON.stringify({
+        chatContent: word, // 단어 저장 (리로드 후 keypoints 재요청용)
         chatType: "수어",
-      }));
-    },
-    [],
-  );
+      }),
+    );
+  }, []);
 
   return { messages, sendMessage, sendImageMessage, sendSignMessage };
-}
+};
 
 export default useChatRoom;
