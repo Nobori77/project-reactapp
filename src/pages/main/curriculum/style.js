@@ -413,9 +413,9 @@ export const StepTooltip = styled.div`
   border-radius: 12px;
   padding: 10px 14px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* 👈 6열 */
+  gap: 4px 16px;
   font-size: 18px;
   color: #555;
   white-space: nowrap;
