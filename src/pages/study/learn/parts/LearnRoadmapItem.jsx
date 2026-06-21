@@ -1,18 +1,16 @@
-// 학습 로드맵 항목: 단계를 선택하면 말풍선에서 학습을 시작합니다.
+// 학습 로드맵 단계 버튼과 선택 팝오버입니다.
 import * as S from "../style";
 
 const LearnRoadmapItem = ({ lesson, index, selected, onSelect, onStart }) => {
   const isLocked = lesson.status === "locked";
   const isReward = lesson.status === "reward";
   const canStart = !isLocked;
-  const startLabel = isLocked ? "🔒" : isReward ? "보상 확인" : "시작 +10 XP";
+  const startLabel = isLocked ? "잠금" : isReward ? "보상 확인" : "시작";
 
-  // 단계 선택: 바로 이동하지 않고 시작 말풍선만 표시합니다.
   const handleSelect = () => {
     onSelect?.(lesson);
   };
 
-  // 학습 시작: 선택된 말풍선 안 버튼에서만 실제 이동합니다.
   const handleStart = () => {
     onStart?.(lesson);
   };
@@ -28,7 +26,7 @@ const LearnRoadmapItem = ({ lesson, index, selected, onSelect, onStart }) => {
       {selected && (
         <S.LessonPopover $status={lesson.status} $index={index}>
           <S.LessonPopoverTitle>{lesson.title}</S.LessonPopoverTitle>
-          <S.LessonPopoverDesc>{isLocked ? "앞 단계를 완료하면 열려요" : lesson.desc}</S.LessonPopoverDesc>
+          <S.LessonPopoverDesc>{isLocked ? "앞 단계를 완료하면 열려요." : lesson.desc}</S.LessonPopoverDesc>
           <S.LessonStartButton type="button" disabled={!canStart} onClick={handleStart}>
             {startLabel}
           </S.LessonStartButton>

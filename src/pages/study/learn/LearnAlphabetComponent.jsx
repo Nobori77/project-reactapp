@@ -1,10 +1,8 @@
 // 문자학습컴포넌트: 한글 자모 카드 목록과 글자 상세 팝업
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { alphabetMenus, alphabetQuests, alphabetSections, getAlphabetInfo } from "./data/alphabetMock";
-import { useTodayQuests } from "../hooks/useTodayQuests";
+import { alphabetSections, getAlphabetInfo } from "./data/alphabetMock";
 import LearnAlphabetPopup from "./parts/LearnAlphabetPopup";
-import LearnQuestPanel from "./parts/LearnQuestPanel";
 import LearnSideMenu from "./parts/LearnSideMenu";
 import LetterCard from "./parts/LetterCard";
 import * as S from "./style";
@@ -14,7 +12,17 @@ const SERVICE_READY_MESSAGE = "서비스 준비중입니다.";
 const LearnAlphabetComponent = () => {
   const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const quests = useTodayQuests(alphabetQuests);
+
+  const sidebarMenus = useMemo(
+    () => [
+      { id: "home", label: "학습 홈", to: "/study" },
+      { id: "analysis", label: "학습현황", to: "/study/learn", activeType: "analysis" },
+      { id: "sign", label: "수어", to: "/study/learn", activeType: "sign" },
+      { id: "signal", label: "응급수신호", to: "/study/learn", activeType: "signal" },
+      { id: "alphabet", label: "문자", to: "/study/learn/alphabet", active: true },
+    ],
+    []
+  );
 
   // 전체글자목록: 팝업에서 이전/다음 이동할 때 사용합니다.
   const letters = useMemo(() => alphabetSections.flatMap((section) => section.letters), []);
@@ -49,7 +57,7 @@ const LearnAlphabetComponent = () => {
   return (
     <S.AlphaWrap>
       <S.AlphaLayout>
-        <LearnSideMenu menus={alphabetMenus} onMenu={handleMenu} />
+        <LearnSideMenu menus={sidebarMenus} onMenu={handleMenu} />
 
         <S.AlphaMain>
           <S.AlphaHeader>
@@ -72,7 +80,9 @@ const LearnAlphabetComponent = () => {
           ))}
         </S.AlphaMain>
 
+        {/*
         <LearnQuestPanel quests={quests} />
+        */}
       </S.AlphaLayout>
 
       {selectedLetter && (

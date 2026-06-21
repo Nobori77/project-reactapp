@@ -1,4 +1,4 @@
-// 학습 데이터 변환: 백엔드 학습 목록과 진행 상태를 화면용 로드맵 데이터로 변환
+// 학습 데이터를 백엔드 학습 목록과 진행 상태 기반 로드맵 데이터로 변환합니다.
 const SESSION_COMPLETE_COUNT = 5;
 
 const isSignalLearn = (learn) => {
@@ -8,7 +8,7 @@ const isSignalLearn = (learn) => {
 };
 
 export const mapLearnItem = (learn, index = 0, progress = {}) => {
-  const totalCount = Number(progress.totalCount || 0);
+  const totalCount = Number(progress.totalCount || SESSION_COMPLETE_COUNT);
   const completedCount = Number(progress.completedCount || 0);
   const percent = Math.min(Math.round((completedCount / SESSION_COMPLETE_COUNT) * 100), 100);
   const isCompleted = Boolean(progress.sessionCompleted) || completedCount >= SESSION_COMPLETE_COUNT;
@@ -20,7 +20,7 @@ export const mapLearnItem = (learn, index = 0, progress = {}) => {
     requiredDia: learn.eduDia || 0,
     status: isCompleted ? "done" : "locked",
     badge: isCompleted ? "✓" : "🔒",
-    buttonText: isCompleted ? "복습" : "🔒",
+    buttonText: isCompleted ? "복습" : "잠금",
     totalCount,
     completedCount,
     percent,
@@ -45,20 +45,12 @@ export const mapLearnList = (learnList = [], progressList = []) => {
     const isPrevCompleted = prevLesson?.status === "done";
     const isOpen = isFirstLesson || isPrevCompleted;
 
-    if (index === 3) {
-      return {
-        ...lesson,
-        status: "reward",
-        badge: "🎁",
-        buttonText: "🔒",
-      };
-    }
 
     return {
       ...lesson,
       status: isOpen ? "active" : "locked",
       badge: isOpen ? "★" : "🔒",
-      buttonText: isOpen ? "시작" : "🔒",
+      buttonText: isOpen ? "시작" : "잠금",
     };
   });
 };
