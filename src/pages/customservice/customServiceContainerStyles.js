@@ -61,6 +61,7 @@ export const Sidebar = styled.aside`
   padding: 20px 0;
   position: sticky;
   top: 88px;
+  overflow: hidden;
 `;
 
 /* ── TabMenu ── */
@@ -94,7 +95,6 @@ export const SidebarNavLink = styled.div`
     text-align: left;
     background: ${({ $active }) => ($active ? "#eef0ff" : "none")};
     border: none;
-    border-left: 3px solid transparent;
     padding: 9px 20px;
     font-size: ${theme.FONT_SIZE.h9};
     font-weight: ${({ $active }) => ($active ? 700 : 400)};

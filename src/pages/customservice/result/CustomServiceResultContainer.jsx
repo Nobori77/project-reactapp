@@ -6,8 +6,10 @@ import { STATS_LABELS } from "./constants";
 import useAuthStore from "../../../store/authStore";
 import LoginRequiredPopup from "../../community/common/LoginRequiredPopup";
 import InquireDonePopup from "../common/InquireDonePopup";
+import { useNavigate } from "react-router-dom";
 
 const CustomServiceResultContainer = () => {
+  const navigate = useNavigate();
   const [results, setResults]           = useState([]);
   const [isLoading, setIsLoading]       = useState(false);
   const [error, setError]               = useState(null);
@@ -139,6 +141,7 @@ const CustomServiceResultContainer = () => {
       <LoginRequiredPopup
         isOpen={showLoginPopup}
         onClose={() => setShowLoginPopup(false)}
+        onBack={() => navigate(-1)}
       />
       <InquireDonePopup
         isOpen={donePopup.isOpen}

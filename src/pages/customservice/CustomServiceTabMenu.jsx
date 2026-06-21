@@ -11,30 +11,34 @@ const CustomServiceTabMenu = () => {
   const [indicatorHeight, setIndicatorHeight] = useState(0);
   const itemRefs                              = useRef([]);
 
+  // 👇 디버그용
   useEffect(() => {
-  const activeIndex = menuLinks.findIndex((item) =>
-    location.pathname.startsWith(item.path)
-  );
+    console.log("현재 pathname:", location.pathname);
+    console.log("비교:", menuLinks.map(m => m.path));
+  }, [location.pathname]);
 
-  const updateIndicator = () => {
-    if (activeIndex !== -1 && itemRefs.current[activeIndex]) {
-      const el = itemRefs.current[activeIndex];
-      setIndicatorTop(el.offsetTop);
-      setIndicatorHeight(el.offsetHeight);
-    }
-  };
+  useEffect(() => {
+    const activeIndex = menuLinks.findIndex((item) =>
+      location.pathname.startsWith(item.path)
+    );
 
-  // 즉시 실행
-  updateIndicator();
+    const updateIndicator = () => {
+      if (activeIndex !== -1 && itemRefs.current[activeIndex]) {
+        const el = itemRefs.current[activeIndex];
+        setIndicatorTop(el.offsetTop);
+        setIndicatorHeight(el.offsetHeight);
+      }
+    };
 
-  // 크기 변경 감지 (폰트 로딩 후에도 재계산)
-  const observer = new ResizeObserver(updateIndicator);
-  itemRefs.current.forEach((el) => {
-    if (el) observer.observe(el);
-  });
+    updateIndicator();
 
-  return () => observer.disconnect();
-}, [location.pathname]);
+    const observer = new ResizeObserver(updateIndicator);
+    itemRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [location.pathname]);
 
   return (
     <S.TabMenuWrap>

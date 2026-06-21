@@ -101,6 +101,7 @@ const CustomServiceInquireContainer = ({ onSubmit }) => {
       <LoginRequiredPopup
         isOpen={showLoginPopup}
         onClose={() => setShowLoginPopup(false)}
+        onBack={() => navigate(-1)}
       />
       <InquireDonePopup
         isOpen={showDonePopup}

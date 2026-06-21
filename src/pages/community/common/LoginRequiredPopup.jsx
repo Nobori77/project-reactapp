@@ -22,7 +22,7 @@ const LoginButton = styled.button`
   }
 `;
 
-const LoginRequiredPopup = ({ isOpen, onClose }) => {
+const LoginRequiredPopup = ({ isOpen, onClose, onBack }) => {
   const navigate = useNavigate();
 
   if (!isOpen) return null;
@@ -32,15 +32,25 @@ const LoginRequiredPopup = ({ isOpen, onClose }) => {
     navigate("/login");
   };
 
+  const handleClose = () => {
+    if (onBack) {
+      onBack(); // onBack이 있으면 뒤로가기
+    } else {
+      onClose(); // 없으면 기존 닫기
+    }
+  };
+
   return ReactDOM.createPortal(
-    <S.Overlay onClick={onClose}>
+    <S.Overlay onClick={handleClose}>
       <S.Card onClick={(e) => e.stopPropagation()}>
         <S.Title>안내</S.Title>
         <S.InfoLabel style={{ color: "inherit" }}>
           로그인이 필요합니다.
         </S.InfoLabel>
         <S.ButtonRow>
-          <S.CancelButton onClick={onClose}>닫기</S.CancelButton>
+          <S.CancelButton onClick={handleClose}>
+            {onBack ? "뒤로가기" : "닫기"}
+          </S.CancelButton>
           <LoginButton onClick={handleLogin}>로그인</LoginButton>
         </S.ButtonRow>
       </S.Card>

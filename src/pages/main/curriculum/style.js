@@ -36,7 +36,7 @@ export const StepItem = styled.div`
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  position: relative;  /* ← 추가 */
+  position: relative;
 `;
 
 export const StepCircle = styled.div`
@@ -50,12 +50,23 @@ export const StepCircle = styled.div`
   color: ${({ $active }) => ($active ? theme.PALETTE.white : textGray)};
   font-size: ${theme.FONT_SIZE.h7};
   font-weight: ${theme.FONT_WEIGHT.medium};
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  ${StepItem}:hover & {
+    background-color: ${theme.PALETTE.primary.main};
+    color: ${theme.PALETTE.white};
+  }
 `;
 
 export const StepLabel = styled.span`
   font-size: ${theme.FONT_SIZE.h7};
   font-weight: ${theme.FONT_WEIGHT.medium};
   color: ${({ $active }) => ($active ? theme.PALETTE.primary.main : textGray)};
+  transition: color 0.2s ease;
+
+  ${StepItem}:hover & {
+    color: ${theme.PALETTE.primary.main};
+  }
 `;
 
 export const StepCount = styled.span`
@@ -405,7 +416,7 @@ export const StepTooltip = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 12px;
+  font-size: 18px;
   color: #555;
   white-space: nowrap;
   opacity: 0;
