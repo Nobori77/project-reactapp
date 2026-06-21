@@ -1,11 +1,11 @@
 // 학습 메인 임시 데이터: 백엔드 연결 전 화면 확인용 데이터
 export const learnHomeMock = {
   menus: [
-    { id: "learn", type: "sign", label: "학습", icon: "◆" },
-    { id: "signal", type: "signal", label: "수신호", icon: "▲" },
-    { id: "letter", label: "문자", icon: "韓", to: "/study/learn/alphabet" },
-    { id: "profile", label: "프로필", icon: "👤", to: "/mypage/learning" },
-    { id: "more", label: "더 보기", icon: "…" },
+    { id: "home", label: "학습 홈", to: "/study" },
+    { id: "analysis", type: "analysis", label: "학습현황" },
+    { id: "sign", type: "sign", label: "수어" },
+    { id: "signal", type: "signal", label: "응급수신호" },
+    { id: "alphabet", label: "문자", to: "/study/learn/alphabet" },
   ],
   roadmaps: {
     sign: {

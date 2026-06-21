@@ -16,106 +16,234 @@ export const LearnWrap = styled.section`
   isolation: isolate;
   width: 100%;
   min-height: 100vh;
-  padding: 112px 24px 120px;
-  background: #fff;
-  color: #2c2c2a;
+  padding: 30px 24px 80px;
+  background: #fbfcff;
+  color: #111827;
   font-family: Pretendard, sans-serif;
 
   @media (max-width: 768px) {
-    padding: 104px 16px 72px;
+    padding: 24px 16px 64px;
   }
 `;
 
 export const LearnLayout = styled.div`
   display: grid;
-  grid-template-columns: 180px minmax(0, 720px) 330px;
-  gap: 45px;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 36px;
   align-items: start;
-  width: min(1320px, 100%);
+  width: min(1560px, 100%);
   margin: 0 auto;
 
-  > aside {
-    position: sticky;
-    top: 96px;
-    align-self: start;
-    width: 330px;
-    padding: 22px;
-  }
-
-  > aside h2 {
-    font-size: 17px;
-    margin-bottom: 18px;
-  }
-
-  @media (max-width: 1100px) {
-    grid-template-columns: 150px minmax(0, 1fr);
-
-    > aside {
-      display: none;
-    }
-  }
-
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
     grid-template-columns: 1fr;
   }
 `;
 
-export const SideMenu = styled.nav`
+export const SideColumn = styled.aside`
   position: sticky;
-  top: 96px;
-  align-self: start;
+  top: 88px;
   display: grid;
-  gap: 12px;
-  padding: 8px 0;
-  border-right: 1px solid #f0f2f7;
+  gap: 24px;
+  align-self: start;
 
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
     position: static;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    border-right: 0;
-    border-bottom: 1px solid #ebedf5;
-    padding-bottom: 14px;
   }
+`;
+
+export const SideCard = styled.div`
+  width: 200px;
+  padding: 20px 0;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  background: #fff;
+`;
+
+export const SideTitle = styled.h2`
+  margin: 0;
+  padding: 12px 20px 6px;
+  color: #aaa;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.2px;
+`;
+
+export const GoalCard = styled.div`
+  width: 200px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  background: #fff;
+`;
+
+export const GoalTitle = styled.strong`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #dfe3ea;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+
+  span {
+    color: #4359fc;
+    font-size: 16px;
+  }
+`;
+
+export const GoalList = styled.div`
+  display: grid;
+  gap: 10px;
+  padding: 14px 0 16px;
+  border-bottom: 1px solid #dfe3ea;
+`;
+
+export const GoalItem = styled.div`
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15;
+
+  span {
+    display: inline-grid;
+    place-items: center;
+    font-size: 15px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  strong {
+    color: #4359fc;
+    font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+`;
+
+export const GoalText = styled.p`
+  margin: 0;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 700;
+`;
+
+export const GoalProgressRow = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+
+  strong {
+    color: #374151;
+    font-size: 14px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+`;
+
+export const GoalProgressBar = styled.div`
+  overflow: hidden;
+  height: 8px;
+  border-radius: 999px;
+  background: #e5e7eb;
+
+  span {
+    display: block;
+    width: 50%;
+    height: 100%;
+    border-radius: inherit;
+    background: #4359fc;
+  }
+`;
+
+export const GoalExp = styled.div`
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding-top: 16px;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+
+  span {
+    display: inline-grid;
+    place-items: center;
+    font-size: 15px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  strong {
+    color: #4359fc;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+`;
+
+export const SideMenu = styled.nav`
+  display: block;
 `;
 
 export const SideButton = styled.button`
-  display: flex;
+  display: block;
   align-items: center;
-  gap: 12px;
-  width: 150px;
-  height: 46px;
-  padding: 0 18px;
+  width: 100%;
+  height: auto;
+  padding: 9px 20px;
   border: 0;
-  border-radius: 8px;
-  background: ${({ $active }) => ($active ? "#eef1ff" : "transparent")};
-  color: ${({ $active }) => ($active ? "#4359fc" : "#777")};
-  font-size: 16px;
-  font-weight: ${({ $active }) => ($active ? 900 : 700)};
+  border-left: 3px solid ${({ $active }) => ($active ? "#4359fc" : "transparent")};
+  border-radius: 0;
+  background: ${({ $active }) => ($active ? "#eef0ff" : "transparent")};
+  color: ${({ $active }) => ($active ? "#4359fc" : "#111827")};
+  font-size: 14px;
+  font-weight: ${({ $active }) => ($active ? 700 : 400)};
+  line-height: 1.4;
   cursor: pointer;
-
-  span {
-    display: inline-flex;
-    justify-content: center;
-    width: 20px;
-    font-size: 16px;
-  }
+  text-align: left;
+  transition: all 0.5s;
 
   &:hover {
-    background: #f2f4ff;
+    background: #eef0ff;
     color: #4359fc;
-  }
-
-  @media (max-width: 760px) {
-    justify-content: center;
-    width: 100%;
-    padding: 0 8px;
-    font-size: 12px;
   }
 `;
 
-export const MainArea = styled.div`
+export const MenuIcon = styled.span`
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  font-size: 15px;
+  line-height: 1;
+`;
+
+export const MainArea = styled.main`
   min-width: 0;
-  position: relative;
+`;
+
+export const RoadmapHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
 `;
 
 export const TopBar = styled.div`
@@ -130,14 +258,40 @@ export const TopBar = styled.div`
 `;
 
 export const GuideButton = styled.button`
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 18px;
+  border: 1px solid #4359fc;
+  border-radius: 8px;
+  background: #fff;
+  color: #4359fc;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover {
+    background: #eef1ff;
+  }
+`;
+
+export const RoadmapGuideSlot = styled.div`
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  z-index: 2;
 `;
 
 export const ChapterPanel = styled.article`
-  overflow: hidden;
-  border-radius: 8px;
-  background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 62%);
-  box-shadow: 0 0 0 1px #edf0f7 inset;
+  position: relative;
+  overflow: visible;
+  min-height: 660px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 24px 80px rgba(30, 48, 86, 0.04);
 `;
 
 export const ChapterHead = styled.header`
@@ -152,8 +306,8 @@ export const ChapterHead = styled.header`
 
 export const Title = styled.h1`
   margin: 0;
-  color: #fff;
-  font-size: 22px;
+  color: #111827;
+  font-size: 28px;
   font-weight: 900;
   line-height: 1.3;
 `;
@@ -177,10 +331,21 @@ export const StatusText = styled.p`
   font-weight: 700;
 `;
 
+export const RoadmapReadyText = styled.div`
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #4359fc;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0;
+`;
+
 export const RoadmapStage = styled.div`
   position: relative;
-  min-height: 820px;
-  padding: 26px 0 130px;
+  min-height: 680px;
+  padding: 26px 0 120px;
   overflow: visible;
 
   @media (max-width: 760px) {
@@ -757,13 +922,13 @@ export const Percent = styled.strong`
 export const AlphaWrap = styled.section`
   width: 100%;
   min-height: 100vh;
-  padding: 112px 24px 120px;
-  background: #fff;
-  color: #2c2c2a;
+  padding: 30px 24px 80px;
+  background: #fbfcff;
+  color: #111827;
   font-family: Pretendard, sans-serif;
 
   @media (max-width: 768px) {
-    padding: 104px 16px 72px;
+    padding: 24px 16px 64px;
   }
 `;
 
@@ -827,7 +992,7 @@ export const AlphaSectionTitle = styled.h2`
 
 export const AlphaLetterGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 86px);
+  grid-template-columns: repeat(5, 86px);
   justify-content: center;
   gap: 18px 24px;
 
@@ -1952,3 +2117,298 @@ export const RewardModalButton = styled.button`
   }
 `;
 
+
+export const SignRoadmapStage = styled.div`
+  position: relative;
+  width: min(1040px, calc(100% - 64px));
+  height: 360px;
+  margin: 88px auto 0;
+
+  @media (max-width: 980px) {
+    width: min(980px, calc(100% - 40px));
+  }
+`;
+
+export const SignRoadmapSvg = styled.svg`
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+
+  path {
+    fill: none;
+    stroke: #aeb7c7;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 7 8;
+  }
+
+  marker path {
+    fill: #aeb7c7;
+    stroke: none;
+    stroke-dasharray: none;
+  }
+
+  #sign-roadmap-arrow-active path {
+    fill: #4359fc;
+  }
+
+  .connector-active {
+    stroke: #4359fc;
+    stroke-dasharray: none;
+  }
+`;
+
+export const SignConnector = styled.span`
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+
+  &.line-1,
+  &.line-2 {
+    top: 146px;
+    height: 0;
+    border-top: 2px dashed #aeb7c7;
+  }
+
+  &.line-1 {
+    left: 118px;
+    width: 98px;
+  }
+
+  &.line-2 {
+    left: 298px;
+    width: 98px;
+  }
+
+  &.line-3 {
+    left: 456px;
+    top: 36px;
+    width: 220px;
+    height: 110px;
+    border-top: 2px dashed #aeb7c7;
+    border-left: 2px dashed #aeb7c7;
+    border-right: 2px dashed #aeb7c7;
+    border-radius: 76px 76px 0 0;
+  }
+
+  &.line-4 {
+    left: 676px;
+    top: 146px;
+    width: 68px;
+    height: 128px;
+    border-right: 2px dashed #aeb7c7;
+    border-bottom: 2px dashed #aeb7c7;
+    border-radius: 0 0 70px 0;
+  }
+
+  &.line-4::before {
+    content: "";
+    position: absolute;
+    right: -2px;
+    bottom: -72px;
+    width: 72px;
+    height: 72px;
+    border-left: 2px dashed #aeb7c7;
+    border-top: 2px dashed #aeb7c7;
+    border-radius: 70px 0 0 0;
+  }
+
+  &.line-3::after,
+  &.line-4::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  &.line-3::after {
+    top: -7px;
+    right: 116px;
+    border-width: 6px 0 6px 10px;
+    border-color: transparent transparent transparent #aeb7c7;
+  }
+
+  &.line-4::after {
+    left: -6px;
+    bottom: -78px;
+    border-width: 10px 6px 0 6px;
+    border-color: #aeb7c7 transparent transparent transparent;
+  }
+
+  &.is-active.line-1,
+  &.is-active.line-2 {
+    border-top-style: solid;
+    border-top-color: #4359fc;
+  }
+
+  &.is-active.line-3 {
+    border-top-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: #4359fc;
+  }
+
+  &.is-active.line-4 {
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-color: #4359fc;
+  }
+
+  &.is-active.line-4::before {
+    border-left-style: solid;
+    border-top-style: solid;
+    border-color: #4359fc;
+  }
+`;
+
+export const SignRoadmapNode = styled.article`
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  gap: 29px;
+  text-align: center;
+
+  &.node-intro {
+    top: 108px;
+  }
+
+  &.node-basic {
+    left: 300px;
+    top: 108px;
+  }
+
+  &.node-middle {
+    left: 560px;
+    top: 108px;
+  }
+
+  &.node-reward {
+    left: 830px;
+    top: 108px;
+  }
+
+  &.node-advanced {
+    left: 812px;
+    top: 368px;
+  }
+
+  &.status-locked {
+    color: #8f98aa;
+  }
+`;
+
+export const SignNodeButton = styled.button`
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.18s ease;
+
+  img {
+    display: block;
+    width: 88px;
+    height: 88px;
+    object-fit: contain;
+    border-radius: 50%;
+  }
+
+  .status-active & {
+    box-shadow: 0 0 0 3px #4359fc;
+  }
+
+  .status-done & {
+    box-shadow: 0 0 0 3px rgba(67, 89, 252, 0.2);
+  }
+
+  .status-locked & {
+    cursor: default;
+    filter: grayscale(1);
+    opacity: 0.72;
+  }
+
+  &:not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+`;
+
+export const SignNodeTitle = styled.strong`
+  color: #111827;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0;
+
+  .status-locked & {
+    color: #7f8797;
+  }
+
+  .node-reward & {
+    display: none;
+  }
+
+`;
+
+export const SignNodeBadge = styled.span`
+  display: none;
+  min-width: 58px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4359fc;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+
+  .status-locked & {
+    background: #eef0f4;
+    color: #98a0ae;
+  }
+
+  .status-done:not(.node-reward) & {
+    display: inline-flex;
+    font-size: 0;
+  }
+
+  .status-done:not(.node-reward) &::before {
+    content: "✓ 완료";
+    font-size: 12px;
+  }
+
+  .node-advanced.status-locked & {
+    display: none;
+  }
+`;
+
+export const SignNodeAction = styled.button`
+  min-width: 86px;
+  height: 30px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #4359fc;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 10px 18px rgba(67, 89, 252, 0.18);
+
+  &:hover {
+    background: #3348ee;
+  }
+`;
