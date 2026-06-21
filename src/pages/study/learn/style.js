@@ -73,7 +73,7 @@ export const GoalCard = styled.div`
   width: 200px;
   padding: 20px;
   border: 1px solid #eee;
-  border-radius: 14px;
+  border-radius: 16px;
   background: #fff;
 `;
 
@@ -108,7 +108,7 @@ export const GoalItem = styled.div`
   align-items: center;
   gap: 8px;
   color: #111827;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1.15;
 
@@ -211,7 +211,7 @@ export const SideButton = styled.button`
   border-radius: 0;
   background: ${({ $active }) => ($active ? "#eef0ff" : "transparent")};
   color: ${({ $active }) => ($active ? "#4359fc" : "#111827")};
-  font-size: 14px;
+  font-size: 16px;
   font-weight: ${({ $active }) => ($active ? 700 : 400)};
   line-height: 1.4;
   cursor: pointer;
@@ -262,11 +262,12 @@ export const GuideButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 38px;
-  padding: 0 18px;
-  border: 1px solid #4359fc;
-  border-radius: 8px;
-  background: #fff;
+  height: ${({ $variant }) => ($variant === "profile" ? "40px" : "38px")};
+  min-width: ${({ $variant }) => ($variant === "profile" ? "118px" : "auto")};
+  padding: ${({ $variant }) => ($variant === "profile" ? "4px 16px 4px 4px" : "0 18px")};
+  border: ${({ $variant }) => ($variant === "profile" ? "0" : "1px solid #4359fc")};
+  border-radius: ${({ $variant }) => ($variant === "profile" ? "999px" : "8px")};
+  background: ${({ $variant }) => ($variant === "profile" ? "#f3f5ff" : "#fff")};
   color: #4359fc;
   font-size: 14px;
   font-weight: 800;
@@ -277,11 +278,50 @@ export const GuideButton = styled.button`
   }
 `;
 
+export const GuideProfileAvatar = styled.img`
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #d9d9d9;
+`;
+
+export const GuideProfileName = styled.span`
+  color: #4359fc;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+`;
+
 export const RoadmapGuideSlot = styled.div`
   position: absolute;
   top: 28px;
   right: 28px;
   z-index: 2;
+`;
+
+export const StudyAnalysisHeader = styled.header`
+  padding: 36px 36px 0;
+  margin-bottom: 48px;
+`;
+
+export const StudyAnalysisTitle = styled.h3`
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.35;
+`;
+
+export const StudyAnalysisDesc = styled.p`
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
 `;
 
 export const ChapterPanel = styled.article`
@@ -2300,6 +2340,117 @@ export const SignRoadmapNode = styled.article`
 
   &.status-locked {
     color: #8f98aa;
+  }
+`;
+
+export const RoadmapRabbitWrap = styled.div`
+  position: absolute;
+  z-index: 3;
+  width: 230px;
+  display: grid;
+  justify-items: center;
+  pointer-events: none;
+`;
+
+export const RoadmapRabbitButton = styled.button`
+  width: 185px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+  transform-origin: 76% 30%;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &:hover {
+    animation: roadmap-rabbit-wave 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 12px 20px rgba(67, 88, 255, 0.16));
+  }
+
+  &:focus-visible {
+    outline: 2px solid #4358ff;
+    outline-offset: 4px;
+    border-radius: 18px;
+  }
+
+  @keyframes roadmap-rabbit-wave {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    18% {
+      transform: translate3d(0, -2px, 0) rotate(-3deg);
+    }
+
+    36% {
+      transform: translate3d(0, 1px, 0) rotate(3deg);
+    }
+
+    54% {
+      transform: translate3d(0, -1px, 0) rotate(-2deg);
+    }
+
+    72% {
+      transform: translate3d(0, 0, 0) rotate(2deg);
+    }
+  }
+`;
+
+export const RoadmapRabbit = styled.img`
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+`;
+
+export const RabbitSpeechBubble = styled.div`
+  position: absolute;
+  right: 160px;
+  top: 6px;
+  width: max-content;
+  max-width: 240px;
+  padding: 12px 14px;
+  border: 1px solid #dbe2ff;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+  box-shadow: 0 16px 36px rgba(30, 42, 92, 0.14);
+  pointer-events: none;
+  animation: rabbit-bubble-in 0.18s ease-out;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -7px;
+    top: 28px;
+    width: 12px;
+    height: 12px;
+    border-top: 1px solid #dbe2ff;
+    border-right: 1px solid #dbe2ff;
+    background: #ffffff;
+    transform: rotate(45deg);
+  }
+
+  @keyframes rabbit-bubble-in {
+    from {
+      opacity: 0;
+      transform: translate3d(6px, 4px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
 `;
 

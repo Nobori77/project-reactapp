@@ -1,14 +1,42 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { claimRoadmapReward, startLearn } from "../apis/LearnApi";
 import { useLearn } from "../hooks/useLearn";
 import { useStudyUser } from "../hooks/useStudyUser";
+import LearnAnalysisPreview from "./parts/LearnAnalysisPreview";
 import LearnSideMenu from "./parts/LearnSideMenu";
 import * as S from "./style";
 
 const SERVICE_READY_MESSAGE = "서비스 준비중입니다.";
 const REWARD_EXP = 50;
 const ROADMAP_ICON_PATH = "/assets/image/learn/roadmap";
+const ROADMAP_RABBIT_IMAGE = `${ROADMAP_ICON_PATH}/rabbithi.png`;
+const ROADMAP_RABBIT_POSITION_KEY = "studyRoadmapRabbitPosition";
+const ROADMAP_RABBIT_DEFAULT_POSITION = { x: 838, y: 436 };
+const ROADMAP_RABBIT_MESSAGES = {
+  start: ["입문부터 차근차근 시작해볼까요?"],
+  active: ["열린 단계부터 학습할 수 있어요!"],
+  reward: ["보상까지 조금만 더 가봐요."],
+  review: ["완료한 단계는 다시 복습할 수 있어요."],
+};
+const DEFAULT_PROFILE_IMAGE =
+  "https://gi.esmplus.com/cjfals1015/eum/userProfile/thumbnail/default1.png";
+const S3_PROFILE_BASE_URL =
+  "https://testapp-gyuhoroh213589.s3.ap-northeast-2.amazonaws.com";
+
+const getProfileImageSrc = (profileImage) => {
+  if (!profileImage || profileImage === "default.jpg" || profileImage === "null") {
+    return DEFAULT_PROFILE_IMAGE;
+  }
+
+  if (profileImage.startsWith("http") || profileImage.startsWith("blob:")) {
+    return profileImage;
+  }
+
+  const filePath = profileImage.startsWith("/") ? profileImage : `/${profileImage}`;
+
+  return `${S3_PROFILE_BASE_URL}${filePath}`;
+};
 
 const REWARD_MODAL_CONTENT = {
   locked: {
@@ -115,14 +143,35 @@ const getNodeBadge = (step, rewardClaimed) => {
 const LearnComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const signRoadmapStageRef = useRef(null);
+  const rabbitRef = useRef(null);
+  const rabbitDragRef = useRef({ isDragging: false, moved: false, offsetX: 0, offsetY: 0 });
   const { data, loading, error } = useLearn();
-  const { userId, isGuest } = useStudyUser();
+  const { user, userId, isGuest } = useStudyUser();
   const [activeType, setActiveType] = useState(location.state?.activeType || "sign");
   const [selectedLessonId, setSelectedLessonId] = useState(null);
   const [rewardModalType, setRewardModalType] = useState(null);
   const [rewardClaimed, setRewardClaimed] = useState(false);
   const [rewardLoading, setRewardLoading] = useState(false);
   const [showRewardBurst, setShowRewardBurst] = useState(false);
+  const [rabbitTip, setRabbitTip] = useState(null);
+  const [rabbitPosition, setRabbitPosition] = useState(() => {
+    if (typeof window === "undefined") {
+      return ROADMAP_RABBIT_DEFAULT_POSITION;
+    }
+
+    try {
+      const savedPosition = JSON.parse(window.localStorage.getItem(ROADMAP_RABBIT_POSITION_KEY));
+
+      if (Number.isFinite(savedPosition?.x) && Number.isFinite(savedPosition?.y)) {
+        return savedPosition;
+      }
+    } catch (error) {
+      return ROADMAP_RABBIT_DEFAULT_POSITION;
+    }
+
+    return ROADMAP_RABBIT_DEFAULT_POSITION;
+  });
   const roadmap = data.roadmaps[activeType] || data.roadmaps.sign;
   const currentLessons = roadmap.lessons || [];
   const isEmpty = !loading && !error && currentLessons.length === 0;
@@ -178,23 +227,75 @@ const LearnComponent = () => {
     return Number.isFinite(Number(previousLesson?.id)) ? Number(previousLesson.id) : null;
   }, [visibleLessons]);
 
-  const rewardStorageKey = useMemo(() => {
-    if (!userId || !rewardEduId) {
-      return null;
+  const rabbitMessagePool = useMemo(() => {
+    const learningSteps = visibleLessons.filter((lesson) => lesson.status !== "reward");
+    const hasActiveLesson = learningSteps.some((lesson) => (lesson.nodeStatus || lesson.status) === "active");
+    const allLessonsDone =
+      learningSteps.length > 0 && learningSteps.every((lesson) => (lesson.nodeStatus || lesson.status) === "done");
+
+    if (allLessonsDone || rewardClaimed) {
+      return ROADMAP_RABBIT_MESSAGES.review;
     }
 
-    return `roadmapReward:${userId}:${rewardEduId}`;
-  }, [rewardEduId, userId]);
+    if (rewardAvailable) {
+      return ROADMAP_RABBIT_MESSAGES.reward;
+    }
+
+    if (hasActiveLesson) {
+      return ROADMAP_RABBIT_MESSAGES.active;
+    }
+
+    return ROADMAP_RABBIT_MESSAGES.start;
+  }, [rewardAvailable, rewardClaimed, visibleLessons]);
 
   useEffect(() => {
-    if (!rewardStorageKey) {
-      setRewardClaimed(false);
+    setRewardClaimed(false);
+    setRewardModalType(null);
+    setRabbitTip(null);
+  }, [activeType, rewardEduId, userId]);
 
+  useEffect(() => {
+    if (!rabbitTip) {
+      return undefined;
+    }
+
+    const timerId = window.setTimeout(() => {
+      setRabbitTip(null);
+    }, 3200);
+
+    return () => window.clearTimeout(timerId);
+  }, [rabbitTip]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
       return;
     }
 
-    setRewardClaimed(localStorage.getItem(rewardStorageKey) === "received");
-  }, [rewardStorageKey]);
+    window.localStorage.setItem(ROADMAP_RABBIT_POSITION_KEY, JSON.stringify(rabbitPosition));
+  }, [rabbitPosition]);
+
+  const getClampedRabbitPosition = (x, y) => {
+    const stageElement = signRoadmapStageRef.current;
+    const rabbitElement = rabbitRef.current;
+
+    if (!stageElement || !rabbitElement) {
+      return { x, y };
+    }
+
+    const panelElement = stageElement.closest("[data-roadmap-panel]") || stageElement;
+    const stageRect = stageElement.getBoundingClientRect();
+    const panelRect = panelElement.getBoundingClientRect();
+    const rabbitRect = rabbitElement.getBoundingClientRect();
+    const minX = panelRect.left - stageRect.left;
+    const minY = panelRect.top - stageRect.top;
+    const maxX = panelRect.right - stageRect.left - rabbitRect.width;
+    const maxY = panelRect.bottom - stageRect.top - rabbitRect.height;
+
+    return {
+      x: Math.min(Math.max(x, minX), maxX),
+      y: Math.min(Math.max(y, minY), maxY),
+    };
+  };
 
   const openRewardModal = () => {
     if (!rewardAvailable) {
@@ -225,10 +326,6 @@ const LearnComponent = () => {
 
         setRewardClaimed(true);
         setRewardModalType("received");
-
-        if (rewardStorageKey) {
-          localStorage.setItem(rewardStorageKey, "received");
-        }
 
         if (rewardExp > 0) {
           setShowRewardBurst(true);
@@ -317,6 +414,90 @@ const LearnComponent = () => {
     navigate(menu.to);
   };
 
+  const handleGuideClick = () => {
+    if (activeType === "sign" || activeType === "signal") {
+      navigate("/mypage/learning");
+
+      return;
+    }
+
+    if (activeType === "analysis") {
+      navigate("/mypage/learning/analysis");
+
+      return;
+    }
+
+    alert(SERVICE_READY_MESSAGE);
+  };
+
+  const handleRabbitClick = () => {
+    if (rabbitDragRef.current.moved) {
+      rabbitDragRef.current.moved = false;
+
+      return;
+    }
+
+    const message = rabbitMessagePool[Math.floor(Math.random() * rabbitMessagePool.length)] || ROADMAP_RABBIT_MESSAGES.start[0];
+
+    setRabbitTip({
+      id: Date.now(),
+      message,
+    });
+  };
+
+  const handleRabbitPointerDown = (event) => {
+    const stageElement = signRoadmapStageRef.current;
+
+    if (!stageElement) {
+      return;
+    }
+
+    const stageRect = stageElement.getBoundingClientRect();
+
+    rabbitDragRef.current = {
+      isDragging: true,
+      moved: false,
+      offsetX: event.clientX - stageRect.left - rabbitPosition.x,
+      offsetY: event.clientY - stageRect.top - rabbitPosition.y,
+    };
+
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  };
+
+  const handleRabbitPointerMove = (event) => {
+    if (!rabbitDragRef.current.isDragging) {
+      return;
+    }
+
+    const stageElement = signRoadmapStageRef.current;
+
+    if (!stageElement) {
+      return;
+    }
+
+    const stageRect = stageElement.getBoundingClientRect();
+    const nextX = event.clientX - stageRect.left - rabbitDragRef.current.offsetX;
+    const nextY = event.clientY - stageRect.top - rabbitDragRef.current.offsetY;
+    const nextPosition = getClampedRabbitPosition(nextX, nextY);
+
+    if (Math.abs(nextPosition.x - rabbitPosition.x) > 2 || Math.abs(nextPosition.y - rabbitPosition.y) > 2) {
+      rabbitDragRef.current.moved = true;
+      setRabbitTip(null);
+    }
+
+    setRabbitPosition(nextPosition);
+  };
+
+  const handleRabbitPointerUp = (event) => {
+    rabbitDragRef.current.isDragging = false;
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+  };
+
+  const guideButtonIcon = activeType === "analysis" ? "📊" : activeType === "sign" || activeType === "signal" ? "👤" : "📘";
+  const guideButtonLabel = activeType === "analysis" ? "학습분석" : activeType === "sign" || activeType === "signal" ? "프로필" : roadmap.chapter.guideLabel || "가이드북";
+  const isProfileGuideButton = activeType === "sign" || activeType === "signal";
+  const guideProfileName = user?.userNickname || user?.userName || "프로필";
+  const guideProfileImage = getProfileImageSrc(user?.userProfile);
 
   const rewardModalContent = rewardModalType ? REWARD_MODAL_CONTENT[rewardModalType] : null;
 
@@ -326,16 +507,33 @@ const LearnComponent = () => {
         <LearnSideMenu menus={currentMenus} onMenu={handleMenu} />
 
         <S.MainArea>
-          <S.ChapterPanel>
+          <S.ChapterPanel data-roadmap-panel>
             <S.RoadmapGuideSlot>
-              <S.GuideButton type="button" onClick={() => alert(SERVICE_READY_MESSAGE)}>
-                📘 {roadmap.chapter.guideLabel || "가이드북"}
+              <S.GuideButton type="button" onClick={handleGuideClick} $variant={isProfileGuideButton ? "profile" : "default"}>
+                {isProfileGuideButton ? (
+                  <>
+                    <S.GuideProfileAvatar
+                      src={guideProfileImage}
+                      alt=""
+                      draggable={false}
+                      onError={(event) => {
+                        event.currentTarget.onerror = null;
+                        event.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                      }}
+                    />
+                    <S.GuideProfileName>{guideProfileName}</S.GuideProfileName>
+                  </>
+                ) : (
+                  <>
+                    {guideButtonIcon} {guideButtonLabel}
+                  </>
+                )}
               </S.GuideButton>
             </S.RoadmapGuideSlot>
 
             {statusMessage && <S.StatusText>{statusMessage}</S.StatusText>}
             {shouldShowRoadmap && (activeType === "sign" || activeType === "signal") && (
-              <S.SignRoadmapStage>
+              <S.SignRoadmapStage ref={signRoadmapStageRef}>
                 <S.SignRoadmapSvg viewBox="0 0 1040 360" aria-hidden="true" focusable="false">
                   <defs>
                     <marker id="sign-roadmap-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
@@ -378,10 +576,26 @@ const LearnComponent = () => {
                     )}
                   </S.SignRoadmapNode>
                 ))}
+                <S.RoadmapRabbitWrap ref={rabbitRef} style={{ left: rabbitPosition.x, top: rabbitPosition.y }}>
+                  {rabbitTip && <S.RabbitSpeechBubble key={rabbitTip.id}>{rabbitTip.message}</S.RabbitSpeechBubble>}
+                  <S.RoadmapRabbitButton
+                    type="button"
+                    onClick={handleRabbitClick}
+                    onPointerDown={handleRabbitPointerDown}
+                    onPointerMove={handleRabbitPointerMove}
+                    onPointerUp={handleRabbitPointerUp}
+                    onPointerCancel={handleRabbitPointerUp}
+                    aria-label="학습 안내 보기"
+                  >
+                    <S.RoadmapRabbit src={ROADMAP_RABBIT_IMAGE} alt="" draggable={false} />
+                  </S.RoadmapRabbitButton>
+                </S.RoadmapRabbitWrap>
               </S.SignRoadmapStage>
             )}
 
-            {shouldShowRoadmap && activeType !== "sign" && activeType !== "signal" && (
+            {!loading && !error && activeType === "analysis" && <LearnAnalysisPreview />}
+
+            {shouldShowRoadmap && activeType !== "sign" && activeType !== "signal" && activeType !== "analysis" && (
               <S.RoadmapReadyText>{activeType === "analysis" ? "분석그래프 준비중" : "로드맵 준비중"}</S.RoadmapReadyText>
             )}
           </S.ChapterPanel>
